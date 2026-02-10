@@ -1,6 +1,5 @@
 package dev.zt64.subsonic.gradle
 
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
@@ -24,7 +23,6 @@ private val Project.libs
 class KmpConfigurationPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         configureKmp(target)
-        configurePublishing(target)
         configureMaintenance(target)
     }
 
@@ -64,55 +62,6 @@ class KmpConfigurationPlugin : Plugin<Project> {
 
             compilerOptions {
                 freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
-            }
-        }
-    }
-
-    private fun configurePublishing(target: Project) {
-        target.apply(plugin = "com.vanniktech.maven.publish")
-
-        target.extensions.configure<MavenPublishBaseExtension> {
-            coordinates(target.group.toString(), target.name, target.version.toString())
-            publishToMavenCentral()
-
-            // Only sign if signing keys are configured (for Maven Central)
-            val hasSigningKey = target.providers
-                .environmentVariable("ORG_GRADLE_PROJECT_signingInMemoryKey")
-                .orElse(target.providers.gradleProperty("signing.keyId"))
-                .orNull != null
-
-            if (hasSigningKey) {
-                signAllPublications()
-            }
-
-            val path = "zt64/subsonic-kotlin"
-
-            pom {
-                name = "subsonic-kotlin"
-                description = "Kotlin Multiplatform library for the Subsonic API"
-                inceptionYear = "2026"
-                url = "https://github.com/$path"
-
-                licenses {
-                    license {
-                        name = "MIT License"
-                        url = "https://opensource.org/licenses/MIT"
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = "zt64"
-                        name = "zt64"
-                        url = "https://zt64.dev"
-                    }
-                }
-
-                scm {
-                    url = "https://github.com/$path"
-                    connection = "scm:git:github.com/$path.git"
-                    developerConnection = "scm:git:ssh://github.com/$path.git"
-                }
             }
         }
     }

@@ -26,7 +26,7 @@ import kotlin.time.Instant
  * @property songs
  */
 @Serializable
-public data class Album(
+public data class Album internal constructor(
     override val id: String,
     override val name: String,
     val artist: String,
@@ -47,3 +47,38 @@ public data class Album(
     @SerialName("song")
     override val songs: List<Song> = emptyList()
 ) : Resource, TrackCollection
+
+@Serializable
+public data class AlbumInfo(
+    val musicBrainzId: String? = null,
+    val largeImageUrl: String? = null,
+    val mediumImageUrl: String? = null,
+    val smallImageUrl: String? = null,
+    val lastFmUrl: String? = null,
+    val notes: String? = null
+)
+
+@Serializable
+public sealed class AlbumListType(public val value: String) {
+    public data object Random : AlbumListType("random")
+
+    public data object Newest : AlbumListType("newest")
+
+    public data object Highest : AlbumListType("highest")
+
+    public data object Frequent : AlbumListType("frequent")
+
+    public data object Recent : AlbumListType("recent")
+
+    public data object Starred : AlbumListType("starred")
+
+    public data object AlphabeticalByName : AlbumListType("alphabeticalByName")
+
+    public data object AlphabeticalByArtist : AlbumListType("alphabeticalByArtist")
+
+    @Serializable
+    public data class ByYear(val fromYear: Int, val toYear: Int) : AlbumListType("byYear")
+
+    @Serializable
+    public data class ByGenre(val genre: String) : AlbumListType("byGenre")
+}

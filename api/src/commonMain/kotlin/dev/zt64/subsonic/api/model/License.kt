@@ -13,7 +13,7 @@ import kotlin.time.Instant
  * @constructor Create empty License
  */
 @Serializable
-public data class License(
+public data class License internal constructor(
     val valid: Boolean,
     val email: String? = null,
     val licenseExpires: Instant? = null,

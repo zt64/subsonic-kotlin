@@ -4,12 +4,11 @@ import dev.zt64.subsonic.client.SubsonicClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class MediaLibraryTest {
-    // Folders & Indexes
+class LibraryTest {
     @Test
     fun testGetMusicFolders() = runTest {
         testEndpoint(
-            endpoint = "getMusicFolders.view",
+            endpoint = "getMusicFolders",
             response = """
                 "musicFolders": {
                   "musicFolder": [
@@ -30,7 +29,7 @@ class MediaLibraryTest {
     @Test
     fun testGetIndexes() = runTest {
         testEndpoint(
-            endpoint = "getIndexes.view",
+            endpoint = "getIndexes",
             response = """
                 "indexes": {
                   "lastModified": 1678943707000,
@@ -48,14 +47,15 @@ class MediaLibraryTest {
                   ]
                 }
             """.trimIndent()
-        ) { getIndexes() }
+        ) {
+            getIndexes()
+        }
     }
 
-    // Scanning
     @Test
     fun testStartScan() = runTest {
         testEndpoint(
-            endpoint = "startScan.view",
+            endpoint = "startScan",
             response = """
                 "scanStatus": {
                   "scanning": true,
@@ -69,7 +69,7 @@ class MediaLibraryTest {
     @Test
     fun testGetScanStatus() = runTest {
         testEndpoint(
-            endpoint = "getScanStatus.view",
+            endpoint = "getScanStatus",
             response = """
                 "scanStatus": {
                   "scanning": true,

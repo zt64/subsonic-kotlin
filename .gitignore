@@ -18,3 +18,5 @@ replay_pid*
 
 # hprof files
 *.hprof
+
+.env

@@ -7,7 +7,7 @@ class ArtistTest {
     @Test
     fun testGetArtists() = runTest {
         testEndpoint(
-            endpoint = "getArtists.view",
+            endpoint = "getArtists",
             response = """
                 "artists": {
                   "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
@@ -49,7 +49,7 @@ class ArtistTest {
     @Test
     fun testGetArtist() = runTest {
         testEndpoint(
-            endpoint = "getArtist.view",
+            endpoint = "getArtist",
             response = """
                 "artist": {
                   "id": "37ec820ca7193e17040c98f7da7c4b51",
@@ -90,13 +90,15 @@ class ArtistTest {
                   ]
                 }
             """.trimIndent()
-        ) { getArtist("37ec820ca7193e17040c98f7da7c4b51") }
+        ) {
+            getArtist("37ec820ca7193e17040c98f7da7c4b51")
+        }
     }
 
     @Test
     fun testGetArtistInfo() = runTest {
         testEndpoint(
-            endpoint = "getArtistInfo.view",
+            endpoint = "getArtistInfo",
             response = """
                 "artistInfo": {
                     "musicBrainzId": "1",

@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Instant
 
+/**
+ * Track collection
+ */
 @Serializable
 public sealed interface TrackCollection {
     public val id: String
@@ -16,7 +19,7 @@ public sealed interface TrackCollection {
 }
 
 @Serializable
-public data class Playlist(
+public data class Playlist internal constructor(
     override val id: String,
     override val name: String,
     override val coverArt: String,

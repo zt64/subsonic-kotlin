@@ -6,9 +6,9 @@ import kotlin.time.Instant
 /**
  * A chat message
  *
- * @property username
- * @property time
- * @property message
+ * @property username The user who sent the message
+ * @property time Time message was sent
+ * @property message The message content
  */
 @Serializable
 public data class ChatMessage internal constructor(

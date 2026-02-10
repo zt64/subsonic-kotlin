@@ -8,7 +8,7 @@ class AlbumTest {
     @Test
     fun testGetAlbum() = runTest {
         testEndpoint(
-            endpoint = "getAlbum.view",
+            endpoint = "getAlbum",
             response = """
                 "album": {
                   "id": "200000021",
@@ -90,7 +90,7 @@ class AlbumTest {
     @Test
     fun testGetAlbumInfo() = runTest {
         testEndpoint(
-            endpoint = "getAlbumInfo.view",
+            endpoint = "getAlbumInfo",
             response = """
                 "albumInfo": {
                   "notes": "Download the full release here (creative commons). These cripsy beats are ripe with thumping funk and techno influences, sample wizardry and daring shuffles. Composed with the help of unique sound plugins which were especially programmed to measure Comfort Fit’s needs and wishes, we think the chances aren’t bad that you’ll fall for the unique sound signature, bounce and elegance of this unusual Hip Hop production. Ltj bukem / Good looking Rec., UK: \"Really love this music.\" Velanche / XLR8R, UK: \"Awesome job he's done... overall production is dope.\" Kwesi / BBE Music, UK: \"Wooooooowwwww... WHAT THE FUCK! THIS IS WHAT",
@@ -108,7 +108,7 @@ class AlbumTest {
     @Test
     fun testGetAlbums() = runTest {
         testEndpoint(
-            endpoint = "getAlbumList.view",
+            endpoint = "getAlbumList",
             response = """
                 "albumList": {
                   "album": [
@@ -149,6 +149,8 @@ class AlbumTest {
                   ]
                 }
             """.trimIndent()
-        ) { getAlbums(AlbumListType.Random) }
+        ) {
+            getAlbums(AlbumListType.Random)
+        }
     }
 }

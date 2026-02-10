@@ -11,3 +11,9 @@ public data class TranscodeDecision(
     val sourceStream: StreamDetails,
     val transcodeStream: StreamDetails,
 )
+
+@Serializable
+public enum class MediaType {
+    SONG,
+    PODCAST
+}

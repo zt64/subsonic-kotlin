@@ -8,7 +8,7 @@ class SongTest {
     @Test
     fun testGetSong() = runTest {
         testEndpoint(
-            endpoint = "getSong.view",
+            endpoint = "getSong",
             response = """
               "song": {
                   "id": "082f435a363c32c57d5edb6a678a28d4",
@@ -124,7 +124,7 @@ class SongTest {
     @Test
     fun testGetGenres() = runTest {
         testEndpoint(
-            endpoint = "getGenres.view",
+            endpoint = "getGenres",
             response = """
                 "genres": {
                   "genre": [
@@ -172,7 +172,7 @@ class SongTest {
     @Test
     fun testGetTopSongs() = runTest {
         testEndpoint(
-            endpoint = "getTopSongs.view",
+            endpoint = "getTopSongs",
             response = """
                 "topSongs": {
                   "song": [
@@ -239,7 +239,7 @@ class SongTest {
     @Test
     fun testGetRandomSongs() = runTest {
         testEndpoint(
-            endpoint = "getRandomSongs.view",
+            endpoint = "getRandomSongs",
             response = """
                 "randomSongs": {
                   "song": [
@@ -307,7 +307,7 @@ class SongTest {
     fun testGetLyrics() = runTest {
         // TODO: Fun fact getLyrics and getLyricsBySongId return two different schema
         testEndpoint(
-            endpoint = "getLyricsBySongId.view",
+            endpoint = "getLyricsBySongId",
             response = """
                 "lyrics": {
                   "artist": "Metallica",
@@ -315,34 +315,36 @@ class SongTest {
                   "value": "Let us have peace, let us have life\n\nLet us escape the cruel night\n\nLet us have time, let the sun shine\n\nLet us beware the deadly sign\n\n\n\nThe day is coming\n\nArmageddon's near\n\nInferno's coming\n\nCan we survive the blitzkrieg?\n\nThe blitzkrieg\n\nThe blitzkrieg\n\n\n\nSave us from fate, save us from hate\n\nSave ourselves before it's too late\n\nCome to our need, hear our plea\n\nSave ourselves before the earth bleeds\n\n\n\nThe day is dawning\n\nThe time is near\n\nAliens calling\n\nCan we survive the blitzkrieg?"
                 }
             """.trimIndent()
-        ) { getLyrics("YN6pPLdIqkkPBan84Wgb3Y") }
+        ) {
+            getLyrics("YN6pPLdIqkkPBan84Wgb3Y")
+        }
     }
 
     @Test
     fun testDownloadSong() = runTest {
-        testEndpoint(
-            endpoint = "download.view"
-        ) { download("") }
+        testEndpoint("download") {
+            download("")
+        }
     }
 
     @Test
     fun testGetCoverArt() = runTest {
-        testEndpoint(
-            endpoint = "getCoverArt.view"
-        ) { getCoverArt("") }
+        testEndpoint("getCoverArt") {
+            getCoverArt("")
+        }
     }
 
     @Test
     fun testHls() = runTest {
-        testEndpoint(
-            endpoint = "hls.view"
-        ) { hls("abc") }
+        testEndpoint("hls") {
+            hls("abc")
+        }
     }
 
     @Test
     fun testTranscode() = runTest {
         testEndpoint(
-            endpoint = "getTranscodeDecision.view",
+            endpoint = "getTranscodeDecision",
             response = """
                 "transcodeDecision": {
                   "canDirectPlay": false,
@@ -377,7 +379,7 @@ class SongTest {
         }
 
         testEndpoint(
-            endpoint = "getTranscodeStream.view",
+            endpoint = "getTranscodeStream",
             response = "todo"
         ) { getTranscodeStream("abc", MediaType.SONG, 0, "abc") }
     }

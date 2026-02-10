@@ -26,3 +26,11 @@ public data class PlayQueue internal constructor(
     @SerialName("entry")
     val items: List<Resource>
 )
+
+@Serializable
+public data class NowPlayingEntry internal constructor(
+    val username: String,
+    val minutesAgo: Int,
+    val playerId: Int,
+    val playerName: String? = null,
+)

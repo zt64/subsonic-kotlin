@@ -22,22 +22,81 @@ private const val CLIENT_NAME = "subsonic-kotlin"
 public class SubsonicClient(
     private val httpClient: HttpClient,
     private val baseUrl: String,
-    private val authParams: Map<String, String>
-) : SubsonicApi by SubsonicApiImpl(httpClient, baseUrl, authParams) {
+    private val params: Map<String, String>
+) : SubsonicApi by SubsonicApiImpl(httpClient, baseUrl, params) {
     public companion object {
         /**
-         * Create a SubsonicClient with API key authentication
+         * Create a SubsonicClient
          */
         public operator fun invoke(
-            apiUrl: String,
+            baseUrl: String,
             auth: SubsonicAuth,
             client: String = CLIENT_NAME,
             userAgent: String = USER_AGENT,
             engine: HttpClientEngine? = null,
             clientConfig: HttpClientConfig<*>.() -> Unit = {}
         ): SubsonicClient {
-            val authParams = buildAuthParams(client, auth)
-            val config = getHttpClientConfiguration(apiUrl, client, auth, userAgent)
+            val params = buildMap {
+                put("f", "json")
+                put("v", API_VERSION)
+                put("c", client)
+
+                when (auth) {
+                    is SubsonicAuth.Key -> {
+                        put("apiKey", auth.apiKey)
+                    }
+
+                    is SubsonicAuth.Token -> {
+                        put("u", auth.username)
+                        put("t", auth.token)
+                        put("s", auth.salt)
+                    }
+                }
+            }
+
+            val config: HttpClientConfig<*>.() -> Unit = {
+                install(ContentNegotiation) {
+                    json(
+                        Json {
+                            ignoreUnknownKeys = true
+                        }
+                    )
+                }
+
+                install(UserAgent) {
+                    agent = userAgent
+                }
+
+                install(HttpTimeout)
+
+                defaultRequest {
+                    contentType(ContentType.Application.Json)
+                    url(baseUrl)
+
+                    url {
+                        parameters.appendAll(
+                            parameters {
+                                set("f", "json")
+                                set("v", API_VERSION)
+                                set("c", client)
+
+                                when (auth) {
+                                    is SubsonicAuth.Key -> {
+                                        set("apiKey", auth.apiKey)
+                                    }
+
+                                    is SubsonicAuth.Token -> {
+                                        set("u", auth.username)
+                                        set("t", auth.token)
+                                        set("s", auth.salt)
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+
             val httpClient = if (engine != null) {
                 HttpClient(engine) {
                     config()
@@ -49,83 +108,8 @@ public class SubsonicClient(
                     clientConfig()
                 }
             }
-            return SubsonicClient(httpClient, apiUrl, authParams)
-        }
-    }
-}
 
-private fun buildAuthParams(client: String, auth: SubsonicAuth): Map<String, String> {
-    return buildMap {
-        put("f", "json")
-        put("v", API_VERSION)
-        put("c", client)
-
-        when (auth) {
-            is SubsonicAuth.Key -> {
-                put("apiKey", auth.apiKey)
-            }
-
-            is SubsonicAuth.Token -> {
-                put("u", auth.username)
-                put("t", auth.token)
-                put("s", auth.salt)
-            }
-
-            SubsonicAuth.Unsecured -> {
-                // No auth params
-            }
-        }
-    }
-}
-
-private fun getHttpClientConfiguration(
-    apiUrl: String,
-    client: String = CLIENT_NAME,
-    auth: SubsonicAuth,
-    userAgent: String = USER_AGENT
-): HttpClientConfig<*>.() -> Unit = {
-    install(ContentNegotiation) {
-        json(
-            Json {
-                ignoreUnknownKeys = true
-            }
-        )
-    }
-
-    install(UserAgent) {
-        agent = userAgent
-    }
-
-    install(HttpTimeout)
-
-    defaultRequest {
-        contentType(ContentType.Application.Json)
-        url(apiUrl)
-
-        url {
-            parameters.appendAll(
-                parameters {
-                    set("f", "json")
-                    set("v", API_VERSION)
-                    set("c", client)
-
-                    when (auth) {
-                        is SubsonicAuth.Key -> {
-                            set("apiKey", auth.apiKey)
-                        }
-
-                        is SubsonicAuth.Token -> {
-                            set("u", auth.username)
-                            set("t", auth.token)
-                            set("s", auth.salt)
-                        }
-
-                        SubsonicAuth.Unsecured -> {
-                            TODO()
-                        }
-                    }
-                }
-            )
+            return SubsonicClient(httpClient, baseUrl, params)
         }
     }
 }

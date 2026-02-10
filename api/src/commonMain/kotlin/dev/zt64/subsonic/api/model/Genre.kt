@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * @param name The name of this genre
  */
 @Serializable
-public data class Genre(
+public data class Genre internal constructor(
     @SerialName("value")
     val name: String,
     val albumCount: Int,

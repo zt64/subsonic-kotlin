@@ -1,6 +1,9 @@
 package dev.zt64.subsonic.api.model
 
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KeepGeneratedSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 internal object UserSerializer : JsonTransformingSerializer<User>(User.generatedSerializer()) {
@@ -39,3 +42,34 @@ public data class User(
     val folder: List<Int> = emptyList(),
     val roles: List<Role> = emptyList()
 )
+
+
+@Serializable
+public enum class Role {
+    @SerialName("guest")
+    GUEST,
+    @SerialName("admin")
+    ADMIN,
+    @SerialName("settings")
+    SETTINGS,
+    @SerialName("download")
+    DOWNLOAD,
+    @SerialName("upload")
+    UPLOAD,
+    @SerialName("playlist")
+    PLAYLIST,
+    @SerialName("cover_art")
+    COVER_ART,
+    @SerialName("comment")
+    COMMENT,
+    @SerialName("podcast")
+    PODCAST,
+    @SerialName("stream")
+    STREAM,
+    @SerialName("jukebox")
+    JUKEBOX,
+    @SerialName("share")
+    SHARE,
+    @SerialName("videoconversion")
+    VIDEO_CONVERSION
+}

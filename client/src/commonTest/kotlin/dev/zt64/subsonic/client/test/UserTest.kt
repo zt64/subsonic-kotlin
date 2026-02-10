@@ -6,12 +6,11 @@ import kotlin.test.Test
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 
-// user interaction related tests
 class UserTest {
     @Test
     fun testGetUser() = runTest {
         testEndpoint(
-            endpoint = "getUser.view",
+            endpoint = "getUser",
             response = """
                 "user": {
                   "folder": [
@@ -40,22 +39,24 @@ class UserTest {
     @Test
     fun testDeleteUser() = runTest {
         testEndpoint(
-            endpoint = "deleteUser.view",
+            endpoint = "deleteUser",
             response = ""
-        ) { deleteUser(USERNAME) }
+        ) {
+            deleteUser(username)
+        }
     }
 
     @Test
     fun testUpdateUser() = runTest {
-        testEndpoint(
-            endpoint = "updateUser.view"
-        ) { updateUser(USERNAME, PASSWORD, EMAIL, false) }
+        testEndpoint("updateUser") {
+            updateUser(username, password, email, false)
+        }
     }
 
     @Test
     fun testGetUsers() = runTest {
         testEndpoint(
-            endpoint = "getUsers.view",
+            endpoint = "getUsers",
             response = """
                 "users": {
                   "user": [
@@ -87,23 +88,23 @@ class UserTest {
 
     @Test
     fun testCreateUser() = runTest {
-        testEndpoint(
-            endpoint = "createUser.view"
-        ) { createUser(USERNAME, PASSWORD, EMAIL) }
+        testEndpoint("createUser") {
+            createUser(username, password, email)
+        }
     }
 
     @Test
     fun testChangePassword() = runTest {
-        testEndpoint(
-            endpoint = "changePassword.view"
-        ) { changePassword(USERNAME, PASSWORD) }
+        testEndpoint("changePassword") {
+            changePassword(username, password)
+        }
     }
 
     // Chat
     @Test
     fun testGetChatMessages() = runTest {
         testEndpoint(
-            endpoint = "getChatMessages.view",
+            endpoint = "getChatMessages",
             response = """
                 "chatMessages": {
                   "chatMessage": [
@@ -120,16 +121,16 @@ class UserTest {
 
     @Test
     fun testAddChatMessage() = runTest {
-        testEndpoint(
-            endpoint = "addChatMessage.view"
-        ) { addChatMessage("Test message") }
+        testEndpoint("addChatMessage") {
+            addChatMessage("Test message")
+        }
     }
 
     // Shares
     @Test
     fun testGetShares() = runTest {
         testEndpoint(
-            endpoint = "getShares.view",
+            endpoint = "getShares",
             response = """
                 
             """.trimIndent(),
@@ -139,63 +140,57 @@ class UserTest {
 
     @Test
     fun testCreateShare() = runTest {
-        testEndpoint(
-            endpoint = "createShare.view"
-        ) {
+        testEndpoint("createShare") {
             createShare(listOf("Wa5fzmngg4VgscnxP1c05u"), "test", Clock.System.now())
         }
     }
 
     @Test
     fun testUpdateShare() = runTest {
-        val share = testEndpoint(
-            endpoint = "createShare.view"
-        ) {
+        val share = testEndpoint("createShare") {
             createShare(listOf("Wa5fzmngg4VgscnxP1c05u"), "test", Clock.System.now())
         }!!
 
-        testEndpoint(
-            endpoint = "updateShare.view"
-        ) { updateShare(share.id, expires = Clock.System.now() + 5.days) }
+        testEndpoint("updateShare") {
+            updateShare(share.id, expires = Clock.System.now() + 5.days)
+        }
     }
 
     @Test
     fun testDeleteShare() = runTest {
-        val share = testEndpoint(
-            endpoint = "createShare.view"
-        ) {
+        val share = testEndpoint("createShare") {
             createShare(listOf("Wa5fzmngg4VgscnxP1c05u"), "test", Clock.System.now())
         }!!
 
-        testEndpoint("deleteShare.view") {
+        testEndpoint("deleteShare") {
             deleteShare(share.id)
         }
     }
 
     @Test
     fun testStar() = runTest {
-        testEndpoint("star.view") { star("abc") }
+        testEndpoint("star") { star("abc") }
     }
 
     @Test
     fun testUnstar() = runTest {
-        testEndpoint("unstar.view") { unstar("abc") }
+        testEndpoint("unstar") { unstar("abc") }
     }
 
     @Test
     fun testGetBookmarks() = runTest {
-        testEndpoint("getBookmarks.view") {
+        testEndpoint("getBookmarks") {
             getBookmarks()
         }
     }
 
     @Test
     fun testBookmark() = runTest {
-        testEndpoint("createBookmark.view") {
+        testEndpoint("createBookmark") {
             createBookmark("abc", position = 0)
         }
 
-        testEndpoint("deleteBookmark.view") {
+        testEndpoint("deleteBookmark") {
             deleteBookmark("abc")
         }
     }

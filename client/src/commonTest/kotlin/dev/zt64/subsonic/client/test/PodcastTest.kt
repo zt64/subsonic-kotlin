@@ -7,7 +7,7 @@ class PodcastTest {
     @Test
     fun testGetPodcasts() = runTest {
         testEndpoint(
-            endpoint = "getPodcasts.view",
+            endpoint = "getPodcasts",
             response = """
                 "podcasts": {
                   "channel": [
@@ -44,13 +44,15 @@ class PodcastTest {
                   ]
                 }
             """.trimIndent()
-        ) { getPodcasts() }
+        ) {
+            getPodcasts()
+        }
     }
 
     @Test
     fun getNewestPodcasts() = runTest {
         testEndpoint(
-            endpoint = "getNewestPodcasts.view",
+            endpoint = "getNewestPodcasts",
             response = """
                 "newestPodcasts": {
                   "episode": [
@@ -86,26 +88,26 @@ class PodcastTest {
 
     @Test
     fun testRefreshPodcasts() = runTest {
-        testEndpoint(
-            endpoint = "refreshPodcasts.view"
-        ) { refreshPodcasts() }
+        testEndpoint("refreshPodcasts") {
+            refreshPodcasts()
+        }
     }
 
     @Test
     fun testDeletePodcast() = runTest {
-        testEndpoint(
-            endpoint = "deletePodcastChannel.view"
-        ) { deletePodcastChannel("abc") }
+        testEndpoint("deletePodcastChannel") {
+            deletePodcastChannel("abc")
+        }
 
-        testEndpoint(
-            endpoint = "deletePodcastEpisode.view"
-        ) { deletePodcastEpisode("abc") }
+        testEndpoint("deletePodcastEpisode") {
+            deletePodcastEpisode("abc")
+        }
     }
 
     @Test
     fun testDownloadPodcastEpisode() = runTest {
-        testEndpoint(
-            endpoint = "downloadPodcastEpisode"
-        ) { downloadPodcastEpisode("123") }
+        testEndpoint("downloadPodcastEpisode") {
+            downloadPodcastEpisode("123")
+        }
     }
 }

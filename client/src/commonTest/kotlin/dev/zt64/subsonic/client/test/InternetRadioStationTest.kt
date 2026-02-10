@@ -7,7 +7,7 @@ class InternetRadioStationTest {
     @Test
     fun testCreateInternetRadioStation() = runTest {
         testEndpoint(
-            endpoint = "createInternetRadioStation.view"
+            endpoint = "createInternetRadioStation"
         ) {
             createInternetRadioStation(
                 streamUrl = "",
@@ -20,7 +20,7 @@ class InternetRadioStationTest {
     @Test
     fun testDeleteInternetRadioStation() = runTest {
         testEndpoint(
-            endpoint = "deleteInternetRadioStation.view"
+            endpoint = "deleteInternetRadioStation"
         ) {
             deleteInternetRadioStation("")
         }
@@ -29,7 +29,7 @@ class InternetRadioStationTest {
     @Test
     fun testGetInternetRadioStations() = runTest {
         testEndpoint(
-            endpoint = "getInternetRadioStations.view",
+            endpoint = "getInternetRadioStations",
             response = """
                 "internetRadioStations": {
                   "internetRadioStation": [

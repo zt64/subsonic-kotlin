@@ -1,11 +1,15 @@
 package dev.zt64.subsonic.api.model
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 internal class SubsonicResponseSerializer<T : Any>(
     val tSerializer: KSerializer<T>
@@ -46,6 +50,15 @@ internal class SubsonicResponseSerializer<T : Any>(
     }
 }
 
+@Serializable
+public enum class SubsonicStatus {
+    @SerialName("ok")
+    OK,
+
+    @SerialName("failed")
+    FAILED
+}
+
 @Serializable(SubsonicResponseSerializer::class)
 public sealed interface SubsonicResponse<out T : Any> {
     public val status: SubsonicStatus
@@ -55,7 +68,7 @@ public sealed interface SubsonicResponse<out T : Any> {
     public val openSubsonic: Boolean
 
     @Serializable
-    public data class Empty(
+    public data class Empty internal constructor(
         override val status: SubsonicStatus,
         override val version: String,
         override val type: String,

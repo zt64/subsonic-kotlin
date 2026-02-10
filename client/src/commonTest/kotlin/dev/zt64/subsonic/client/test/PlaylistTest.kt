@@ -8,7 +8,7 @@ class PlaylistTest {
     @Test
     fun testGetPlaylists() = runTest {
         testEndpoint(
-            endpoint = "getPlaylists.view",
+            endpoint = "getPlaylists",
             response = """
                 "playlists": {
                   "playlist": [
@@ -42,7 +42,7 @@ class PlaylistTest {
     @Test
     fun testGetPlaylist() = runTest {
         testEndpoint(
-            endpoint = "getPlaylist.view",
+            endpoint = "getPlaylist",
             response = """
                  "playlist": {
                   "id": "800000075",
@@ -92,8 +92,8 @@ class PlaylistTest {
 
     @Test
     fun testCreatePlaylist() = runTest {
-        val playlist = testEndpoint(
-            endpoint = "createPlaylist.view",
+        testEndpoint(
+            endpoint = "createPlaylist",
             response = """"""
         ) {
             createPlaylist("Test Playlist", emptyList())
@@ -102,8 +102,8 @@ class PlaylistTest {
 
     @Test
     fun testDeletePlaylist() = runTest {
-        testEndpoint(
-            endpoint = "deletePlaylist.view"
-        ) { deletePlaylist("CZDXgohio9aEBl6RwmT6g8") }
+        testEndpoint("deletePlaylist") {
+            deletePlaylist("CZDXgohio9aEBl6RwmT6g8")
+        }
     }
 }

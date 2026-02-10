@@ -8,7 +8,7 @@ class SystemTest {
     @Test
     fun testGetOpenSubsonicExtensions() = runTest {
         testEndpoint(
-            endpoint = "getOpenSubsonicExtensions.view",
+            endpoint = "getOpenSubsonicExtensions",
             response = """
                 "openSubsonicExtensions": [
                     {
@@ -33,10 +33,10 @@ class SystemTest {
     @Test
     fun testTokenInfo() = runTest {
         testEndpoint(
-            endpoint = "tokenInfo.view",
+            endpoint = "tokenInfo",
             response = """
                 "tokenInfo": {
-                  "username": "$USERNAME"
+                  "username": "$username"
                 }
             """.trimIndent(),
             call = SubsonicClient::tokenInfo
@@ -46,11 +46,11 @@ class SystemTest {
     @Test
     fun testGetLicense() = runTest {
         testEndpoint(
-            endpoint = "getLicense.view",
+            endpoint = "getLicense",
             response = """
                 "license": {
                     "valid": true,
-                    "email": "$EMAIL",
+                    "email": "$email",
                     "licenseExpires": "2017-04-11T10:42:50.842Z",
                     "trialExpires": "2017-04-11T10:42:50.842Z"
                 }

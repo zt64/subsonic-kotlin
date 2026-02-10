@@ -19,44 +19,39 @@ import kotlin.time.Instant
 internal class SubsonicApiImpl(
     private val httpClient: HttpClient,
     private val baseUrl: String,
-    private val authParams: Map<String, String>
+    private val clientParams: Map<String, String>
 ) : SubsonicApi {
     private val json = Json {
         ignoreUnknownKeys = true
-        serializersModule = SerializersModule {
-            contextual(List::class) { args ->
-                ArrayUnwrapSerializer(args[0])
-            }
-        }
     }
 
     private fun buildUrl(
         endpoint: String,
         params: Map<String, String?> = emptyMap(),
         includeAuth: Boolean = true
-    ): String {
-        return URLBuilder(baseUrl).apply {
-            path(endpoint)
-            if (includeAuth) {
-                authParams.forEach { (key, value) ->
-                    parameters.append(key, value)
-                }
+    ): String = buildUrl {
+        takeFrom(baseUrl)
+        path(endpoint)
+
+        if (includeAuth) {
+            clientParams.forEach { (key, value) ->
+                parameters.append(key, value)
             }
-            params.forEach { (key, value) ->
-                if (value != null) {
-                    parameters.append(key, value)
-                }
+        }
+
+        params.forEach { (key, value) ->
+            if (value != null) {
+                parameters.append(key, value)
             }
-        }.buildString()
-    }
+        }
+    }.toString()
 
     private suspend inline fun <reified T : Any> getSubsonicResponse(
         endPoint: String,
         builder: HttpRequestBuilder.() -> Unit = {},
         serializer: KSerializer<SubsonicResponse<T>> = serializer<SubsonicResponse<T>>()
     ): SubsonicResponse<T> {
-        val res = httpClient
-            .get(endPoint, builder)
+        val res = httpClient.get("$endPoint.view", builder)
 
         when (res.status) {
             HttpStatusCode.NotFound -> {
@@ -76,7 +71,7 @@ internal class SubsonicApiImpl(
     }
 
     @Throws(SubsonicException::class, CancellationException::class)
-    private suspend inline fun <reified T : Any> get(
+    private suspend inline fun <reified T : Any> getBody(
         endPoint: String,
         dataSerializer: KSerializer<T> = serializerFor<T>(json.serializersModule),
         builder: HttpRequestBuilder.() -> Unit = {}
@@ -85,11 +80,6 @@ internal class SubsonicApiImpl(
 
         return when (val response = getSubsonicResponse(endPoint, builder, responseSerializer)) {
             is SubsonicResponse.Error -> {
-                if (response.error.code == 70) {
-                    // 70 means data not found
-                    // TODO: Return null or throw
-                }
-
                 throw SubsonicException(
                     code = response.error.code,
                     message = response.error.message
@@ -117,13 +107,11 @@ internal class SubsonicApiImpl(
         } as KSerializer<T>
     }
 
-    private suspend inline fun getNullable(
-        endPoint: String,
-        builder: HttpRequestBuilder.() -> Unit = {}
-    ) {
+    private suspend inline fun get(endPoint: String, builder: HttpRequestBuilder.() -> Unit = {}) {
         when (val response = getSubsonicResponse<Unit>(endPoint, builder)) {
-            is SubsonicResponse.Error -> error(
-                "Subsonic API error ${response.error.code}: ${response.error.message}"
+            is SubsonicResponse.Error -> throw SubsonicException(
+                code = response.error.code,
+                message = response.error.message
             )
 
             is SubsonicResponse.Success<Unit> -> error("Unexpected response")
@@ -132,7 +120,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    private suspend inline fun reqBytes(
+    private suspend inline fun getBytes(
         endPoint: String,
         builder: HttpRequestBuilder.() -> Unit = {}
     ): ByteArray {
@@ -140,23 +128,23 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun ping() {
-        return getNullable("ping.view")
+        get("ping")
     }
 
     override suspend fun tokenInfo(): TokenInfo {
-        return get("tokenInfo.view")
+        return getBody("tokenInfo")
     }
 
     override suspend fun getLicense(): License {
-        return get("getLicense.view")
+        return getBody("getLicense")
     }
 
     override suspend fun getOpenSubsonicExtensions(): List<SubsonicExtension> {
-        return get("getOpenSubsonicExtensions.view")
+        return getBody("getOpenSubsonicExtensions")
     }
 
     override suspend fun changePassword(username: String, password: String) {
-        getNullable("changePassword.view") {
+        get("changePassword") {
             parameter("username", username)
             parameter("password", password)
         }
@@ -167,42 +155,10 @@ internal class SubsonicApiImpl(
         password: String,
         email: String,
         ldapAuthenticated: Boolean,
-        roles: List<Role>
+        roles: List<Role>,
+        folders: List<String>
     ) {
-        getNullable("createUser.view") {
-            parameter("username", username)
-            parameter("password", password)
-            parameter("email", email)
-            parameter("ldapAuthenticated", ldapAuthenticated)
-
-            // TODO: Roles
-        }
-    }
-
-    override suspend fun deleteUser(username: String) {
-        getNullable("deleteUser.view") {
-            parameter("username", username)
-        }
-    }
-
-    override suspend fun getUser(username: String): User {
-        return get("getUser.view") {
-            parameter("username", username)
-        }
-    }
-
-    override suspend fun getUsers(): List<User> {
-        return get("getUsers.view")
-    }
-
-    override suspend fun updateUser(
-        username: String,
-        password: String,
-        email: String?,
-        ldapAuthenticated: Boolean?,
-        roles: List<Role>?
-    ) {
-        getNullable("updateUser.view") {
+        get("createUser") {
             parameter("username", username)
             parameter("password", password)
             parameter("email", email)
@@ -212,46 +168,113 @@ internal class SubsonicApiImpl(
                 if (Role.ADMIN in roles) parameter("adminRole", true)
                 if (Role.SETTINGS in roles) parameter("settingsRole", true)
                 if (Role.STREAM in roles) parameter("streamRole", true)
+                if (Role.JUKEBOX in roles) parameter("jukeboxRole", true)
+                if (Role.DOWNLOAD in roles) parameter("downloadRole", true)
+                if (Role.UPLOAD in roles) parameter("uploadRole", true)
+                if (Role.PLAYLIST in roles) parameter("playlistRole", true)
+                if (Role.COVER_ART in roles) parameter("coverArtRole", true)
+                if (Role.COMMENT in roles) parameter("commentRole", true)
+                if (Role.PODCAST in roles) parameter("podcastRole", true)
+                if (Role.SHARE in roles) parameter("shareRole", true)
+                if (Role.VIDEO_CONVERSION in roles) parameter("videoConversionRole", true)
+            }
 
-                // TODO: Add other roles
+            folders.forEach {
+                parameter("musicFolderId", it)
             }
         }
     }
 
+    override suspend fun updateUser(
+        username: String,
+        password: String,
+        email: String?,
+        ldapAuthenticated: Boolean?,
+        roles: List<Role>?,
+        maxBitRate: Int?,
+        folders: List<String>
+    ) {
+        get("updateUser") {
+            parameter("username", username)
+            parameter("password", password)
+            parameter("email", email)
+            parameter("ldapAuthenticated", ldapAuthenticated)
+
+            if (!roles.isNullOrEmpty()) {
+                if (Role.ADMIN in roles) parameter("adminRole", true)
+                if (Role.SETTINGS in roles) parameter("settingsRole", true)
+                if (Role.STREAM in roles) parameter("streamRole", true)
+                if (Role.JUKEBOX in roles) parameter("jukeboxRole", true)
+                if (Role.DOWNLOAD in roles) parameter("downloadRole", true)
+                if (Role.UPLOAD in roles) parameter("uploadRole", true)
+                if (Role.PLAYLIST in roles) parameter("playlistRole", true)
+                if (Role.COVER_ART in roles) parameter("coverArtRole", true)
+                if (Role.COMMENT in roles) parameter("commentRole", true)
+                if (Role.PODCAST in roles) parameter("podcastRole", true)
+                if (Role.SHARE in roles) parameter("shareRole", true)
+                if (Role.VIDEO_CONVERSION in roles) parameter("videoConversionRole", true)
+            }
+
+            folders.forEach {
+                parameter("musicFolderId", it)
+            }
+
+            parameter("maxBitRate", maxBitRate)
+        }
+    }
+
+    override suspend fun deleteUser(username: String) {
+        get("deleteUser") {
+            parameter("username", username)
+        }
+    }
+
+    override suspend fun getUser(username: String): User {
+        return getBody("getUser") {
+            parameter("username", username)
+        }
+    }
+
+    override suspend fun getUsers(): List<User> {
+        return getBody("getUsers")
+    }
+
     override suspend fun getMusicFolders(): List<MusicFolder> {
-        return get("getMusicFolders.view")
+        return getBody("getMusicFolders")
     }
 
     override suspend fun getIndexes(musicFolderId: String?): Indexes {
-        return get("getIndexes.view")
+        return getBody("getIndexes")
     }
 
-    override suspend fun getMusicDirectory() {
-        return get("getMusicDirectory.view")
+    override suspend fun getMusicDirectory(id: String) {
+        return getBody("getMusicDirectory") {
+            parameter("id", id)
+        }
     }
 
-    override suspend fun getGenres(): List<Genre> = get("getGenres.view")
+    override suspend fun getGenres(): List<Genre> = getBody("getGenres")
 
     override suspend fun getArtists(folder: String?): Artists {
-        return get("getArtists.view") {
+        return getBody("getArtists") {
             parameter("musicFolderId", folder)
         }
     }
 
     override suspend fun getArtist(id: String): Artist {
-        return get("getArtist.view") {
+        return getBody("getArtist") {
             parameter("id", id)
         }
     }
 
     override suspend fun getAlbum(id: String): Album {
-        return get("getAlbum.view") {
+        return getBody("getAlbum") {
             parameter("id", id)
         }
     }
 
     override suspend fun getSong(id: String): Song {
-        return get("getSong.view") {
+        return getBody("getSong") {
             parameter("id", id)
         }
     }
@@ -265,7 +288,7 @@ internal class SubsonicApiImpl(
         maxSimilar: Int,
         includeNotPresent: Boolean
     ): ArtistInfo {
-        return get("getArtistInfo.view") {
+        return getBody("getArtistInfo") {
             parameter("id", id)
             parameter("count", maxSimilar)
             parameter("includeNotPresent", includeNotPresent)
@@ -281,7 +304,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getArtistInfo2(id: String, maxSimilar: Int, includeNotPresent: Boolean) {
-        return get("getArtistInfo.view") {
+        return getBody("getArtistInfo") {
             parameter("id", id)
             parameter("count", maxSimilar)
             parameter("includeNotPresent", includeNotPresent)
@@ -289,31 +312,31 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getAlbumInfo(id: String): AlbumInfo {
-        return get("getAlbumInfo.view") {
+        return getBody("getAlbumInfo") {
             parameter("id", id)
         }
     }
 
     override suspend fun getAlbumInfo2(id: String): AlbumInfo {
-        return get("getAlbumInfo2.view") {
+        return getBody("getAlbumInfo2") {
             parameter("id", id)
         }
     }
 
     override suspend fun getSimilarSongs(id: String, count: Int): List<Song> {
-        return get("getSimilarSongs.view") {
+        return getBody("getSimilarSongs") {
             parameter("id", id)
         }
     }
 
     override suspend fun getSimilarSongs2(id: String, count: Int): List<Song> {
-        return get("getSimilarSongs2.view") {
+        return getBody("getSimilarSongs2") {
             parameter("id", id)
         }
     }
 
     override suspend fun getTopSongs(artist: String, count: Int): List<Song> {
-        return get("getTopSongs.view") {
+        return getBody("getTopSongs") {
             parameter("artist", artist)
             parameter("count", count)
         }
@@ -324,7 +347,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getAlbums(type: AlbumListType, size: Int, offset: Int): List<Album> {
-        return get("getAlbumList.view") {
+        return getBody("getAlbumList") {
             parameter("type", type.value)
             parameter("size", size)
             parameter("offset", offset)
@@ -345,7 +368,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getAlbums2(type: AlbumListType, size: Int, offset: Int): List<Album> {
-        return get("getAlbumList2.view") {
+        return getBody("getAlbumList2") {
             parameter("type", type.value)
             parameter("size", size)
             parameter("offset", offset)
@@ -371,7 +394,7 @@ internal class SubsonicApiImpl(
         fromYear: Int?,
         toYear: Int?
     ): List<Song> {
-        return get("getRandomSongs.view") {
+        return getBody("getRandomSongs") {
             parameter("size", size)
             parameter("genre", genre)
             parameter("fromYear", fromYear)
@@ -379,26 +402,32 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getSongs(count: Int, genre: Genre?, musicFolderId: String): List<Song> {
-        return get("getSongsByGenre.view") {
-            parameter("count", count)
+    override suspend fun getSongs(
+        genre: Genre,
+        count: Int,
+        offset: Int,
+        musicFolderId: String?
+    ): List<Song> {
+        return getBody("getSongsByGenre") {
             parameter("genre", genre)
+            parameter("count", count)
+            parameter("offset", offset)
             parameter("musicFolderId", musicFolderId)
         }
     }
 
     override suspend fun getNowPlaying(): List<NowPlayingEntry> {
-        return get("nowPlaying.view")
+        return getBody("nowPlaying")
     }
 
     override suspend fun getStarred(musicFolder: MusicFolder?): Starred {
-        return get("getStarred.view") {
+        return getBody("getStarred") {
             parameter("musicFolderId", musicFolder?.id)
         }
     }
 
     override suspend fun getStarred2(musicFolder: MusicFolder?): Starred {
-        return get("getStarred2.view") {
+        return getBody("getStarred2") {
             parameter("musicFolderId", musicFolder?.id)
         }
     }
@@ -413,7 +442,7 @@ internal class SubsonicApiImpl(
         songOffset: Int,
         musicFolderId: Int?
     ): SearchResult {
-        return get("search2.view") {
+        return getBody("search2") {
             parameter("query", query)
             parameter("artistCount", artistCount)
             parameter("artistOffset", artistOffset)
@@ -435,7 +464,7 @@ internal class SubsonicApiImpl(
         songOffset: Int,
         musicFolderId: Int?
     ): SearchResult {
-        return get("search3.view") {
+        return getBody("search3") {
             parameter("query", query)
             parameter("artistCount", artistCount)
             parameter("artistOffset", artistOffset)
@@ -447,17 +476,18 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getPlaylists(): List<Playlist> = get("getPlaylists.view")
+    override suspend fun getPlaylists(): List<Playlist> = getBody("getPlaylists")
 
     override suspend fun getPlaylist(id: String): Playlist {
-        return get("getPlaylist.view") {
+        return getBody("getPlaylist") {
             parameter("id", id)
         }
     }
 
     override suspend fun createPlaylist(name: String, songIds: List<String>): Playlist {
-        return get("createPlaylist.view") {
+        return getBody("createPlaylist") {
             parameter("name", name)
+
             songIds.forEach { id ->
                 parameter("songId", id)
             }
@@ -476,31 +506,31 @@ internal class SubsonicApiImpl(
         songIdsToAdd: List<String>,
         songIndicesToRemove: List<Int>
     ) {
-        getNullable("updatePlaylist.view") {
+        get("updatePlaylist") {
             parameter("id", id)
             parameter("name", name)
             parameter("comment", comment)
             parameter("public", public)
-            parameter("songIdToAdd", songIdsToAdd)
-            parameter("songIndexToRemove", songIndicesToRemove)
+
+            songIdsToAdd.forEach {
+                parameter("songIdToAdd", it)
+            }
+
+            songIndicesToRemove.forEach {
+                parameter("songIndexToRemove", it)
+            }
         }
     }
 
     override suspend fun deletePlaylist(id: String) {
-        getNullable("deletePlaylist.view") {
+        get("deletePlaylist") {
             parameter("id", id)
         }
     }
 
-    override suspend fun stream(id: String, maxBitRate: Int, format: String?): ByteReadChannel {
-        return httpClient.get("stream.view") {
-            parameter("id", id)
-        }.bodyAsChannel()
-    }
-
     override fun getStreamUrl(id: String, maxBitRate: Int, format: String?): String {
         return buildUrl(
-            "rest/stream.view",
+            "rest/stream",
             buildMap {
                 put("id", id)
                 if (maxBitRate > 0) put("maxBitRate", maxBitRate.toString())
@@ -511,13 +541,13 @@ internal class SubsonicApiImpl(
 
     override suspend fun download(id: String): ByteArray {
         // TODO: parse using subsonic response which is used for errors
-        return httpClient.get("download.view") {
+        return httpClient.get("download") {
             parameter("id", id)
         }.bodyAsBytes()
     }
 
     override suspend fun hls(id: String, bitRate: Int?, audioTrack: String?): ByteArray {
-        return reqBytes("hls.view") {
+        return getBytes("hls") {
             parameter("id", id)
             parameter("bitrate", bitRate)
             parameter("audioTrack", audioTrack)
@@ -525,14 +555,14 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getCaptions(videoId: String, format: String): List<String> {
-        return get("getCaptions.view") {
+        return getBody("getCaptions") {
             parameter("id", videoId)
             parameter("format", format)
         }
     }
 
     override suspend fun getCoverArt(id: String, size: String?): ByteArray {
-        return reqBytes("getCoverArt.view") {
+        return getBytes("getCoverArt") {
             parameter("id", id)
             parameter("size", size)
         }
@@ -540,7 +570,7 @@ internal class SubsonicApiImpl(
 
     override fun getCoverArtUrl(id: String, size: String?, auth: Boolean): String {
         return buildUrl(
-            "rest/getCoverArt.view",
+            "rest/getCoverArt",
             buildMap {
                 put("id", id)
                 if (size != null) put("size", size)
@@ -550,14 +580,14 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getLyrics(artist: String, title: String): Lyrics {
-        return get("getLyrics.view") {
+        return getBody("getLyrics") {
             parameter("artist", artist)
             parameter("title", title)
         }
     }
 
     override suspend fun getLyrics(id: String): StructuredLyrics {
-        return get("getLyricsBySongId.view") {
+        return getBody("getLyricsBySongId") {
             parameter("id", id)
         }
     }
@@ -565,14 +595,14 @@ internal class SubsonicApiImpl(
     override suspend fun getLyrics(song: Song): StructuredLyrics = getLyrics(song.id)
 
     override suspend fun getAvatar(username: String): ByteArray {
-        return httpClient.get("getAvatar.view") {
+        return httpClient.get("getAvatar") {
             parameter("username", username)
         }.bodyAsBytes()
     }
 
     override fun getAvatarUrl(username: String, auth: Boolean): String {
         return buildUrl(
-            "rest/getAvatar.view",
+            "rest/getAvatar",
             mapOf("username" to username),
             includeAuth = auth
         )
@@ -581,7 +611,7 @@ internal class SubsonicApiImpl(
     override suspend fun star(vararg id: String) {
         require(id.isNotEmpty())
 
-        getNullable("star.view") {
+        get("star") {
             parameter("id", id.toList())
         }
     }
@@ -593,7 +623,7 @@ internal class SubsonicApiImpl(
     override suspend fun unstar(vararg id: String) {
         require(id.isNotEmpty())
 
-        return getNullable("unstar.view") {
+        return get("unstar") {
             parameter("id", id.toList())
         }
     }
@@ -603,14 +633,14 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun setRating(id: String, rating: Int) {
-        getNullable("setRating.view") {
+        get("setRating") {
             parameter("id", id)
             parameter("rating", rating)
         }
     }
 
     override suspend fun scrobble(id: String, time: Instant, submission: Boolean) {
-        getNullable("scrobble.view") {
+        get("scrobble") {
             parameter("id", id)
             parameter("time", time)
             parameter("submission", submission)
@@ -618,7 +648,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getShares(): List<Share> {
-        return get("getShares.view")
+        return getBody("getShares")
     }
 
     override suspend fun createShare(
@@ -626,7 +656,7 @@ internal class SubsonicApiImpl(
         description: String?,
         expires: Instant?
     ): Share {
-        return get<List<Share>>("createShare.view") {
+        return getBody<List<Share>>("createShare") {
             entries.forEach { id ->
                 parameter("id", id)
             }
@@ -636,7 +666,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun updateShare(id: String, description: String?, expires: Instant?) {
-        getNullable("updateShare.view") {
+        get("updateShare") {
             parameter("id", id)
             parameter("description", description)
             parameter("expires", expires)
@@ -644,55 +674,57 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun deleteShare(id: String) {
-        getNullable("deleteShare.view") {
+        get("deleteShare") {
             parameter("id", id)
         }
     }
 
-    override suspend fun getPodcasts(includeEpisodes: Boolean): List<Podcast> {
-        return get("getPodcasts.view") {
+    override suspend fun getPodcasts(includeEpisodes: Boolean): List<PodcastChannel> {
+        return getBody("getPodcasts") {
             parameter("includeEpisodes", includeEpisodes)
         }
     }
 
-    override suspend fun getNewestPodcasts(): List<Podcast> {
-        return get("getNewestPodcasts.view") {}
+    override suspend fun getNewestPodcasts(count: Int): List<PodcastEpisode> {
+        return getBody("getNewestPodcasts") {
+            parameter("count", count)
+        }
     }
 
     override suspend fun getPodcastEpisode(id: String) {
-        return get("getPodcastEpisode.view") {}
+        return getBody("getPodcastEpisode") {}
     }
 
     override suspend fun refreshPodcasts() {
-        getNullable("refreshPodcasts.view")
+        get("refreshPodcasts")
     }
 
     override suspend fun createPodcastChannel(url: String) {
-        getNullable("createPodcastChannel.view") {
+        get("createPodcastChannel") {
             parameter("url", url)
         }
     }
 
     override suspend fun deletePodcastChannel(id: String) {
-        getNullable("deletePodcastChannel.view") {
+        get("deletePodcastChannel") {
             parameter("id", id)
         }
     }
 
     override suspend fun deletePodcastEpisode(id: String) {
-        getNullable("deletePodcastEpisode.view") {
+        get("deletePodcastEpisode") {
             parameter("id", id)
         }
     }
 
     override suspend fun downloadPodcastEpisode(id: String) {
-        return get("downloadPodcastEpisode.view") {
+        return getBody("downloadPodcastEpisode") {
             parameter("id", id)
         }
     }
 
     override suspend fun jukeboxControl(action: JukeboxAction, gain: Float) {
-        return get("jukeboxControl.view") {
+        return getBody("jukeboxControl") {
             parameter("action", action)
 
             when (action) {
@@ -718,7 +750,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getInternetRadioStations(): List<InternetRadioStation> {
-        return get("getInternetRadioStations.view")
+        return getBody("getInternetRadioStations")
     }
 
     override suspend fun createInternetRadioStation(
@@ -726,7 +758,7 @@ internal class SubsonicApiImpl(
         name: String,
         homepageUrl: String?
     ) {
-        return getNullable("createInternetRadioStation.view") {
+        return get("createInternetRadioStation") {
             parameter("streamUrl", streamUrl)
             parameter("name", name)
             parameter("homepageUrl", homepageUrl)
@@ -739,7 +771,7 @@ internal class SubsonicApiImpl(
         name: String,
         homepageUrl: String?
     ) {
-        getNullable("updateInternetRadioStation.view") {
+        get("updateInternetRadioStation") {
             parameter("id", id)
             parameter("streamUrl", streamUrl)
             parameter("name", name)
@@ -748,27 +780,27 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun deleteInternetRadioStation(id: String) {
-        getNullable("deleteRadioStation.view") {
+        get("deleteRadioStation") {
             parameter("id", id)
         }
     }
 
     override suspend fun getChatMessages(): List<ChatMessage> {
-        return get("getChatMessages.view")
+        return getBody("getChatMessages")
     }
 
     override suspend fun addChatMessage(message: String) {
-        getNullable("addChatMessage.view") {
+        get("addChatMessage") {
             parameter("message", message)
         }
     }
 
     override suspend fun getBookmarks(): List<Bookmark<Resource>> {
-        return get("getBookmarks.view")
+        return getBody("getBookmarks")
     }
 
     override suspend fun createBookmark(id: String, position: Long, comment: String?) {
-        return getNullable("createBookmark.view") {
+        return get("createBookmark") {
             parameter("id", id)
             parameter("position", position)
             parameter("comment", comment)
@@ -776,21 +808,21 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun deleteBookmark(id: String) {
-        getNullable("deleteBookmark.view") {
+        get("deleteBookmark") {
             parameter("id", id)
         }
     }
 
     override suspend fun getPlayQueue(): PlayQueue {
-        return get("getPlayQueue.view")
+        return getBody("getPlayQueue")
     }
 
     override suspend fun getPlayQueueByIndex() {
-        return get("getPlayQueueByIndex.view")
+        return getBody("getPlayQueueByIndex")
     }
 
     override suspend fun savePlayQueue(id: Long?, currentId: Long, position: Int) {
-        getNullable("savePlayQueueByIndex") {
+        get("savePlayQueueByIndex") {
             parameter("id", id)
             parameter("current", currentId)
             parameter("position", position)
@@ -798,7 +830,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun savePlayQueue(id: String?, currentIndex: Int?, position: Long?) {
-        getNullable("savePlayQueueByIndex") {
+        get("savePlayQueueByIndex") {
             parameter("id", id)
             parameter("currentIndex", currentIndex)
             parameter("position", position)
@@ -806,15 +838,15 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getScanStatus(): ScanStatus {
-        return get("getScanStatus.view")
+        return getBody("getScanStatus")
     }
 
     override suspend fun startScan(): ScanStatus {
-        return get("startScan.view")
+        return getBody("startScan")
     }
 
     override suspend fun getTranscodeDecision(id: String, mediaType: MediaType): TranscodeDecision {
-        return get("getTranscodeDecision.view") {
+        return getBody("getTranscodeDecision") {
             parameter("id", id)
             parameter("mediaType", mediaType)
         }
@@ -826,7 +858,7 @@ internal class SubsonicApiImpl(
         offset: Int,
         params: String
     ): ByteArray {
-        return reqBytes("getTranscodeStream.view") {
+        return getBytes("getTranscodeStream") {
             parameter("id", id)
             parameter("mediaType", mediaType)
             parameter("offset", offset)
@@ -839,12 +871,12 @@ internal class SubsonicApiImpl(
         mediaType: MediaType,
         offset: Int
     ): ByteArray {
-        val decision = get<TranscodeDecision>("getTranscodeDecision.view") {
+        val decision = getBody<TranscodeDecision>("getTranscodeDecision") {
             parameter("id", id)
             parameter("mediaType", mediaType)
         }
 
-        return reqBytes("getTranscodeStream.view") {
+        return getBytes("getTranscodeStream") {
             parameter("id", id)
             parameter("mediaType", mediaType)
             parameter("offset", offset)

@@ -1,7 +1,6 @@
 package dev.zt64.subsonic.api
 
 import dev.zt64.subsonic.api.model.*
-import io.ktor.utils.io.*
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -15,163 +14,172 @@ public interface SubsonicApi {
     public suspend fun ping()
 
     /**
-     * TODO
+     * Returns information about the API key.
      *
-     * @return
+     * @return Token information
      */
     public suspend fun tokenInfo(): TokenInfo
 
     /**
-     * TODO
+     * Get details about the software license.
      *
-     * @return
+     * @return License details
      */
     public suspend fun getLicense(): License
 
     /**
-     * TODO
+     * Get supported open subsonic extensions
      *
-     * @return
+     * @return List of supported extensions
      */
     public suspend fun getOpenSubsonicExtensions(): List<SubsonicExtension>
 
     /**
-     * TODO
+     * Changes the password of an existing user on the server, using the following parameters.
+     * You can only change your own password unless you have admin privileges.
      *
-     * @param username
-     * @param password
+     * @param username The name of the user which should change its password.
+     * @param password The new password to set
      */
     public suspend fun changePassword(username: String, password: String)
 
     /**
-     * TODO
+     * Create a new user on the server.
      *
-     * @param username
-     * @param password
-     * @param email
-     * @param ldapAuthenticated
-     * @param roles
+     * @param username The name of the new user
+     * @param password The password of the new user
+     * @param email The email address of the new user
+     * @param ldapAuthenticated Whether to use LDAP authentication
+     * @param roles The roles to assign to the user
+     * @param folders The music folders to grant access to
      */
     public suspend fun createUser(
         username: String,
         password: String,
         email: String,
         ldapAuthenticated: Boolean = false,
-        roles: List<Role> = emptyList()
+        roles: List<Role> = emptyList(),
+        folders: List<String> = emptyList()
     )
 
     /**
-     * TODO
+     * Update an existing user on the server.
      *
-     * @param username
-     */
-    public suspend fun deleteUser(username: String)
-
-    /**
-     * TODO
-     *
-     * @param username
-     * @return
-     */
-    public suspend fun getUser(username: String): User
-
-    /**
-     * TODO
-     *
-     * @return
-     */
-    public suspend fun getUsers(): List<User>
-
-    /**
-     * TODO
-     *
-     * @param username
-     * @param password
-     * @param email
-     * @param ldapAuthenticated
-     * @param roles
+     * @param username The name of the user to update
+     * @param password The new password
+     * @param email The new email address
+     * @param ldapAuthenticated Whether to use LDAP authentication
+     * @param roles The roles to assign to the user
+     * @param maxBitRate The maximum bit rate for streaming
+     * @param folders The music folders to grant access to
      */
     public suspend fun updateUser(
         username: String,
         password: String,
         email: String? = null,
         ldapAuthenticated: Boolean? = null,
-        roles: List<Role>? = null
+        roles: List<Role>? = null,
+        maxBitRate: Int? = null,
+        folders: List<String> = emptyList()
     )
 
     /**
-     * TODO
+     * Delete a user from the server.
      *
-     * @return
+     * @param username The name of the user to delete
+     */
+    public suspend fun deleteUser(username: String)
+
+    /**
+     * Get details about a specific user.
+     *
+     * @param username The username to look up
+     * @return User information
+     */
+    public suspend fun getUser(username: String): User
+
+    /**
+     * Get a list of all users on the server.
+     *
+     * @return List of users
+     */
+    public suspend fun getUsers(): List<User>
+
+    /**
+     * Get all configured music folders.
+     *
+     * @return List of music folders
      */
     public suspend fun getMusicFolders(): List<MusicFolder>
 
     /**
-     * TODO
+     * Get an indexed structure of all artists.
      *
-     * @param musicFolderId
-     * @return
+     * @param musicFolderId Only return artists in the specified music folder
+     * @return Indexed artist list
      */
     public suspend fun getIndexes(musicFolderId: String? = null): Indexes
 
     /**
-     * TODO
+     * Get a listing of all files in a music directory.
      *
+     * @param id The directory ID
      */
-    public suspend fun getMusicDirectory()
+    public suspend fun getMusicDirectory(id: String)
 
     /**
-     * TODO
+     * Get all available genres in the music library.
      *
-     * @return
+     * @return List of genres
      */
     public suspend fun getGenres(): List<Genre>
 
     /**
-     * TODO
+     * Get all artists but organizes music according to ID3 tags.
      *
-     * @param folder
-     * @return
+     * @param folder The music folder ID to filter by
+     * @return Artists grouped by index
      */
     public suspend fun getArtists(folder: String? = null): Artists
 
     /**
-     * TODO
+     * Get details about a specific artist.
      *
-     * @param id
-     * @return
+     * @param id The artist ID
+     * @return Artist details
      */
-    public suspend fun getArtist(id: String): Artist?
+    public suspend fun getArtist(id: String): Artist
 
     /**
-     * TODO
+     * Get details about a specific album.
      *
      * @param id The album ID
-     * @return
+     * @return Album details
      */
-    public suspend fun getAlbum(id: String): Album?
+    public suspend fun getAlbum(id: String): Album
 
     /**
-     * TODO
+     * Get details about a specific song.
      *
      * @param id The song ID
-     * @return
+     * @return Song details
      */
-    public suspend fun getSong(id: String): Song?
+    public suspend fun getSong(id: String): Song
 
     /**
-     * TODO
+     * Get information about a video file.
      *
+     * TODO: Not much documentation, possibly remove this endpoint
      */
     public suspend fun getVideoInfo()
 
     /**
-     * TODO
+     * Get artist information from Last.fm, including biography and similar artists.
      *
-     * @param id
-     * @param maxSimilar
-     * @param includeNotPresent
-     * @return
+     * @param id The artist ID
+     * @param maxSimilar Maximum number of similar artists to return
+     * @param includeNotPresent Whether to include artists not present in the library
+     * @return Artist information
      */
     public suspend fun getArtistInfo(
         id: String,
@@ -179,6 +187,14 @@ public interface SubsonicApi {
         includeNotPresent: Boolean = false
     ): ArtistInfo
 
+    /**
+     * Get artist information from Last.fm, including biography and similar artists.
+     *
+     * @param artist The artist
+     * @param maxSimilar Maximum number of similar artists to return
+     * @param includeNotPresent Whether to include artists not present in the library
+     * @return Artist information
+     */
     public suspend fun getArtistInfo(
         artist: Artist,
         maxSimilar: Int = 20,
@@ -186,11 +202,11 @@ public interface SubsonicApi {
     ): ArtistInfo
 
     /**
-     * TODO
+     * Get artist information using ID3 tags, including biography and similar artists.
      *
-     * @param id
-     * @param maxSimilar
-     * @param includeNotPresent
+     * @param id The artist ID
+     * @param maxSimilar Maximum number of similar artists to return
+     * @param includeNotPresent Whether to include artists not present in the library
      */
     public suspend fun getArtistInfo2(
         id: String,
@@ -199,71 +215,83 @@ public interface SubsonicApi {
     )
 
     /**
-     * TODO
+     * Get album information from Last.fm, including notes and links.
      *
-     * @param id
+     * @param id The album ID
      */
     public suspend fun getAlbumInfo(id: String): AlbumInfo
 
     /**
-     * TODO
+     * Get album information using ID3 tags, including notes and links.
      *
-     * @param id
+     * @param id The album ID
      */
     public suspend fun getAlbumInfo2(id: String): AlbumInfo
 
     /**
-     * TODO
+     * Get songs similar to a given song.
      *
-     * @param id
-     * @param count
-     * @return
+     * @param id The song ID
+     * @param count Maximum number of similar songs to return
+     * @return List of similar songs
      */
     public suspend fun getSimilarSongs(id: String, count: Int = 50): List<Song>
 
     /**
-     * TODO
+     * Get songs similar to a given song using ID3 tags.
      *
-     * @param id
-     * @param count
-     * @return
+     * @param id The song ID
+     * @param count Maximum number of similar songs to return
+     * @return List of similar songs
      */
     public suspend fun getSimilarSongs2(id: String, count: Int = 50): List<Song>
 
     /**
-     * Get top songs for an artist
+     * Get top songs for an artist.
      *
-     * @return A list of top songs, or empty if the artist is missing or no songs found
+     * @param artist The artist name
+     * @param count Maximum number of songs to return
+     * @return A list of top songs, or empty if no songs found
      */
     public suspend fun getTopSongs(artist: String, count: Int = 50): List<Song>
 
+    /**
+     * Get top songs for an artist.
+     *
+     * @param artist The artist
+     * @param count Maximum number of songs to return
+     * @return A list of top songs, or empty if no songs found
+     */
     public suspend fun getTopSongs(artist: Artist, count: Int = 50): List<Song>
 
     /**
-     * TODO
+     * Get a list of albums matching the specified criteria.
      *
-     * @param type
-     * @param size
-     * @param offset
-     * @return
+     * @param type The type of album list to return
+     * @param size Maximum number of albums to return
+     * @param offset The offset for pagination
+     * @return List of albums
      */
     public suspend fun getAlbums(type: AlbumListType, size: Int = 10, offset: Int = 0): List<Album>
 
     /**
-     * TODO
+     * Get a list of albums matching the specified criteria using ID3 tags.
      *
-     * @return
+     * @param type The type of album list to return
+     * @param size Maximum number of albums to return
+     * @param offset The offset for pagination
+     * @return List of albums
      */
     public suspend fun getAlbums2(type: AlbumListType, size: Int = 10, offset: Int = 0): List<Album>
 
     /**
-     * TODO
+     * Get random songs matching the specified criteria.
      *
-     * @param size
-     * @param genre
-     * @param fromYear
-     * @param toYear
-     * @return
+     * @param size Maximum number of songs to return
+     * @param genre The genre to filter by
+     * @param fromYear The minimum year to filter by
+     * @param toYear The maximum year to filter by
+     * @return List of random songs
      */
     public suspend fun getRandomSongs(
         size: Int = 10,
@@ -273,51 +301,56 @@ public interface SubsonicApi {
     ): List<Song>
 
     /**
-     * TODO
+     * Get songs by genre
      *
-     * @param count
-     * @param genre
-     * @param musicFolderId
-     * @return
+     * @param genre The genre to filter by
+     * @param count The max number of songs to get (max 500)
+     * @param offset The offset, used for pagination
+     * @param musicFolderId The music folder ID to filter by
+     * @return List of songs
      */
     public suspend fun getSongs(
+        genre: Genre,
         count: Int = 10,
-        genre: Genre? = null,
-        musicFolderId: String
+        offset: Int = 0,
+        musicFolderId: String? = null
     ): List<Song>
 
     /**
-     * TODO
+     * Get information about what is currently being played by all users.
      *
-     * @return
+     * @return List of now playing entries
      */
     public suspend fun getNowPlaying(): List<NowPlayingEntry>
 
     /**
-     * TODO
+     * Get starred songs, albums, and artists.
      *
-     * @param musicFolder
+     * @param musicFolder The music folder to filter by
+     * @return Starred items
      */
     public suspend fun getStarred(musicFolder: MusicFolder? = null): Starred
 
     /**
-     * TODO
+     * Get starred songs, albums, and artists using ID3 tags.
      *
-     * @param musicFolder
+     * @param musicFolder The music folder to filter by
+     * @return Starred items
      */
     public suspend fun getStarred2(musicFolder: MusicFolder? = null): Starred
 
     /**
-     * TODO
+     * Search for artists, albums, and songs.
      *
-     * @param query
-     * @param artistCount
-     * @param artistOffset
-     * @param albumCount
-     * @param albumOffset
-     * @param songCount
-     * @param songOffset
-     * @param musicFolderId
+     * @param query The search query
+     * @param artistCount Maximum number of artists to return
+     * @param artistOffset The offset for artist pagination
+     * @param albumCount Maximum number of albums to return
+     * @param albumOffset The offset for album pagination
+     * @param songCount Maximum number of songs to return
+     * @param songOffset The offset for song pagination
+     * @param musicFolderId The music folder ID to filter by
+     * @return Search results
      */
     public suspend fun search(
         query: String,
@@ -331,9 +364,17 @@ public interface SubsonicApi {
     ): SearchResult
 
     /**
-     * TODO
+     * Search for artists, albums, and songs using ID3 tags.
      *
-     * @param query
+     * @param query The search query
+     * @param artistCount Maximum number of artists to return
+     * @param artistOffset The offset for artist pagination
+     * @param albumCount Maximum number of albums to return
+     * @param albumOffset The offset for album pagination
+     * @param songCount Maximum number of songs to return
+     * @param songOffset The offset for song pagination
+     * @param musicFolderId The music folder ID to filter by
+     * @return Search results
      */
     public suspend fun search3(
         query: String,
@@ -347,45 +388,47 @@ public interface SubsonicApi {
     ): SearchResult
 
     /**
-     * TODO
+     * Get all playlists.
      *
-     * @return
+     * @return List of playlists
      */
     public suspend fun getPlaylists(): List<Playlist>
 
     /**
-     * TODO
+     * Get details about a specific playlist.
      *
-     * @param id
-     * @return
+     * @param id The playlist ID
+     * @return Playlist details
      */
     public suspend fun getPlaylist(id: String): Playlist
 
     /**
-     * TODO
+     * Create a new playlist.
      *
-     * @param name
-     * @param songIds
+     * @param name The playlist name
+     * @param songIds The list of song IDs to add
+     * @return The created playlist
      */
     public suspend fun createPlaylist(name: String, songIds: List<String>): Playlist
 
     /**
-     * TODO
+     * Create a new playlist from a list of songs.
      *
-     * @param name
-     * @param songs
+     * @param name The playlist name
+     * @param songs The list of songs to add
+     * @return The created playlist
      */
     public suspend fun createPlaylistFromSongs(name: String, songs: List<Song>): Playlist
 
     /**
-     * TODO
+     * Update an existing playlist.
      *
-     * @param id
-     * @param name
-     * @param comment
-     * @param public
-     * @param songIdsToAdd
-     * @param songIndicesToRemove
+     * @param id The playlist ID
+     * @param name The new playlist name
+     * @param comment The new playlist comment
+     * @param public Whether the playlist should be public
+     * @param songIdsToAdd List of song IDs to add to the playlist
+     * @param songIndicesToRemove List of song indices to remove from the playlist
      */
     public suspend fun updatePlaylist(
         id: String,
@@ -396,153 +439,153 @@ public interface SubsonicApi {
         songIndicesToRemove: List<Int> = emptyList()
     )
 
-    // public suspend fun updatePlaylist(
-    //     id: String,
-    //     name: String? = null,
-    //     comment: String? = null,
-    //     public: Boolean? = null,
-    //     songsToAdd: List<Song> = emptyList(),
-    //     songIndicesToRemove: List<Int> = emptyList()
-    // )
-
     /**
-     * TODO
+     * Delete a playlist.
      *
-     * @param id
+     * @param id The playlist ID
      */
     public suspend fun deletePlaylist(id: String)
 
     /**
-     * TODO
+     * Get the URL for streaming a media file.
      *
-     * @param id
-     * @param maxBitRate
-     * @param format
-     * @return
+     * @param id The media file ID
+     * @param maxBitRate The maximum bit rate for streaming
+     * @param format The preferred audio format
+     * @return The stream URL
      */
-    public suspend fun stream(
-        id: String,
-        maxBitRate: Int = 0,
-        format: String? = null
-    ): ByteReadChannel
-
     public fun getStreamUrl(id: String, maxBitRate: Int = 0, format: String? = null): String
 
     /**
-     * TODO
+     * Download a media file.
      *
-     * @param id
-     * @return
+     * @param id The media file ID
+     * @return The file contents
      */
     public suspend fun download(id: String): ByteArray
 
     /**
-     * TODO
+     * Get an HLS playlist for streaming video or audio.
      *
-     * @param id
-     * @param bitRate
-     * @param audioTrack
-     * @return
+     * @param id The video ID
+     * @param bitRate The video bit rate to use
+     * @param audioTrack The audio track to use
+     * @return The HLS playlist
      */
     public suspend fun hls(id: String, bitRate: Int? = null, audioTrack: String? = null): ByteArray
 
     /**
-     * TODO
+     * Get captions/subtitles for a video.
      *
-     * @param videoId
-     * @param format
-     * @return
+     * @param videoId The video ID
+     * @param format The caption format
+     * @return List of caption lines
      */
     public suspend fun getCaptions(videoId: String, format: String): List<String>
 
     /**
-     * TODO
+     * Get cover art for an album or song.
      *
-     * @param id
-     * @param size
-     * @return
+     * @param id The cover art ID
+     * @param size The desired image size
+     * @return The cover art image data
      */
     public suspend fun getCoverArt(id: String, size: String? = null): ByteArray
 
+    /**
+     * Get the URL for cover art.
+     *
+     * @param id The cover art ID
+     * @param size The desired image size
+     * @param auth Whether to include authentication in the URL
+     * @return The cover art URL
+     */
     public fun getCoverArtUrl(id: String, size: String? = null, auth: Boolean = true): String
 
     /**
-     * TODO
+     * Get lyrics for a song by artist and title.
      *
-     * @param artist
-     * @param title
-     * @return
+     * @param artist The artist name
+     * @param title The song title
+     * @return Lyrics information
      */
     public suspend fun getLyrics(artist: String, title: String): Lyrics
 
     /**
-     * TODO
+     * Get structured lyrics for a song by ID.
      *
-     * @param id
-     * @return
+     * @param id The song ID
+     * @return Structured lyrics with timing information
      */
     public suspend fun getLyrics(id: String): StructuredLyrics
 
     /**
-     * TODO
+     * Get structured lyrics for a song.
      *
-     * @param song
-     * @return
+     * @param song The song
+     * @return Structured lyrics with timing information
      */
     public suspend fun getLyrics(song: Song): StructuredLyrics
 
     /**
-     * TODO
+     * Get the avatar image for a user.
      *
-     * @param username
-     * @return
+     * @param username The username
+     * @return The avatar image data
      */
     public suspend fun getAvatar(username: String): ByteArray
 
+    /**
+     * Get the URL for a user's avatar.
+     *
+     * @param username The username
+     * @param auth Whether to include authentication in the URL
+     * @return The avatar URL
+     */
     public fun getAvatarUrl(username: String, auth: Boolean = true): String
 
     /**
-     * Star an item
+     * Star items by ID.
      *
-     * @param id
+     * @param id The IDs of items to star
      */
     public suspend fun star(vararg id: String)
 
     /**
-     * Star
+     * Star items.
      *
-     * @param item
+     * @param item The items to star
      */
     public suspend fun star(vararg item: Resource)
 
     /**
-     * TODO
+     * Unstar items by ID.
      *
-     * @param id
+     * @param id The IDs of items to unstar
      */
     public suspend fun unstar(vararg id: String)
 
     /**
-     * TODO
+     * Unstar items.
      *
-     * @param items
+     * @param items The items to unstar
      */
     public suspend fun unstar(vararg items: Resource)
 
     /**
-     * TODO
+     * Set the rating for a media file.
      *
-     * @param id
-     * @param rating
+     * @param id The media file ID
+     * @param rating The rating (1-5, or 0 to remove rating)
      */
     public suspend fun setRating(id: String, rating: Int)
 
     /**
-     * TODO
+     * Register a song play with Last.fm or similar services.
      *
-     * @param id
-     * @param time
-     * @param submission
+     * @param id The song ID
+     * @param time The time the song was played
+     * @param submission Whether this is a submission or a now-playing notification
      */
     public suspend fun scrobble(
         id: String,
@@ -551,18 +594,19 @@ public interface SubsonicApi {
     )
 
     /**
-     * TODO
+     * Get all shares active user is allowed to manage.
      *
-     * @return
+     * @return List of shares
      */
     public suspend fun getShares(): List<Share>
 
     /**
-     * TODO
+     * Create a public share for media files.
      *
-     * @param entries
-     * @param description
-     * @param expires
+     * @param entries The IDs of media files to share
+     * @param description A description of the share
+     * @param expires The expiration time for the share
+     * @return The created share
      */
     public suspend fun createShare(
         entries: List<String>,
@@ -571,11 +615,11 @@ public interface SubsonicApi {
     ): Share
 
     /**
-     * TODO
+     * Update an existing share.
      *
-     * @param id
-     * @param description
-     * @param expires
+     * @param id The share ID
+     * @param description The new description
+     * @param expires The new expiration time
      */
     public suspend fun updateShare(
         id: String,
@@ -584,89 +628,89 @@ public interface SubsonicApi {
     )
 
     /**
-     * TODO
+     * Delete a share.
      *
-     * @param id
+     * @param id The share ID
      */
     public suspend fun deleteShare(id: String)
 
     /**
-     * TODO
+     * Get all podcast channels.
      *
-     * @param includeEpisodes
-     * @return
+     * @param includeEpisodes Whether to include episode details
+     * @return List of podcast channels
      */
-    public suspend fun getPodcasts(includeEpisodes: Boolean = true): List<Podcast>
+    public suspend fun getPodcasts(includeEpisodes: Boolean = true): List<PodcastChannel>
 
     /**
-     * TODO
+     * Get the most recently published podcast episodes
      *
-     * @return
+     * @param count The maximum number of episodes to return
+     * @return A list of episodes or empty if none found
      */
-    public suspend fun getNewestPodcasts(): List<Podcast>
+    public suspend fun getNewestPodcasts(count: Int = 20): List<PodcastEpisode>
 
     /**
-     * TODO
+     * Get details about a specific podcast episode.
      *
-     * @param id
+     * @param id The episode ID
      */
     public suspend fun getPodcastEpisode(id: String)
 
     /**
-     * TODO
-     *
+     * Refresh all podcast channels and check for new episodes.
      */
     public suspend fun refreshPodcasts()
 
     /**
-     * TODO
+     * Create a new podcast channel
      *
-     * @param url
+     * @param url The podcast URL
      */
     public suspend fun createPodcastChannel(url: String)
 
     /**
-     * TODO
+     * Delete a podcast channel.
      *
-     * @param id
+     * @param id The channel ID
      */
     public suspend fun deletePodcastChannel(id: String)
 
     /**
-     * TODO
+     * Delete a podcast episode.
      *
-     * @param id
+     * @param id The episode ID
      */
     public suspend fun deletePodcastEpisode(id: String)
 
     /**
-     * TODO
+     * Download a podcast episode.
      *
-     * @param id
+     * @param id The episode ID
      */
     public suspend fun downloadPodcastEpisode(id: String)
 
     /**
-     * TODO
+     * Control the jukebox playback.
      *
-     * @param action
-     * @param gain
+     * @param action The action to perform
+     * @param gain The audio gain (0.0-1.0)
      */
     public suspend fun jukeboxControl(action: JukeboxAction, gain: Float)
 
     /**
-     * TODO
+     * Get all internet radio stations.
      *
-     * @return
+     * @return List of internet radio stations
      */
     public suspend fun getInternetRadioStations(): List<InternetRadioStation>
 
     /**
-     * TODO
+     * Create a new internet radio station.
      *
-     * @param streamUrl
-     * @param name
-     * @param homepageUrl
+     * @param streamUrl The stream URL
+     * @param name The station name
+     * @param homepageUrl The station homepage URL
      */
     public suspend fun createInternetRadioStation(
         streamUrl: String,
@@ -675,12 +719,12 @@ public interface SubsonicApi {
     )
 
     /**
-     * TODO
+     * Update an existing internet radio station.
      *
-     * @param id
-     * @param streamUrl
-     * @param name
-     * @param homepageUrl
+     * @param id The station ID
+     * @param streamUrl The stream URL
+     * @param name The station name
+     * @param homepageUrl The station homepage URL
      */
     public suspend fun updateInternetRadioStation(
         id: String,
@@ -690,16 +734,16 @@ public interface SubsonicApi {
     )
 
     /**
-     * TODO
+     * Delete an internet radio station.
      *
-     * @param id
+     * @param id The station ID
      */
     public suspend fun deleteInternetRadioStation(id: String)
 
     /**
-     * TODO
+     * Get all chat messages.
      *
-     * @return
+     * @return List of chat messages
      */
     public suspend fun getChatMessages(): List<ChatMessage>
 
@@ -711,9 +755,9 @@ public interface SubsonicApi {
     public suspend fun addChatMessage(message: String)
 
     /**
-     * TODO
+     * Get all bookmarks for the current user.
      *
-     * @return
+     * @return List of bookmarks
      */
     public suspend fun getBookmarks(): List<Bookmark<Resource>>
 
@@ -727,42 +771,39 @@ public interface SubsonicApi {
     public suspend fun createBookmark(id: String, position: Long, comment: String? = null)
 
     /**
-     * TODO
+     * Delete a bookmark.
      *
-     * @param id
+     * @param id The bookmark ID
      */
     public suspend fun deleteBookmark(id: String)
 
-    // -- Play queue --
-
     /**
-     * TODO
+     * Get the current play queue for the user.
      *
-     * @return
+     * @return Play queue information
      */
     public suspend fun getPlayQueue(): PlayQueue
 
     /**
-     * TODO
-     *
+     * Get the play queue by index.
      */
     public suspend fun getPlayQueueByIndex()
 
     /**
-     * TODO
+     * Save the play queue state.
      *
-     * @param id
-     * @param currentId
-     * @param position
+     * @param id The play queue ID
+     * @param currentId The ID of the currently playing song
+     * @param position The playback position in the current song
      */
     public suspend fun savePlayQueue(id: Long? = null, currentId: Long, position: Int = 0)
 
     /**
-     * TODO
+     * Save the play queue state.
      *
-     * @param id
-     * @param currentIndex
-     * @param position
+     * @param id The play queue ID
+     * @param currentIndex The index of the currently playing song
+     * @param position The playback position in milliseconds
      */
     public suspend fun savePlayQueue(
         id: String? = null,
@@ -771,32 +812,36 @@ public interface SubsonicApi {
     )
 
     /**
-     * Check the current of an active scan.
+     * Check the current status of an active scan.
+     *
+     * @return The scan status
      */
     public suspend fun getScanStatus(): ScanStatus
 
     /**
      * Start a scan of the media library.
+     *
+     * @return The scan status
      */
     public suspend fun startScan(): ScanStatus
 
     /**
-     * TODO
+     * Get transcoding decision information for a media file.
      *
-     * @param id
-     * @param mediaType
-     * @return
+     * @param id The media file ID
+     * @param mediaType The media type
+     * @return Transcoding decision details
      */
     public suspend fun getTranscodeDecision(id: String, mediaType: MediaType): TranscodeDecision
 
     /**
-     * TODO
+     * Get a transcoded media stream with custom parameters.
      *
-     * @param id
-     * @param mediaType
-     * @param offset
-     * @param params
-     * @return
+     * @param id The media file ID
+     * @param mediaType The media type
+     * @param offset The time offset in seconds
+     * @param params Custom transcoding parameters
+     * @return The transcoded stream data
      */
     public suspend fun getTranscodeStream(
         id: String,
@@ -809,8 +854,9 @@ public interface SubsonicApi {
      * Get a transcoded media stream
      *
      * @param id The ID of the media to be transcoded
-     * @param mediaType
-     * @param offset
+     * @param mediaType The media type
+     * @param offset The time offset in seconds
+     * @return The transcoded stream data
      */
     public suspend fun getTranscodeStream(
         id: String,
