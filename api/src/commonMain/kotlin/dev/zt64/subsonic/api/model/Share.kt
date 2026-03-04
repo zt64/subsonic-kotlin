@@ -5,17 +5,17 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 /**
- * Share
+ * Share information
  *
  * @property id The share ID
  * @property url The share URL
  * @property description A description
- * @property username
- * @property created
- * @property expires
- * @property lastVisited
- * @property visitCount
- * @property items
+ * @property username User who created the share
+ * @property createdAt Date share was created
+ * @property expiresAt Date of expiration
+ * @property lastVisited Date of last visit
+ * @property visitCount Number of visits
+ * @property items List of items in this share
  */
 @Serializable
 public data class Share internal constructor(
@@ -23,8 +23,10 @@ public data class Share internal constructor(
     val url: String,
     val description: String,
     val username: String,
-    val created: Instant,
-    val expires: Instant,
+    @SerialName("created")
+    val createdAt: Instant,
+    @SerialName("expires")
+    val expiresAt: Instant,
     val lastVisited: Instant? = null,
     val visitCount: Int,
     @SerialName("entry")

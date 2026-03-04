@@ -4,13 +4,12 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 /**
- * License
+ * License information
  *
- * @property valid
- * @property email
- * @property licenseExpires
- * @property trialExpires
- * @constructor Create empty License
+ * @property valid Whether the license is valid
+ * @property email The user email
+ * @property licenseExpires End of license date
+ * @property trialExpires End of trial date
  */
 @Serializable
 public data class License internal constructor(

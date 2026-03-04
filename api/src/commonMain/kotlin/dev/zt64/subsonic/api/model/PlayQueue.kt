@@ -7,12 +7,12 @@ import kotlin.time.Instant
 /**
  * Play queue
  *
- * @property currentId
- * @property position
- * @property username
- * @property modifiedAt
- * @property modifiedBy
- * @property items
+ * @property currentId ID of currently playing song
+ * @property position Position in milliseconds of the currently playing song
+ * @property username The user this queue belongs to
+ * @property modifiedAt Date of modification
+ * @property modifiedBy Name of client that modified
+ * @property songs List of songs in the queue
  */
 @Serializable
 public data class PlayQueue internal constructor(
@@ -24,7 +24,7 @@ public data class PlayQueue internal constructor(
     @SerialName("changedBy")
     val modifiedBy: String,
     @SerialName("entry")
-    val items: List<Resource>
+    val songs: List<Resource>
 )
 
 @Serializable
@@ -32,5 +32,5 @@ public data class NowPlayingEntry internal constructor(
     val username: String,
     val minutesAgo: Int,
     val playerId: Int,
-    val playerName: String? = null,
+    val playerName: String? = null
 )

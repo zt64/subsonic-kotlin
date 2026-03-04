@@ -303,7 +303,11 @@ internal class SubsonicApiImpl(
         return getArtistInfo(artist.id, maxSimilar, includeNotPresent)
     }
 
-    override suspend fun getArtistInfo2(id: String, maxSimilar: Int, includeNotPresent: Boolean) {
+    override suspend fun getArtistInfoID3(
+        id: String,
+        maxSimilar: Int,
+        includeNotPresent: Boolean
+    ): ArtistInfo {
         return getBody("getArtistInfo") {
             parameter("id", id)
             parameter("count", maxSimilar)
@@ -317,7 +321,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getAlbumInfo2(id: String): AlbumInfo {
+    override suspend fun getAlbumInfoID3(id: String): AlbumInfo {
         return getBody("getAlbumInfo2") {
             parameter("id", id)
         }
@@ -329,7 +333,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getSimilarSongs2(id: String, count: Int): List<Song> {
+    override suspend fun getSimilarSongsID3(id: String, count: Int): List<Song> {
         return getBody("getSimilarSongs2") {
             parameter("id", id)
         }
@@ -367,7 +371,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getAlbums2(type: AlbumListType, size: Int, offset: Int): List<Album> {
+    override suspend fun getAlbumsID3(type: AlbumListType, size: Int, offset: Int): List<Album> {
         return getBody("getAlbumList2") {
             parameter("type", type.value)
             parameter("size", size)
@@ -426,7 +430,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getStarred2(musicFolder: MusicFolder?): Starred {
+    override suspend fun getStarredID3(musicFolder: MusicFolder?): Starred {
         return getBody("getStarred2") {
             parameter("musicFolderId", musicFolder?.id)
         }
@@ -454,7 +458,7 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun search3(
+    override suspend fun searchID3(
         query: String,
         artistCount: Int,
         artistOffset: Int,
@@ -570,8 +574,8 @@ internal class SubsonicApiImpl(
 
     override fun getCoverArtUrl(id: String, size: String?, auth: Boolean): String {
         return buildUrl(
-            "rest/getCoverArt",
-            buildMap {
+            endpoint = "rest/getCoverArt",
+            params = buildMap {
                 put("id", id)
                 if (size != null) put("size", size)
             },
@@ -586,13 +590,13 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getLyrics(id: String): StructuredLyrics {
+    override suspend fun getLyrics(id: String): List<StructuredLyrics> {
         return getBody("getLyricsBySongId") {
             parameter("id", id)
         }
     }
 
-    override suspend fun getLyrics(song: Song): StructuredLyrics = getLyrics(song.id)
+    override suspend fun getLyrics(song: Song): List<StructuredLyrics> = getLyrics(song.id)
 
     override suspend fun getAvatar(username: String): ByteArray {
         return httpClient.get("getAvatar") {
@@ -602,8 +606,8 @@ internal class SubsonicApiImpl(
 
     override fun getAvatarUrl(username: String, auth: Boolean): String {
         return buildUrl(
-            "rest/getAvatar",
-            mapOf("username" to username),
+            endpoint = "rest/getAvatar",
+            params = mapOf("username" to username),
             includeAuth = auth
         )
     }
@@ -654,22 +658,22 @@ internal class SubsonicApiImpl(
     override suspend fun createShare(
         entries: List<String>,
         description: String?,
-        expires: Instant?
+        expiresAt: Instant?
     ): Share {
         return getBody<List<Share>>("createShare") {
             entries.forEach { id ->
                 parameter("id", id)
             }
             parameter("description", description)
-            parameter("expires", expires)
+            parameter("expires", expiresAt)
         }.single()
     }
 
-    override suspend fun updateShare(id: String, description: String?, expires: Instant?) {
+    override suspend fun updateShare(id: String, description: String?, expiresAt: Instant?) {
         get("updateShare") {
             parameter("id", id)
             parameter("description", description)
-            parameter("expires", expires)
+            parameter("expires", expiresAt)
         }
     }
 

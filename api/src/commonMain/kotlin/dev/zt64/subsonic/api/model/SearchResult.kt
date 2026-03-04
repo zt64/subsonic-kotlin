@@ -4,11 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Search result
+ * Search results
  *
- * @property artists
- * @property albums
- * @property songs
+ * @property artists List of artists or empty if none found
+ * @property albums List of albums or empty if none found
+ * @property songs List of songs or empty if none found
  */
 @Serializable
 public data class SearchResult internal constructor(

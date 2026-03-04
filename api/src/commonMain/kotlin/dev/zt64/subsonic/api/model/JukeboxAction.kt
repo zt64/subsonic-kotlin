@@ -3,9 +3,7 @@ package dev.zt64.subsonic.api.model
 import kotlinx.serialization.Serializable
 
 /**
- * Jukebox action
- *
- * @constructor Create empty Jukebox action
+ * Jukebox control action
  */
 @Serializable
 public sealed class JukeboxAction {

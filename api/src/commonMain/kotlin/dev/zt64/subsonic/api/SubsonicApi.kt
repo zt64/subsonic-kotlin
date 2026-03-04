@@ -208,11 +208,11 @@ public interface SubsonicApi {
      * @param maxSimilar Maximum number of similar artists to return
      * @param includeNotPresent Whether to include artists not present in the library
      */
-    public suspend fun getArtistInfo2(
+    public suspend fun getArtistInfoID3(
         id: String,
         maxSimilar: Int = 20,
         includeNotPresent: Boolean = false
-    )
+    ): ArtistInfo
 
     /**
      * Get album information from Last.fm, including notes and links.
@@ -226,7 +226,7 @@ public interface SubsonicApi {
      *
      * @param id The album ID
      */
-    public suspend fun getAlbumInfo2(id: String): AlbumInfo
+    public suspend fun getAlbumInfoID3(id: String): AlbumInfo
 
     /**
      * Get songs similar to a given song.
@@ -244,7 +244,7 @@ public interface SubsonicApi {
      * @param count Maximum number of similar songs to return
      * @return List of similar songs
      */
-    public suspend fun getSimilarSongs2(id: String, count: Int = 50): List<Song>
+    public suspend fun getSimilarSongsID3(id: String, count: Int = 50): List<Song>
 
     /**
      * Get top songs for an artist.
@@ -282,7 +282,11 @@ public interface SubsonicApi {
      * @param offset The offset for pagination
      * @return List of albums
      */
-    public suspend fun getAlbums2(type: AlbumListType, size: Int = 10, offset: Int = 0): List<Album>
+    public suspend fun getAlbumsID3(
+        type: AlbumListType,
+        size: Int = 10,
+        offset: Int = 0
+    ): List<Album>
 
     /**
      * Get random songs matching the specified criteria.
@@ -337,7 +341,7 @@ public interface SubsonicApi {
      * @param musicFolder The music folder to filter by
      * @return Starred items
      */
-    public suspend fun getStarred2(musicFolder: MusicFolder? = null): Starred
+    public suspend fun getStarredID3(musicFolder: MusicFolder? = null): Starred
 
     /**
      * Search for artists, albums, and songs.
@@ -376,7 +380,7 @@ public interface SubsonicApi {
      * @param musicFolderId The music folder ID to filter by
      * @return Search results
      */
-    public suspend fun search3(
+    public suspend fun searchID3(
         query: String,
         artistCount: Int = 20,
         artistOffset: Int = 0,
@@ -517,7 +521,7 @@ public interface SubsonicApi {
      * @param id The song ID
      * @return Structured lyrics with timing information
      */
-    public suspend fun getLyrics(id: String): StructuredLyrics
+    public suspend fun getLyrics(id: String): List<StructuredLyrics>
 
     /**
      * Get structured lyrics for a song.
@@ -525,7 +529,7 @@ public interface SubsonicApi {
      * @param song The song
      * @return Structured lyrics with timing information
      */
-    public suspend fun getLyrics(song: Song): StructuredLyrics
+    public suspend fun getLyrics(song: Song): List<StructuredLyrics>
 
     /**
      * Get the avatar image for a user.
@@ -605,13 +609,13 @@ public interface SubsonicApi {
      *
      * @param entries The IDs of media files to share
      * @param description A description of the share
-     * @param expires The expiration time for the share
+     * @param expiresAt The expiration time for the share
      * @return The created share
      */
     public suspend fun createShare(
         entries: List<String>,
         description: String? = null,
-        expires: Instant? = null
+        expiresAt: Instant? = null
     ): Share
 
     /**
@@ -619,12 +623,12 @@ public interface SubsonicApi {
      *
      * @param id The share ID
      * @param description The new description
-     * @param expires The new expiration time
+     * @param expiresAt The new expiration time
      */
     public suspend fun updateShare(
         id: String,
         description: String? = null,
-        expires: Instant? = null
+        expiresAt: Instant? = null
     )
 
     /**

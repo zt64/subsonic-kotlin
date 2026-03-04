@@ -4,7 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * @param name The name of this genre
+ * Genre
+ *
+ * @property name Name of the genre
+ * @property albumCount Number of albums associated with this genre
+ * @property songCount Number of songs associated with this genre
  */
 @Serializable
 public data class Genre internal constructor(

@@ -4,13 +4,15 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 /**
- * Resource
+ * Base interface for media resources
  *
- * @param id
+ * @property id Unique identifier
+ * @property coverArtId ID of the cover art image
+ * @property starredAt Timestamp when the resource was starred, if applicable
  */
 @Serializable
 public sealed interface Resource {
     public val id: String
-    public val coverArt: String?
-    public val starred: Instant?
+    public val coverArtId: String?
+    public val starredAt: Instant?
 }

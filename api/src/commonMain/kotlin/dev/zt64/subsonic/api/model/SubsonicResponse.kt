@@ -6,10 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonDecoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.*
 
 internal class SubsonicResponseSerializer<T : Any>(
     val tSerializer: KSerializer<T>
@@ -59,6 +56,16 @@ public enum class SubsonicStatus {
     FAILED
 }
 
+/**
+ * Generic Subsonic response
+ *
+ * @param T
+ * @property status Status of the response
+ * @property version API version
+ * @property type Server name
+ * @property serverVersion Server version
+ * @property openSubsonic
+ */
 @Serializable(SubsonicResponseSerializer::class)
 public sealed interface SubsonicResponse<out T : Any> {
     public val status: SubsonicStatus
@@ -67,6 +74,9 @@ public sealed interface SubsonicResponse<out T : Any> {
     public val serverVersion: String
     public val openSubsonic: Boolean
 
+    /**
+     * An empty response with no data, used for endpoints that return no data.
+     */
     @Serializable
     public data class Empty internal constructor(
         override val status: SubsonicStatus,
@@ -76,6 +86,12 @@ public sealed interface SubsonicResponse<out T : Any> {
         override val openSubsonic: Boolean
     ) : SubsonicResponse<Nothing>
 
+    /**
+     * Success
+     *
+     * @param T Type of data
+     * @property data The deserialized data as [T]
+     */
     @Serializable
     public data class Success<out T : Any> internal constructor(
         override val status: SubsonicStatus,
@@ -86,6 +102,11 @@ public sealed interface SubsonicResponse<out T : Any> {
         val data: T
     ) : SubsonicResponse<T>
 
+    /**
+     * Subsonic error
+     *
+     * @property error
+     */
     @Serializable
     public data class Error internal constructor(
         override val status: SubsonicStatus,
