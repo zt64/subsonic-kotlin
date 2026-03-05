@@ -39,11 +39,13 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Gradle Wrapper Validation
         uses: gradle/actions/wrapper-validation@v5
 
-      - name: Cache konan directory
+      - name: Cache Konan directory
         uses: actions/cache@v5
         with:
           path: ~/.konan
