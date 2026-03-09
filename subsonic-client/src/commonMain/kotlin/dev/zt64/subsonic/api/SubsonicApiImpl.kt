@@ -9,6 +9,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.modules.SerializersModule
@@ -40,9 +41,7 @@ internal class SubsonicApiImpl(
         }
 
         params.forEach { (key, value) ->
-            if (value != null) {
-                parameters.append(key, value)
-            }
+            if (value != null) parameters.append(key, value)
         }
     }.toString()
 
@@ -136,7 +135,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getOpenSubsonicExtensions(): List<SubsonicExtension> {
-        return getBody("getOpenSubsonicExtensions")
+        return getBody("getOpenSubsonicExtensions", ListSerializer(SubsonicExtension.serializer()))
     }
 
     override suspend fun changePassword(username: String, password: String) {
