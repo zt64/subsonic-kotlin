@@ -1,23 +1,27 @@
 # subsonic-kotlin
 
-[![Maven Central Version](https://img.shields.io/maven-central/v/dev.zt64.subsonic/subsonic-client)](https://central.sonatype.com/artifact/dev.zt64.subsonic/subsonic-client)
-<br>
+[![Maven Central](https://img.shields.io/maven-central/v/dev.zt64.subsonic/subsonic-client)](https://central.sonatype.com/artifact/dev.zt64.subsonic/subsonic-client)
+[![License](https://img.shields.io/github/license/zt64/subsonic-kotlin)](LICENSE)
+
 ![badge-platform-jvm]
+![badge-platform-android]
 ![badge-platform-linux]
 ![badge-platform-windows]
 ![badge-platform-macos]
 ![badge-platform-ios]
 ![badge-platform-tvos]
 ![badge-platform-watchos]
+![badge-platform-js]
+![badge-platform-wasm]
 
 A Kotlin Multiplatform client library for the Subsonic API.
 
 ## Features
 
-- Full OpenSubsonic API coverage (based on API version 1.16.1)
-- Kotlin Multiplatform support (JVM, Linux, Windows, macOS, iOS, tvOS, watchOS, JS, Wasm)
+- Full [OpenSubsonic](https://opensubsonic.netlify.app/) API coverage (based on API version 1.16.1)
+- Kotlin Multiplatform support (JVM, Android, Linux, Windows, macOS, iOS, tvOS, watchOS, JS, Wasm)
 - Token-based and API key authentication
-- Built on Ktor with kotlinx.serialization
+- Built on [Ktor](https://ktor.io/) with [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)
 
 ## Setup
 
@@ -134,18 +138,13 @@ Contributions are welcome and encouraged! Please feel free to submit issues or p
 
 This project is licensed under the [MIT License](LICENSE).
 
-[badge-platform-jvm]: http://img.shields.io/badge/-jvm-DB413D.svg?style=flat
-
-[badge-platform-linux]: http://img.shields.io/badge/-linux-2D3F6C.svg?style=flat
-
-[badge-platform-windows]: http://img.shields.io/badge/-windows-4D76CD.svg?style=flat
-
-[badge-platform-macos]: http://img.shields.io/badge/-macos-111111.svg?style=flat
-
-[badge-platform-ios]: http://img.shields.io/badge/-ios-CDCDCD.svg?style=flat
-
-[badge-platform-tvos]: http://img.shields.io/badge/-tvos-808080.svg?style=flat
-
-[badge-platform-watchos]: http://img.shields.io/badge/-watchos-C0C0C0.svg?style=flat
-
+[badge-platform-jvm]: https://img.shields.io/badge/-jvm-DB413D.svg?style=flat
+[badge-platform-android]: https://img.shields.io/badge/-android-3DDC84.svg?style=flat
+[badge-platform-linux]: https://img.shields.io/badge/-linux-2D3F6C.svg?style=flat
+[badge-platform-windows]: https://img.shields.io/badge/-windows-4D76CD.svg?style=flat
+[badge-platform-macos]: https://img.shields.io/badge/-macos-111111.svg?style=flat
+[badge-platform-ios]: https://img.shields.io/badge/-ios-CDCDCD.svg?style=flat
+[badge-platform-tvos]: https://img.shields.io/badge/-tvos-808080.svg?style=flat
+[badge-platform-watchos]: https://img.shields.io/badge/-watchos-C0C0C0.svg?style=flat
+[badge-platform-js]: https://img.shields.io/badge/-js-F8DB5D.svg?style=flat
 [badge-platform-wasm]: https://img.shields.io/badge/-wasm-624FE8.svg?style=flat
