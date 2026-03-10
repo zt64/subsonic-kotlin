@@ -9,7 +9,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-private const val USER_AGENT = "github.com/zt64/subsonic-kotlin"
+private const val USER_AGENT = "subsonic-kotlin (github.com/zt64/subsonic-kotlin)"
 private const val API_VERSION = "1.16.1"
 private const val CLIENT_NAME = "subsonic-kotlin"
 
