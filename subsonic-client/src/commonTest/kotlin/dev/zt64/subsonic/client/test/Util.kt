@@ -37,7 +37,7 @@ val client by lazy {
                 assertEquals(params["c"], "subsonic-kotlin")
                 assertEquals(params["f"], "json")
 
-                val endpoint = req.url.segments.first()
+                val endpoint = req.url.segments.last()
 
                 if (endpoint in responses) {
                     val content = responses[endpoint]
