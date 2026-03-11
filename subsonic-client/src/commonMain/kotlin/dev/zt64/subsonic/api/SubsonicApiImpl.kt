@@ -503,7 +503,7 @@ internal class SubsonicApiImpl(
         songIndicesToRemove: List<Int>
     ) {
         get("updatePlaylist") {
-            parameter("id", id)
+            parameter("playlistId", id)
             parameter("name", name)
             parameter("comment", comment)
             parameter("public", public)
