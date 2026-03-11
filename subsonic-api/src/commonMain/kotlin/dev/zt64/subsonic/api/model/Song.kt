@@ -48,8 +48,8 @@ public data class Song internal constructor(
     @SerialName("parent")
     val parentId: String? = null,
     @SerialName("track")
-    val trackNumber: Int,
-    val discNumber: Int,
+    val trackNumber: Int? = null,
+    val discNumber: Int? = null,
     val year: Int? = null,
     val genre: String? = null,
     @Serializable(SubsonicDurationSerializer::class)
