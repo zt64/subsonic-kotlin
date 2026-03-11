@@ -49,8 +49,8 @@ public data class Artist internal constructor(
  */
 @Serializable
 public data class ArtistInfo internal constructor(
-    val musicBrainzId: String,
-    val biography: String,
+    val musicBrainzId: String? = null,
+    val biography: String? = null,
     val smallImageUrl: String,
     val mediumImageUrl: String,
     val largeImageUrl: String,
