@@ -26,7 +26,9 @@ internal object ResourceSerializer : JsonContentPolymorphicSerializer<Resource>(
             "song" -> Song.serializer()
             "artist" -> Artist.serializer()
             "album" -> Album.serializer()
-            else -> throw SerializationException("Unknown media type: ${element.jsonObject["mediaType"]}")
+            else -> throw SerializationException(
+                "Unknown media type: ${element.jsonObject["mediaType"]}"
+            )
         }
     }
 }
