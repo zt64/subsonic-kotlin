@@ -141,6 +141,23 @@ internal class SubsonicApiImpl(
         }
     }
 
+    private fun HttpRequestBuilder.addRoles(roles: List<Role>) {
+        if (roles.isNotEmpty()) {
+            if (Role.ADMIN in roles) parameter("adminRole", true)
+            if (Role.SETTINGS in roles) parameter("settingsRole", true)
+            if (Role.STREAM in roles) parameter("streamRole", true)
+            if (Role.JUKEBOX in roles) parameter("jukeboxRole", true)
+            if (Role.DOWNLOAD in roles) parameter("downloadRole", true)
+            if (Role.UPLOAD in roles) parameter("uploadRole", true)
+            if (Role.PLAYLIST in roles) parameter("playlistRole", true)
+            if (Role.COVER_ART in roles) parameter("coverArtRole", true)
+            if (Role.COMMENT in roles) parameter("commentRole", true)
+            if (Role.PODCAST in roles) parameter("podcastRole", true)
+            if (Role.SHARE in roles) parameter("shareRole", true)
+            if (Role.VIDEO_CONVERSION in roles) parameter("videoConversionRole", true)
+        }
+    }
+
     override suspend fun createUser(
         username: String,
         password: String,
@@ -155,20 +172,7 @@ internal class SubsonicApiImpl(
             parameter("email", email)
             parameter("ldapAuthenticated", ldapAuthenticated)
 
-            if (roles.isNotEmpty()) {
-                if (Role.ADMIN in roles) parameter("adminRole", true)
-                if (Role.SETTINGS in roles) parameter("settingsRole", true)
-                if (Role.STREAM in roles) parameter("streamRole", true)
-                if (Role.JUKEBOX in roles) parameter("jukeboxRole", true)
-                if (Role.DOWNLOAD in roles) parameter("downloadRole", true)
-                if (Role.UPLOAD in roles) parameter("uploadRole", true)
-                if (Role.PLAYLIST in roles) parameter("playlistRole", true)
-                if (Role.COVER_ART in roles) parameter("coverArtRole", true)
-                if (Role.COMMENT in roles) parameter("commentRole", true)
-                if (Role.PODCAST in roles) parameter("podcastRole", true)
-                if (Role.SHARE in roles) parameter("shareRole", true)
-                if (Role.VIDEO_CONVERSION in roles) parameter("videoConversionRole", true)
-            }
+            addRoles(roles)
 
             folders.forEach {
                 parameter("musicFolderId", it)
@@ -191,20 +195,7 @@ internal class SubsonicApiImpl(
             parameter("email", email)
             parameter("ldapAuthenticated", ldapAuthenticated)
 
-            if (!roles.isNullOrEmpty()) {
-                if (Role.ADMIN in roles) parameter("adminRole", true)
-                if (Role.SETTINGS in roles) parameter("settingsRole", true)
-                if (Role.STREAM in roles) parameter("streamRole", true)
-                if (Role.JUKEBOX in roles) parameter("jukeboxRole", true)
-                if (Role.DOWNLOAD in roles) parameter("downloadRole", true)
-                if (Role.UPLOAD in roles) parameter("uploadRole", true)
-                if (Role.PLAYLIST in roles) parameter("playlistRole", true)
-                if (Role.COVER_ART in roles) parameter("coverArtRole", true)
-                if (Role.COMMENT in roles) parameter("commentRole", true)
-                if (Role.PODCAST in roles) parameter("podcastRole", true)
-                if (Role.SHARE in roles) parameter("shareRole", true)
-                if (Role.VIDEO_CONVERSION in roles) parameter("videoConversionRole", true)
-            }
+            addRoles(roles.orEmpty())
 
             folders.forEach {
                 parameter("musicFolderId", it)
@@ -337,8 +328,13 @@ internal class SubsonicApiImpl(
         return getTopSongs(artist.name, count)
     }
 
-    override suspend fun getAlbums(type: AlbumListType, size: Int, offset: Int): List<Album> {
-        return getBody("getAlbumList") {
+    private suspend fun getAlbums(
+        endpoint: String,
+        type: AlbumListType,
+        size: Int,
+        offset: Int
+    ): List<Album> {
+        return getBody(endpoint) {
             parameter("type", type.value)
             parameter("size", size)
             parameter("offset", offset)
@@ -358,25 +354,22 @@ internal class SubsonicApiImpl(
         }
     }
 
+    override suspend fun getAlbums(type: AlbumListType, size: Int, offset: Int): List<Album> {
+        return getAlbums(
+            endpoint = "getAlbumList",
+            type = type,
+            size = size,
+            offset = offset
+        )
+    }
+
     override suspend fun getAlbumsID3(type: AlbumListType, size: Int, offset: Int): List<Album> {
-        return getBody("getAlbumList2") {
-            parameter("type", type.value)
-            parameter("size", size)
-            parameter("offset", offset)
-
-            when (type) {
-                is AlbumListType.ByYear -> {
-                    parameter("fromYear", type.fromYear)
-                    parameter("toYear", type.toYear)
-                }
-
-                is AlbumListType.ByGenre -> {
-                    parameter("genre", type.genre)
-                }
-
-                else -> {}
-            }
-        }
+        return getAlbums(
+            endpoint = "getAlbumList2",
+            type = type,
+            size = size,
+            offset = offset
+        )
     }
 
     override suspend fun getRandomSongs(
@@ -423,6 +416,29 @@ internal class SubsonicApiImpl(
         }
     }
 
+    private suspend fun search(
+        endpoint: String,
+        query: String,
+        artistCount: Int,
+        artistOffset: Int,
+        albumCount: Int,
+        albumOffset: Int,
+        songCount: Int,
+        songOffset: Int,
+        musicFolderId: Int?
+    ): SearchResult {
+        return getBody(endpoint) {
+            parameter("query", query)
+            parameter("artistCount", artistCount)
+            parameter("artistOffset", artistOffset)
+            parameter("albumCount", albumCount)
+            parameter("albumOffset", albumOffset)
+            parameter("songCount", songCount)
+            parameter("songOffset", songOffset)
+            parameter("musicFolderId", musicFolderId)
+        }
+    }
+
     override suspend fun search(
         query: String,
         artistCount: Int,
@@ -433,16 +449,17 @@ internal class SubsonicApiImpl(
         songOffset: Int,
         musicFolderId: Int?
     ): SearchResult {
-        return getBody("search2") {
-            parameter("query", query)
-            parameter("artistCount", artistCount)
-            parameter("artistOffset", artistOffset)
-            parameter("albumCount", albumCount)
-            parameter("albumOffset", albumOffset)
-            parameter("songCount", songCount)
-            parameter("songOffset", songOffset)
-            parameter("musicFolderId", musicFolderId)
-        }
+        return search(
+            endpoint = "search",
+            query = query,
+            artistCount = artistCount,
+            artistOffset = artistOffset,
+            albumCount = albumCount,
+            albumOffset = albumOffset,
+            songCount = songCount,
+            songOffset = songOffset,
+            musicFolderId = musicFolderId
+        )
     }
 
     override suspend fun searchID3(
@@ -455,16 +472,17 @@ internal class SubsonicApiImpl(
         songOffset: Int,
         musicFolderId: Int?
     ): SearchResult {
-        return getBody("search3") {
-            parameter("query", query)
-            parameter("artistCount", artistCount)
-            parameter("artistOffset", artistOffset)
-            parameter("albumCount", albumCount)
-            parameter("albumOffset", albumOffset)
-            parameter("songCount", songCount)
-            parameter("songOffset", songOffset)
-            parameter("musicFolderId", musicFolderId)
-        }
+        return search(
+            endpoint = "search2",
+            query = query,
+            artistCount = artistCount,
+            artistOffset = artistOffset,
+            albumCount = albumCount,
+            albumOffset = albumOffset,
+            songCount = songCount,
+            songOffset = songOffset,
+            musicFolderId = musicFolderId
+        )
     }
 
     override suspend fun getPlaylists(): List<Playlist> = getBody("getPlaylists")
