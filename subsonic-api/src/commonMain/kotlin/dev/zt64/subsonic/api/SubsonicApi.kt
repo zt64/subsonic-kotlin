@@ -167,13 +167,6 @@ public interface SubsonicApi {
     public suspend fun getSong(id: String): Song
 
     /**
-     * Get information about a video file.
-     *
-     * TODO: Not much documentation, possibly remove this endpoint
-     */
-    public suspend fun getVideoInfo()
-
-    /**
      * Get artist information from Last.fm, including biography and similar artists.
      *
      * @param id The artist ID

@@ -105,7 +105,6 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getUsers (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun getVideoInfo (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun hls (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun jukeboxControl (Ldev/zt64/subsonic/api/model/JukeboxAction;FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun ping (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

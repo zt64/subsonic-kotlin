@@ -270,10 +270,6 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override suspend fun getVideoInfo() {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getArtistInfo(
         id: String,
         maxSimilar: Int,
