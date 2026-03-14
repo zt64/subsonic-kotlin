@@ -459,7 +459,7 @@ public interface SubsonicApi {
      * @param id The media file ID
      * @return The file contents
      */
-    public suspend fun download(id: String): ByteArray
+    public suspend fun download(id: String): ByteReadChannel
 
     /**
      * Get an HLS playlist for streaming video or audio.

@@ -548,11 +548,11 @@ internal class SubsonicApiImpl(
         )
     }
 
-    override suspend fun download(id: String): ByteArray {
+    override suspend fun download(id: String): ByteReadChannel {
         // TODO: parse using subsonic response which is used for errors
         return httpClient.get("download") {
             parameter("id", id)
-        }.bodyAsBytes()
+        }.bodyAsChannel()
     }
 
     override suspend fun hls(id: String, bitRate: Int?, audioTrack: String?): ByteArray {
