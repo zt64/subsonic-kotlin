@@ -7,6 +7,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.utils.io.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -879,17 +880,17 @@ internal class SubsonicApiImpl(
         id: String,
         mediaType: MediaType,
         offset: Int
-    ): ByteArray {
+    ): ByteReadChannel {
         val decision = getBody<TranscodeDecision>("getTranscodeDecision") {
             parameter("id", id)
             parameter("mediaType", mediaType)
         }
 
-        return getBytes("getTranscodeStream") {
+        return getRaw("getTranscodeStream") {
             parameter("id", id)
             parameter("mediaType", mediaType)
             parameter("offset", offset)
             parameter("transcodeParams", decision.transcodeParams)
-        }
+        }.bodyAsChannel()
     }
 }

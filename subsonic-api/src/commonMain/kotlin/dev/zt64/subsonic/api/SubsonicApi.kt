@@ -860,5 +860,5 @@ public interface SubsonicApi {
         id: String,
         mediaType: MediaType,
         offset: Int = 0
-    ): ByteArray
+    ): ByteReadChannel
 }
