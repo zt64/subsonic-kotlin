@@ -1,20 +1,13 @@
 package dev.zt64.subsonic.api
 
 import dev.zt64.subsonic.api.model.*
-import dev.zt64.subsonic.client.ArrayUnwrapSerializer
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
-import kotlin.reflect.typeOf
 import kotlin.time.Instant
 
 internal class SubsonicApiImpl(
@@ -42,81 +35,47 @@ internal class SubsonicApiImpl(
         }
     }.toString()
 
-    private suspend inline fun <reified T : Any> getSubsonicResponse(
-        endPoint: String,
-        builder: HttpRequestBuilder.() -> Unit = {},
-        serializer: KSerializer<SubsonicResponse<T>> = serializer<SubsonicResponse<T>>()
-    ): SubsonicResponse<T> {
-        val res = httpClient.get("$endPoint.view", builder)
+    /**
+     * Base request function. Interacts with the httpClient
+     */
+    private suspend fun execute(
+        endpoint: String,
+        builder: HttpRequestBuilder.() -> Unit = {}
+    ): HttpResponse {
+        val res = httpClient.get("$endpoint.view", builder)
 
         when (res.status) {
-            HttpStatusCode.Gone -> {
-                throw SubsonicException("Endpoint '$endPoint' will not be implemented")
-            }
-
-            HttpStatusCode.NotImplemented -> {
-                throw SubsonicException("Endpoint '$endPoint' is not implemented")
-            }
+            HttpStatusCode.Gone -> throw SubsonicException("Endpoint '$endpoint' will not be implemented")
+            HttpStatusCode.NotImplemented -> throw SubsonicException("Endpoint '$endpoint' is not implemented")
         }
 
-        return json.decodeFromJsonElement(serializer, res.body<JsonObject>()["subsonic-response"]!!)
+        return res
     }
 
-    // TODO: getBody and get can be simplified, I'm just not sure how yet
     private suspend inline fun <reified T : Any> getBody(
-        endPoint: String,
-        dataSerializer: KSerializer<T> = serializerFor<T>(json.serializersModule),
-        builder: HttpRequestBuilder.() -> Unit = {}
+        endpoint: String,
+        noinline builder: HttpRequestBuilder.() -> Unit = {}
     ): T {
-        val responseSerializer = SubsonicResponse.serializer(dataSerializer)
-
-        return when (val response = getSubsonicResponse(endPoint, builder, responseSerializer)) {
-            is SubsonicResponse.Error -> {
-                throw SubsonicException(
-                    code = response.error.code,
-                    message = response.error.message
-                )
-            }
-
-            is SubsonicResponse.Success<T> -> {
-                response.data
-            }
-
-            is SubsonicResponse.Empty -> {
-                error("Expected data but received empty response")
-            }
+        return when (val res = execute(endpoint, builder).body<SubsonicResponse<T>>()) {
+            is SubsonicResponse.Success -> res.data
+            is SubsonicResponse.Empty -> throw SubsonicException("Expected data but received empty response")
+            is SubsonicResponse.Error -> throw SubsonicException(res.error.message, res.error.code)
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private inline fun <reified T> serializerFor(module: SerializersModule): KSerializer<T> {
-        val type = typeOf<T>()
-        return if (type.classifier == List::class) {
-            val elementSerializer = json.serializersModule.serializer(type.arguments[0].type!!)
-            ArrayUnwrapSerializer(elementSerializer)
-        } else {
-            module.serializer(type)
-        } as KSerializer<T>
+    private suspend fun get(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}) {
+        val res = execute(endpoint, builder).body<SubsonicResponse<Unit>>()
+        if (res is SubsonicResponse.Error) throw SubsonicException(res.error.message, res.error.code)
     }
 
-    private suspend inline fun get(endPoint: String, builder: HttpRequestBuilder.() -> Unit = {}) {
-        when (val response = getSubsonicResponse<Unit>(endPoint, builder)) {
-            is SubsonicResponse.Error -> throw SubsonicException(
-                code = response.error.code,
-                message = response.error.message
-            )
-
-            is SubsonicResponse.Success<Unit> -> error("Unexpected response")
-
-            is SubsonicResponse.Empty -> return
+    private suspend fun getBytes(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}): ByteArray {
+        val res = execute(endpoint, builder)
+        if (res.contentType() == ContentType.Application.Json) {
+            val parsed = json.decodeFromString<SubsonicResponse<Unit>>(res.bodyAsText())
+            if (parsed is SubsonicResponse.Error) throw SubsonicException(parsed.error.message, parsed.error.code)
+            error("Unexpected JSON response for binary endpoint")
         }
-    }
-
-    private suspend inline fun getBytes(
-        endPoint: String,
-        builder: HttpRequestBuilder.() -> Unit = {}
-    ): ByteArray {
-        return httpClient.get(endPoint, builder).bodyAsBytes()
+        return res.bodyAsBytes()
     }
 
     override suspend fun ping() {
@@ -132,7 +91,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun getOpenSubsonicExtensions(): List<SubsonicExtension> {
-        return getBody("getOpenSubsonicExtensions", ListSerializer(SubsonicExtension.serializer()))
+        return getBody("getOpenSubsonicExtensions")
     }
 
     override suspend fun changePassword(username: String, password: String) {
@@ -605,9 +564,9 @@ internal class SubsonicApiImpl(
     override suspend fun getLyrics(song: Song): List<StructuredLyrics> = getLyrics(song.id)
 
     override suspend fun getAvatar(username: String): ByteArray {
-        return httpClient.get("getAvatar") {
+        return getBytes("getAvatar") {
             parameter("username", username)
-        }.bodyAsBytes()
+        }
     }
 
     override fun getAvatarUrl(username: String, auth: Boolean): String {
@@ -886,7 +845,7 @@ internal class SubsonicApiImpl(
             parameter("mediaType", mediaType)
         }
 
-        return getRaw("getTranscodeStream") {
+        return execute("getTranscodeStream") {
             parameter("id", id)
             parameter("mediaType", mediaType)
             parameter("offset", offset)

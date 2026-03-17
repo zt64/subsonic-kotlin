@@ -3,13 +3,14 @@ package dev.zt64.subsonic.api.model
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 
 internal class SubsonicResponseSerializer<T : Any>(
-    val tSerializer: KSerializer<T>
+    private val tSerializer: KSerializer<T>
 ) : KSerializer<SubsonicResponse<T>> {
     override val descriptor = buildClassSerialDescriptor(
         "SubsonicResponse",
@@ -19,16 +20,31 @@ internal class SubsonicResponseSerializer<T : Any>(
     override fun deserialize(decoder: Decoder): SubsonicResponse<T> {
         require(decoder is JsonDecoder)
 
-        val element = decoder.decodeJsonElement().jsonObject
+        val parent = decoder.decodeJsonElement().jsonObject
+        val element = parent["subsonic-response"]!!.jsonObject
         val status = element.jsonObject["status"]!!.jsonPrimitive.content
+
         return if (status == "ok") {
             if (element.entries.size == 6) {
-                // There is a data field
+                // There is a data field if there's 6 entries
+                // TODO: Find a safer way than relying on the size
                 val dataEntry = element.entries.last()
-                val dataKey = dataEntry.key
-                val dataValue = dataEntry.value
+
+                // List responses are either a bare array e.g. [...] like "getOpenSubsonicExtensions"
+                // or wrapped in a single-key object e.g. {"song": [...]};
+                // unwrap to a plain array so the element serializer receives what it expects
+                val dataValue = if (tSerializer.descriptor.kind == StructureKind.LIST) {
+                    when (val v = dataEntry.value) {
+                        is JsonArray -> v
+                        is JsonObject -> v.entries.singleOrNull()?.value ?: JsonArray(emptyList())
+                        else -> JsonArray(emptyList())
+                    }
+                } else {
+                    dataEntry.value
+                }
+
                 val obj = element.jsonObject.toMutableMap().apply {
-                    remove(dataKey)
+                    remove(dataEntry.key)
                     this["data"] = dataValue
                 }
 
@@ -37,18 +53,19 @@ internal class SubsonicResponseSerializer<T : Any>(
                     JsonObject(obj)
                 )
             } else {
-                SubsonicResponse.Empty.serializer().deserialize(decoder)
+                decoder.decodeSerializableValue(SubsonicResponse.Empty.serializer())
             }
         } else {
-            SubsonicResponse.Error.serializer().deserialize(decoder)
+            decoder.decodeSerializableValue(SubsonicResponse.Error.serializer())
         }
     }
 
-    override fun serialize(encoder: Encoder, value: SubsonicResponse<T>) {
-        error("Not needed")
-    }
+    override fun serialize(encoder: Encoder, value: SubsonicResponse<T>) = error("Not needed")
 }
 
+/**
+ * Status of Subsonic API response
+ */
 @Serializable
 public enum class SubsonicStatus {
     @SerialName("ok")
@@ -61,12 +78,12 @@ public enum class SubsonicStatus {
 /**
  * Generic Subsonic response
  *
- * @param T
+ * @param T Type of data
  * @property status Status of the response
  * @property version API version
  * @property type Server name
  * @property serverVersion Server version
- * @property openSubsonic
+ * @property openSubsonic Whether the server is OpenSubsonic
  */
 @Serializable(SubsonicResponseSerializer::class)
 public sealed interface SubsonicResponse<out T : Any> {
@@ -75,6 +92,22 @@ public sealed interface SubsonicResponse<out T : Any> {
     public val type: String
     public val serverVersion: String
     public val openSubsonic: Boolean
+
+    /**
+     * Success
+     *
+     * @param T Type of data
+     * @property data The data deserialized as [T]
+     */
+    @Serializable
+    public data class Success<out T : Any> internal constructor(
+        override val status: SubsonicStatus,
+        override val version: String,
+        override val type: String,
+        override val serverVersion: String,
+        override val openSubsonic: Boolean,
+        val data: T
+    ) : SubsonicResponse<T>
 
     /**
      * An empty response with no data, used for endpoints that return no data.
@@ -89,25 +122,9 @@ public sealed interface SubsonicResponse<out T : Any> {
     ) : SubsonicResponse<Nothing>
 
     /**
-     * Success
-     *
-     * @param T Type of data
-     * @property data The deserialized data as [T]
-     */
-    @Serializable
-    public data class Success<out T : Any> internal constructor(
-        override val status: SubsonicStatus,
-        override val version: String,
-        override val type: String,
-        override val serverVersion: String,
-        override val openSubsonic: Boolean,
-        val data: T
-    ) : SubsonicResponse<T>
-
-    /**
      * Subsonic error
      *
-     * @property error
+     * @property error Error information
      */
     @Serializable
     public data class Error internal constructor(
@@ -166,7 +183,7 @@ public enum class SubsonicErrorCode(public val description: String) {
     @SerialName("60")
     TRIAL_EXPIRED(
         "The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. " +
-            "Visit subsonic.org for details."
+                "Visit subsonic.org for details."
     ),
 
     @SerialName("70")
