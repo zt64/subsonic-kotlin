@@ -45,8 +45,12 @@ internal class SubsonicApiImpl(
         val res = httpClient.get("$endpoint.view", builder)
 
         when (res.status) {
-            HttpStatusCode.Gone -> throw SubsonicException("Endpoint '$endpoint' will not be implemented")
-            HttpStatusCode.NotImplemented -> throw SubsonicException("Endpoint '$endpoint' is not implemented")
+            HttpStatusCode.Gone -> throw SubsonicException(
+                "Endpoint '$endpoint' will not be implemented"
+            )
+            HttpStatusCode.NotImplemented -> throw SubsonicException(
+                "Endpoint '$endpoint' is not implemented"
+            )
         }
 
         return res
@@ -58,21 +62,31 @@ internal class SubsonicApiImpl(
     ): T {
         return when (val res = execute(endpoint, builder).body<SubsonicResponse<T>>()) {
             is SubsonicResponse.Success -> res.data
-            is SubsonicResponse.Empty -> throw SubsonicException("Expected data but received empty response")
+            is SubsonicResponse.Empty -> throw SubsonicException(
+                "Expected data but received empty response"
+            )
             is SubsonicResponse.Error -> throw SubsonicException(res.error.message, res.error.code)
         }
     }
 
     private suspend fun get(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}) {
         val res = execute(endpoint, builder).body<SubsonicResponse<Unit>>()
-        if (res is SubsonicResponse.Error) throw SubsonicException(res.error.message, res.error.code)
+        if (res is SubsonicResponse.Error) {
+            throw SubsonicException(res.error.message, res.error.code)
+        }
     }
 
-    private suspend fun getBytes(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}): ByteArray {
+    private suspend fun getBytes(
+        endpoint: String,
+        builder: HttpRequestBuilder.() -> Unit = {
+        }
+    ): ByteArray {
         val res = execute(endpoint, builder)
         if (res.contentType() == ContentType.Application.Json) {
             val parsed = json.decodeFromString<SubsonicResponse<Unit>>(res.bodyAsText())
-            if (parsed is SubsonicResponse.Error) throw SubsonicException(parsed.error.message, parsed.error.code)
+            if (parsed is SubsonicResponse.Error) {
+                throw SubsonicException(parsed.error.message, parsed.error.code)
+            }
             error("Unexpected JSON response for binary endpoint")
         }
         return res.bodyAsBytes()

@@ -54,14 +54,14 @@ internal class SubsonicResponseSerializer<T : Any>(
                 )
             } else {
                 decoder.json.decodeFromJsonElement(
-                    SubsonicResponse.Empty.serializer(),
-                    element
+                    deserializer = SubsonicResponse.Empty.serializer(),
+                    element = element
                 )
             }
         } else {
             decoder.json.decodeFromJsonElement(
-                SubsonicResponse.Error.serializer(),
-                element
+                deserializer = SubsonicResponse.Error.serializer(),
+                element = element
             )
         }
     }
@@ -189,7 +189,7 @@ public enum class SubsonicErrorCode(public val description: String) {
     @SerialName("60")
     TRIAL_EXPIRED(
         "The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. " +
-                "Visit subsonic.org for details."
+            "Visit subsonic.org for details."
     ),
 
     @SerialName("70")
