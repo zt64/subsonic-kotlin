@@ -83,27 +83,35 @@ public data class AlbumInfo(
 @Serializable
 public sealed class AlbumListType(public val value: String) {
     /** Random albums */
+    @Serializable
     public data object Random : AlbumListType("random")
 
     /** Newest albums */
+    @Serializable
     public data object Newest : AlbumListType("newest")
 
     /** Highest rated albums */
+    @Serializable
     public data object Highest : AlbumListType("highest")
 
     /** Most frequently played albums */
+    @Serializable
     public data object Frequent : AlbumListType("frequent")
 
     /** Recently played albums */
+    @Serializable
     public data object Recent : AlbumListType("recent")
 
     /** Starred albums */
+    @Serializable
     public data object Starred : AlbumListType("starred")
 
     /** Alphabetically sorted by album name */
+    @Serializable
     public data object AlphabeticalByName : AlbumListType("alphabeticalByName")
 
     /** Alphabetically sorted by artist name */
+    @Serializable
     public data object AlphabeticalByArtist : AlbumListType("alphabeticalByArtist")
 
     /**
