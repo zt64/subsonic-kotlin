@@ -40,7 +40,7 @@ public data class Album internal constructor(
     val genre: String? = null,
     override val songCount: Int,
     @Serializable(SubsonicDurationSerializer::class)
-    override val duration: Duration,
+    override val duration: Duration? = null,
     @SerialName("created")
     val createdAt: Instant,
     @SerialName("starred")

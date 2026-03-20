@@ -25,7 +25,7 @@ public sealed interface SongCollection {
     public val coverArtId: String?
 
     @Serializable(SubsonicDurationSerializer::class)
-    public val duration: Duration
+    public val duration: Duration?
     public val songCount: Int
     public val songs: List<Song>
 }

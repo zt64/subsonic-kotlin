@@ -77,11 +77,11 @@ public data class Song internal constructor(
     val averageRating: Int? = null,
     @SerialName("bitRate")
     val bitRate: Int,
-    val bitDepth: Int,
+    val bitDepth: Int? = null,
     @SerialName("samplingRate")
-    val sampleRate: Int,
+    val sampleRate: Int? = null,
     @SerialName("channelCount")
-    val audioChannelCount: Int,
+    val audioChannelCount: Int? = null,
     val replayGain: ReplayGain? = null,
     val explicitStatus: ExplicitStatus? = null,
     @SerialName("size")
@@ -91,7 +91,7 @@ public data class Song internal constructor(
     @SerialName("contentType")
     val mimeType: String,
     @SerialName("path")
-    val filePath: String,
+    val filePath: String? = null,
     @SerialName("starred")
     override val starredAt: Instant? = null,
     @SerialName("coverArt")

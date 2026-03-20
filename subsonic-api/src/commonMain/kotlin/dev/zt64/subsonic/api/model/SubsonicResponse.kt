@@ -87,9 +87,9 @@ public enum class SubsonicStatus {
 @Serializable(SubsonicResponseSerializer::class)
 public sealed interface SubsonicResponse<out T : Any> {
     public val status: SubsonicStatus
-    public val version: String
-    public val type: String
-    public val serverVersion: String
+    public val version: String?
+    public val type: String?
+    public val serverVersion: String?
     public val openSubsonic: Boolean
 
     /**
@@ -101,10 +101,10 @@ public sealed interface SubsonicResponse<out T : Any> {
     @Serializable
     public data class Success<out T : Any> internal constructor(
         override val status: SubsonicStatus,
-        override val version: String,
-        override val type: String,
-        override val serverVersion: String,
-        override val openSubsonic: Boolean,
+        override val version: String? = null,
+        override val type: String? = null,
+        override val serverVersion: String? = null,
+        override val openSubsonic: Boolean = false,
         val data: T
     ) : SubsonicResponse<T>
 
@@ -114,10 +114,10 @@ public sealed interface SubsonicResponse<out T : Any> {
     @Serializable
     public data class Empty internal constructor(
         override val status: SubsonicStatus,
-        override val version: String,
-        override val type: String,
-        override val serverVersion: String,
-        override val openSubsonic: Boolean
+        override val version: String? = null,
+        override val type: String? = null,
+        override val serverVersion: String? = null,
+        override val openSubsonic: Boolean = false
     ) : SubsonicResponse<Nothing>
 
     /**
@@ -128,10 +128,10 @@ public sealed interface SubsonicResponse<out T : Any> {
     @Serializable
     public data class Error internal constructor(
         override val status: SubsonicStatus,
-        override val version: String,
-        override val type: String,
-        override val serverVersion: String,
-        override val openSubsonic: Boolean,
+        override val version: String? = null,
+        override val type: String? = null,
+        override val serverVersion: String? = null,
+        override val openSubsonic: Boolean = false,
         public val error: ErrorDetail
     ) : SubsonicResponse<Nothing> {
         @Serializable
@@ -182,7 +182,7 @@ public enum class SubsonicErrorCode(public val description: String) {
     @SerialName("60")
     TRIAL_EXPIRED(
         "The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. " +
-            "Visit subsonic.org for details."
+                "Visit subsonic.org for details."
     ),
 
     @SerialName("70")
