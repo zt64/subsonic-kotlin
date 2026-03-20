@@ -5,5 +5,5 @@ plugins {
 
 allprojects {
     group = "dev.zt64.subsonic"
-    version = "1.0.0-alpha05"
+    version = "1.0.0-alpha06"
 }
