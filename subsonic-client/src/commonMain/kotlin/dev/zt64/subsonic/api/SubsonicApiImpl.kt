@@ -424,7 +424,7 @@ internal class SubsonicApiImpl(
         musicFolderId: Int?
     ): SearchResult {
         return search(
-            endpoint = "search",
+            endpoint = "search2",
             query = query,
             artistCount = artistCount,
             artistOffset = artistOffset,
@@ -447,7 +447,7 @@ internal class SubsonicApiImpl(
         musicFolderId: Int?
     ): SearchResult {
         return search(
-            endpoint = "search2",
+            endpoint = "search3",
             query = query,
             artistCount = artistCount,
             artistOffset = artistOffset,

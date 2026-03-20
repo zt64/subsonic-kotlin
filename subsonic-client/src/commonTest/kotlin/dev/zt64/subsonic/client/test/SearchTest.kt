@@ -8,7 +8,7 @@ class SearchTest {
     @Test
     fun testSearch() = runTest {
         val result = testEndpoint(
-            endpoint = "search",
+            endpoint = "search2",
             response = """
                 "searchResult2": {
                       "artist": [
