@@ -22,7 +22,7 @@ internal class SubsonicApiImpl(
         includeAuth: Boolean = true
     ): String = buildUrl {
         takeFrom(baseUrl)
-        path(endpoint)
+        appendPathSegments(endpoint.removePrefix("/").split('/'))
 
         if (includeAuth) {
             clientParams.forEach { (key, value) ->
