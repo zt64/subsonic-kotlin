@@ -1,11 +1,9 @@
 package dev.zt64.subsonic.api.model
 
+import dev.zt64.subsonic.api.model.serializer.GenresSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.*
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -143,14 +141,6 @@ public data class Song internal constructor(
 
         @SerialName("")
         UNKNOWN
-    }
-
-    private class GenresSerializer : JsonTransformingSerializer<List<String>>(
-        tSerializer = ListSerializer(String.serializer())
-    ) {
-        override fun transformDeserialize(element: JsonElement): JsonElement {
-            return JsonArray(element.jsonArray.map { it.jsonObject["name"]!! })
-        }
     }
 }
 
