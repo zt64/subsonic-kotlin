@@ -24,7 +24,7 @@ public data class PlayQueue internal constructor(
     @SerialName("changedBy")
     val modifiedBy: String,
     @SerialName("entry")
-    val songs: List<Resource>
+    val songs: List<SubsonicResource> = emptyList()
 )
 
 @Serializable

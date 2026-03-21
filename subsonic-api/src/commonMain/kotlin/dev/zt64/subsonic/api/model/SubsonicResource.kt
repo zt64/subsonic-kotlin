@@ -14,14 +14,18 @@ import kotlin.time.Instant
  * @property starredAt Timestamp when the resource was starred, if applicable
  */
 @Serializable(ResourceSerializer::class)
-public sealed interface Resource {
+public sealed interface SubsonicResource {
     public val id: String
     public val coverArtId: String?
     public val starredAt: Instant?
 }
 
-internal object ResourceSerializer : JsonContentPolymorphicSerializer<Resource>(Resource::class) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Resource> {
+internal object ResourceSerializer : JsonContentPolymorphicSerializer<SubsonicResource>(
+    baseClass = SubsonicResource::class
+) {
+    override fun selectDeserializer(
+        element: JsonElement
+    ): DeserializationStrategy<SubsonicResource> {
         return when (element.jsonObject["mediaType"]!!.jsonPrimitive.content) {
             "song" -> Song.serializer()
             "artist" -> Artist.serializer()

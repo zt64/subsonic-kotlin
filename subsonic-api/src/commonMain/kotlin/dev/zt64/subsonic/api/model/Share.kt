@@ -30,5 +30,5 @@ public data class Share internal constructor(
     val lastVisited: Instant? = null,
     val visitCount: Int,
     @SerialName("entry")
-    val items: List<Resource> = emptyList()
+    val items: List<SubsonicResource> = emptyList()
 )

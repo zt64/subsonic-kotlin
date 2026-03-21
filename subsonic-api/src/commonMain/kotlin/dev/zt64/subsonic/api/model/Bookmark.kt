@@ -16,7 +16,7 @@ import kotlin.time.Instant
  * @property entry The bookmarked resource
  */
 @Serializable
-public data class Bookmark<T : Resource> internal constructor(
+public data class Bookmark<T : SubsonicResource> internal constructor(
     val position: Int,
     val username: String,
     val comment: String,

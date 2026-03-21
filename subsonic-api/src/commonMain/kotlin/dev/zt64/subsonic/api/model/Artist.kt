@@ -34,7 +34,7 @@ public data class Artist internal constructor(
     val musicBrainzId: String? = null,
     val roles: List<String> = emptyList(),
     val album: List<Album> = emptyList()
-) : Resource
+) : SubsonicResource
 
 /**
  * Detailed artist information from Last.fm

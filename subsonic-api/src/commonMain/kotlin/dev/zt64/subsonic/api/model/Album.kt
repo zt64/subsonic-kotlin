@@ -57,7 +57,7 @@ public data class Album internal constructor(
     val musicBrainzId: String? = null,
     @SerialName("song")
     override val songs: List<Song> = emptyList()
-) : Resource, SongCollection
+) : SubsonicResource, SongCollection
 
 /**
  * Detailed album information from Last.fm

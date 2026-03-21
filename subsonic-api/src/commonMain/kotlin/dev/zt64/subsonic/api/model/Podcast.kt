@@ -77,4 +77,4 @@ public data class PodcastEpisode internal constructor(
     val publishDate: Instant,
     @SerialName("starred")
     override val starredAt: Instant? = null
-) : Resource
+) : SubsonicResource
