@@ -72,7 +72,7 @@ public data class Song internal constructor(
     val contributors: List<Contributor> = emptyList(),
     val playCount: Int = 0,
     val userRating: Int? = null,
-    val averageRating: Int? = null,
+    val averageRating: Float? = null,
     @SerialName("bitRate")
     val bitRate: Int,
     val bitDepth: Int? = null,
