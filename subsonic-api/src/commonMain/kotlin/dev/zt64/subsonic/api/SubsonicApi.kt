@@ -119,7 +119,7 @@ public interface SubsonicApi {
      * @param musicFolderId Only return artists in the specified music folder
      * @return Indexed artist list
      */
-    public suspend fun getIndexes(musicFolderId: String? = null): Indexes
+    public suspend fun getIndexes(musicFolderId: String? = null): ArtistIndexes
 
     /**
      * Get a listing of all files in a music directory.

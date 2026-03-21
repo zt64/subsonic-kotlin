@@ -13,7 +13,7 @@ import kotlin.time.Instant
  * @property coverArtId Cover art ID
  * @property artistImageUrl Direct URL to artist image
  * @property starredAt Timestamp when starred, or null if not starred
- * @property userRating User rating (1-5), or -1 if not rated
+ * @property userRating User rating (1-5), or null if unrated
  * @property sortName Alternate name for sorting
  * @property roles List of artist roles (e.g., composer, performer)
  * @property album List of albums by this artist
@@ -28,7 +28,7 @@ public data class Artist internal constructor(
     val artistImageUrl: String? = null,
     @SerialName("starred")
     override val starredAt: Instant? = null,
-    val userRating: Int = -1,
+    val userRating: Int? = null,
     val sortName: String? = null,
     override val musicBrainzId: String? = null,
     val roles: List<String> = emptyList(),
@@ -65,10 +65,10 @@ public data class ArtistInfo internal constructor(
  * @property artists List of artists in this index
  */
 @Serializable
-public data class Index internal constructor(
+public data class ArtistIndex internal constructor(
     val name: String,
     @SerialName("artist")
-    val artists: List<Artist>
+    val artists: List<Artist> = emptyList()
 )
 
 /**
@@ -79,13 +79,13 @@ public data class Index internal constructor(
  * @property index Artist indexes grouped by name
  */
 @Serializable
-public data class Indexes internal constructor(
+public data class ArtistIndexes internal constructor(
     @SerialName("shortcut")
     val shortcut: List<Artist> = emptyList(),
     @SerialName("child")
     val child: List<Artist> = emptyList(),
     @SerialName("index")
-    val index: List<Index> = emptyList()
+    val index: List<ArtistIndex> = emptyList()
 )
 
 /**
@@ -97,5 +97,5 @@ public data class Indexes internal constructor(
 @Serializable
 public data class Artists internal constructor(
     val ignoredArticles: String,
-    val index: List<Index>
-) : List<Index> by index
+    val index: List<ArtistIndex> = emptyList()
+) : List<ArtistIndex> by index

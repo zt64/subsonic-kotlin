@@ -191,7 +191,7 @@ public data class StructuredLyrics internal constructor(
     val displayTitle: String,
     val offset: Int = 0,
     @SerialName("line")
-    val lines: List<Line>
+    val lines: List<Line> = emptyList()
 ) {
     /**
      * A single line of lyrics with timing information

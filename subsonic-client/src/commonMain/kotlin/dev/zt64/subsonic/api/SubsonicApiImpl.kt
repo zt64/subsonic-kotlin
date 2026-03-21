@@ -199,7 +199,7 @@ internal class SubsonicApiImpl(
         return getBody("getMusicFolders")
     }
 
-    override suspend fun getIndexes(musicFolderId: String?): Indexes {
+    override suspend fun getIndexes(musicFolderId: String?): ArtistIndexes {
         return getBody("getIndexes")
     }
 
