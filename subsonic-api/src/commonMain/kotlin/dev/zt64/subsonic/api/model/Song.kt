@@ -74,7 +74,7 @@ public data class Song internal constructor(
     val userRating: Int? = null,
     val averageRating: Float? = null,
     @SerialName("bitRate")
-    val bitRate: Int,
+    val bitRate: Int? = null,
     val bitDepth: Int? = null,
     @SerialName("samplingRate")
     val sampleRate: Int? = null,
