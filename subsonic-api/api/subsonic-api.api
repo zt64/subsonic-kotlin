@@ -1396,7 +1396,7 @@ public final class dev/zt64/subsonic/api/model/Share$Companion {
 
 public final class dev/zt64/subsonic/api/model/Song : dev/zt64/subsonic/api/model/SubsonicResource {
 	public static final field Companion Ldev/zt64/subsonic/api/model/Song$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/List;Ljava/util/List;JLjava/lang/Integer;Ljava/util/List;ILjava/lang/Integer;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ldev/zt64/subsonic/api/model/Song$ReplayGain;Ldev/zt64/subsonic/api/model/Song$ExplicitStatus;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/time/Duration;Ljava/lang/Integer;Ljava/util/List;ILjava/lang/Integer;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ldev/zt64/subsonic/api/model/Song$ReplayGain;Ldev/zt64/subsonic/api/model/Song$ExplicitStatus;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component10 ()Ljava/lang/Integer;
 	public final fun component11 ()Ljava/util/List;
@@ -1404,7 +1404,7 @@ public final class dev/zt64/subsonic/api/model/Song : dev/zt64/subsonic/api/mode
 	public final fun component13 ()Ljava/lang/String;
 	public final fun component14 ()Ljava/util/List;
 	public final fun component15 ()Ljava/util/List;
-	public final fun component16-UwyO8pc ()J
+	public final fun component16-FghU774 ()Lkotlin/time/Duration;
 	public final fun component17 ()Ljava/lang/Integer;
 	public final fun component18 ()Ljava/util/List;
 	public final fun component19 ()I
@@ -1431,7 +1431,7 @@ public final class dev/zt64/subsonic/api/model/Song : dev/zt64/subsonic/api/mode
 	public final fun component7 ()Ljava/lang/String;
 	public final fun component8 ()Ljava/lang/String;
 	public final fun component9 ()Ljava/lang/Integer;
-	public static synthetic fun copy-xzfVt6M$subsonic_api$default (Ldev/zt64/subsonic/api/model/Song;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/List;Ljava/util/List;JLjava/lang/Integer;Ljava/util/List;ILjava/lang/Integer;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ldev/zt64/subsonic/api/model/Song$ReplayGain;Ldev/zt64/subsonic/api/model/Song$ExplicitStatus;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;IILjava/lang/Object;)Ldev/zt64/subsonic/api/model/Song;
+	public static synthetic fun copy-Qk3czKM$subsonic_api$default (Ldev/zt64/subsonic/api/model/Song;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/time/Duration;Ljava/lang/Integer;Ljava/util/List;ILjava/lang/Integer;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ldev/zt64/subsonic/api/model/Song$ReplayGain;Ldev/zt64/subsonic/api/model/Song$ExplicitStatus;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;IILjava/lang/Object;)Ldev/zt64/subsonic/api/model/Song;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAlbumId ()Ljava/lang/String;
 	public final fun getAlbumTitle ()Ljava/lang/String;
@@ -1446,7 +1446,7 @@ public final class dev/zt64/subsonic/api/model/Song : dev/zt64/subsonic/api/mode
 	public final fun getContributors ()Ljava/util/List;
 	public fun getCoverArtId ()Ljava/lang/String;
 	public final fun getDiscNumber ()Ljava/lang/Integer;
-	public final fun getDuration-UwyO8pc ()J
+	public final fun getDuration-FghU774 ()Lkotlin/time/Duration;
 	public final fun getExplicitStatus ()Ldev/zt64/subsonic/api/model/Song$ExplicitStatus;
 	public final fun getFileExtension ()Ljava/lang/String;
 	public final fun getFilePath ()Ljava/lang/String;

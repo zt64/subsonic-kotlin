@@ -67,7 +67,7 @@ public data class Song internal constructor(
     val genres: List<String> = emptyList(),
     val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
-    val duration: Duration,
+    val duration: Duration? = null,
     val bpm: Int? = null,
     val contributors: List<Contributor> = emptyList(),
     val playCount: Int = 0,
