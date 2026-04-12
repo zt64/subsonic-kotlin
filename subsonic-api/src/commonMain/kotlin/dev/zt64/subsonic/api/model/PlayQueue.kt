@@ -27,6 +27,14 @@ public data class PlayQueue internal constructor(
     val songs: List<SubsonicResource> = emptyList()
 )
 
+/**
+ * Represents a currently playing entry reported by a Subsonic client.
+ *
+ * @property username The username of the user playing this entry
+ * @property minutesAgo How many minutes ago playback started
+ * @property playerId Unique identifier of the player
+ * @property playerName Optional display name of the player
+ */
 @Serializable
 public data class NowPlayingEntry internal constructor(
     val username: String,
