@@ -199,8 +199,14 @@ internal class SubsonicApiImpl(
         return getBody("getMusicFolders")
     }
 
-    override suspend fun getIndexes(musicFolderId: String?): ArtistIndexes {
-        return getBody("getIndexes")
+    override suspend fun getIndexes(
+        musicFolderId: String?,
+        ifModifiedSince: Instant?
+    ): ArtistIndexes {
+        return getBody("getIndexes") {
+            parameter("musicFolderId", musicFolderId)
+            parameter("ifModifiedSince", ifModifiedSince?.toEpochMilliseconds())
+        }
     }
 
     override suspend fun getDirectory(id: String): Directory {

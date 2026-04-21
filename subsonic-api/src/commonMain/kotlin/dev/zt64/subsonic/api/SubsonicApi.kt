@@ -119,9 +119,13 @@ public interface SubsonicApi {
      * Get an indexed structure of all artists.
      *
      * @param musicFolderId Only return artists in the specified music folder
+     * @param ifModifiedSince Only return artists (and indexes) modified since this instant
      * @return Indexed artist list
      */
-    public suspend fun getIndexes(musicFolderId: String? = null): ArtistIndexes
+    public suspend fun getIndexes(
+        musicFolderId: String? = null,
+        ifModifiedSince: Instant? = null
+    ): ArtistIndexes
 
     /**
      * Get a listing of all files in a music directory. Not to be confused with [getDirectories]

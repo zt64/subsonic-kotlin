@@ -50,8 +50,8 @@ public abstract interface class dev/zt64/subsonic/api/SubsonicApi {
 	public abstract fun getDirectories (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getDirectory (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getGenres (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getIndexes (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun getIndexes$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getIndexes (Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun getIndexes$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getInternetRadioStations (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getLicense (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getLyrics (Ldev/zt64/subsonic/api/model/Song;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -142,7 +142,7 @@ public final class dev/zt64/subsonic/api/SubsonicApi$DefaultImpls {
 	public static synthetic fun getAvatarUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ZILjava/lang/Object;)Ljava/lang/String;
 	public static synthetic fun getCoverArt$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getCoverArtUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ljava/lang/String;
-	public static synthetic fun getIndexes$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun getIndexes$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getNewestPodcasts$default (Ldev/zt64/subsonic/api/SubsonicApi;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getPodcasts$default (Ldev/zt64/subsonic/api/SubsonicApi;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getRandomSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;ILjava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
