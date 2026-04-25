@@ -50,7 +50,7 @@ public data class Song internal constructor(
     val title: String,
     @SerialName("artist")
     val artistName: String,
-    val artistId: String,
+    val artistId: String? = null,
     @SerialName("album")
     val albumTitle: String? = null,
     val albumId: String? = null,
@@ -83,7 +83,7 @@ public data class Song internal constructor(
     val replayGain: ReplayGain? = null,
     val explicitStatus: ExplicitStatus? = null,
     @SerialName("size")
-    val fileSize: Long,
+    val fileSize: Long? = null,
     @SerialName("suffix")
     val fileExtension: String,
     @SerialName("contentType")
