@@ -13,6 +13,7 @@ val username = env("SUBSONIC_USERNAME") ?: "abc"
 val password = env("SUBSONIC_PASSWORD") ?: "xyz"
 
 private val responses = mutableMapOf<String, String?>()
+private val expectedQueryParams = mutableMapOf<String, Map<String, String?>>()
 
 @OptIn(ExperimentalUuidApi::class)
 val client by lazy {
@@ -38,6 +39,13 @@ val client by lazy {
                 assertEquals(params["f"], "json")
 
                 val endpoint = req.url.segments.last()
+
+                val expected = expectedQueryParams[endpoint]
+                if (expected != null) {
+                    expected.forEach { (k, v) ->
+                        assertEquals(v, params[k])
+                    }
+                }
 
                 if (endpoint in responses) {
                     val content = responses[endpoint]
@@ -91,8 +99,10 @@ expect fun env(name: String): String?
 suspend fun <T> testEndpoint(
     endpoint: String,
     response: String? = null,
+    expectedParams: Map<String, String?> = emptyMap(),
     call: suspend SubsonicClient.() -> T
 ): T? {
     responses["$endpoint.view"] = response
+    expectedQueryParams["$endpoint.view"] = expectedParams
     return client.call().also { println(it) }
 }

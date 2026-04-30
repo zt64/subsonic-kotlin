@@ -3,6 +3,7 @@ package dev.zt64.subsonic.client.test
 import dev.zt64.subsonic.client.SubsonicClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.time.Instant
 
 class LibraryTest {
     @Test
@@ -51,6 +52,38 @@ class LibraryTest {
             """.trimIndent()
         ) {
             getIndexes()
+        }
+    }
+
+    @Test
+    fun testGetIndexesIfModifiedSince() = runTest {
+        val since = Instant.fromEpochMilliseconds(1678943707000)
+
+        testEndpoint(
+            endpoint = "getIndexes",
+            response = """
+                "indexes": {
+                  "lastModified": 1678943707000,
+                  "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
+                  "index": [
+                    {
+                      "name": "A",
+                      "artist": [
+                        {
+                          "id": "ar-1",
+                          "name": "Artist 1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+            """.trimIndent(),
+            expectedParams = mapOf(
+                "musicFolderId" to "1",
+                "ifModifiedSince" to since.toEpochMilliseconds().toString()
+            )
+        ) {
+            getIndexes(musicFolderId = "1", ifModifiedSince = since)
         }
     }
 
