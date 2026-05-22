@@ -42,7 +42,7 @@ public data class Album internal constructor(
     val genre: String? = null,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
-    override val songCount: Int,
+    override val songCount: Int = 0,
     @Serializable(SubsonicDurationSerializer::class)
     override val duration: Duration? = null,
     @SerialName("created")
