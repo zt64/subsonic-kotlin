@@ -56,7 +56,7 @@ public data class Playlist internal constructor(
     val comment: String? = null,
     @SerialName("coverArt")
     override val coverArtId: String? = null,
-    override val songCount: Int,
+    override val songCount: Int = 0,
     @Serializable(SubsonicDurationSerializer::class)
     override val duration: Duration,
     @SerialName("created")

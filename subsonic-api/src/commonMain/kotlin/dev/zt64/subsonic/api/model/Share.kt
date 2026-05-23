@@ -28,7 +28,7 @@ public data class Share internal constructor(
     @SerialName("expires")
     val expiresAt: Instant,
     val lastVisited: Instant? = null,
-    val visitCount: Int,
+    val visitCount: Int = 0,
     @SerialName("entry")
     val items: List<SubsonicResource> = emptyList()
 )

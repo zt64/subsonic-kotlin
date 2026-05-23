@@ -14,6 +14,6 @@ import kotlinx.serialization.Serializable
 public data class Genre internal constructor(
     @SerialName("value")
     val name: String,
-    val albumCount: Int,
-    val songCount: Int
+    val albumCount: Int = 0,
+    val songCount: Int = 0
 )
