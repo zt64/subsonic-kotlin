@@ -32,11 +32,12 @@ public final class dev/zt64/subsonic/client/SubsonicAuth$Token$Companion {
 	public final fun invoke (Ljava/lang/String;Ljava/lang/String;)Ldev/zt64/subsonic/client/SubsonicAuth$Token;
 }
 
-public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/api/SubsonicApi {
+public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/api/SubsonicApi, java/lang/AutoCloseable {
 	public static final field Companion Ldev/zt64/subsonic/client/SubsonicClient$Companion;
 	public fun <init> (Lio/ktor/client/HttpClient;Lkotlinx/serialization/json/Json;Ljava/lang/String;Ljava/util/Map;)V
 	public fun addChatMessage (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun changePassword (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun close ()V
 	public fun createBookmark (Ljava/lang/String;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun createInternetRadioStation (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun createPlaylist (Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

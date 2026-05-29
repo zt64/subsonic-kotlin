@@ -24,7 +24,7 @@ public class SubsonicClient(
     private val json: Json,
     private val baseUrl: String,
     private val params: Map<String, String>
-) : SubsonicApi by SubsonicApiImpl(httpClient, json, baseUrl, params) {
+) : SubsonicApi by SubsonicApiImpl(httpClient, json, baseUrl, params), AutoCloseable {
     public companion object {
         /**
          * Create a SubsonicClient
@@ -82,5 +82,9 @@ public class SubsonicClient(
 
             return SubsonicClient(httpClient, json, baseUrl, params)
         }
+    }
+
+    override fun close() {
+        httpClient.close()
     }
 }
