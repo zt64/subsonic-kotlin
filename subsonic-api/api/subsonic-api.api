@@ -1670,10 +1670,10 @@ public final class dev/zt64/subsonic/api/model/StructuredLyrics$Companion {
 
 public final class dev/zt64/subsonic/api/model/StructuredLyrics$Line {
 	public static final field Companion Ldev/zt64/subsonic/api/model/StructuredLyrics$Line$Companion;
-	public final fun component1 ()I
+	public final fun component1 ()Ljava/lang/Integer;
 	public final fun component2 ()Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getStart ()I
+	public final fun getStart ()Ljava/lang/Integer;
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

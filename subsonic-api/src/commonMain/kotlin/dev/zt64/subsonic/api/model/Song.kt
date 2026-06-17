@@ -201,7 +201,7 @@ public data class StructuredLyrics internal constructor(
      */
     @Serializable
     public data class Line internal constructor(
-        val start: Int,
+        val start: Int? = null,
         val value: String
     )
 }
