@@ -9,6 +9,7 @@ on:
       - 'gradle.properties'
       - '.github/workflows/check.yml'
       - 'gradle/**'
+      - 'kotlin-js-store/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -17,6 +18,7 @@ on:
       - 'gradle.properties'
       - '.github/workflows/check.yml'
       - 'gradle/**'
+      - 'kotlin-js-store/**'
   workflow_dispatch:
 
 concurrency:
