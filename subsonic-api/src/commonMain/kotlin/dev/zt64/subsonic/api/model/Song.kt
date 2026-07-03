@@ -94,7 +94,8 @@ public data class Song internal constructor(
     override val starredAt: Instant? = null,
     @SerialName("coverArt")
     override val coverArtId: String? = null,
-    override val musicBrainzId: String? = null
+    override val musicBrainzId: String? = null,
+    val isExternal: Boolean = false
 ) : SubsonicResource {
     /**
      * Type of media content
