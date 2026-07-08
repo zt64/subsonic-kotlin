@@ -83,8 +83,8 @@ public abstract interface class dev/zt64/subsonic/api/SubsonicApi {
 	public static synthetic fun getStarred$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getStarredID3 (Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun getStarredID3$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public abstract fun getStreamUrl (Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
-	public static synthetic fun getStreamUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public abstract fun getStreamUrl (Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;Z)Ljava/lang/String;
+	public static synthetic fun getStreamUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;ZILjava/lang/Object;)Ljava/lang/String;
 	public abstract fun getTopSongs (Ldev/zt64/subsonic/api/model/Artist;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getTopSongs (Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun getTopSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Artist;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -151,7 +151,7 @@ public final class dev/zt64/subsonic/api/SubsonicApi$DefaultImpls {
 	public static synthetic fun getSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;IILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getStarred$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getStarredID3$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static synthetic fun getStreamUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public static synthetic fun getStreamUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;ZILjava/lang/Object;)Ljava/lang/String;
 	public static synthetic fun getTopSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Artist;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getTopSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getTranscodeStream$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;

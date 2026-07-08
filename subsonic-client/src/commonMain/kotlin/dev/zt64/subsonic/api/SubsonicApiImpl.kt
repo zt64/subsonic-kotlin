@@ -517,13 +517,21 @@ internal class SubsonicApiImpl(
         }
     }
 
-    override fun getStreamUrl(id: String, maxBitRate: Int, format: String?): String {
+    override fun getStreamUrl(
+        id: String,
+        maxBitRate: Int,
+        format: String?,
+        timeOffset: Int?,
+        estimateContentLength: Boolean
+    ): String {
         return buildUrl(
             "rest/stream",
             buildMap {
                 put("id", id)
                 if (maxBitRate > 0) put("maxBitRate", maxBitRate.toString())
                 if (format != null) put("format", format)
+                if (timeOffset != null) put("timeOffset", timeOffset.toString())
+                if (estimateContentLength) put("estimateContentLength", "true")
             }
         )
     }

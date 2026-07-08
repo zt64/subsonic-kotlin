@@ -459,9 +459,17 @@ public interface SubsonicApi {
      * @param id The media file ID
      * @param maxBitRate The maximum bit rate for streaming
      * @param format The preferred audio format
+     * @param timeOffset If specified, the offset to start streaming at (in seconds) into the media
+     * @param estimateContentLength If set to `true`, the Content-Length HTTP header will be set to an estimated value for transcoded or downsampled media
      * @return The stream URL
      */
-    public fun getStreamUrl(id: String, maxBitRate: Int = 0, format: String? = null): String
+    public fun getStreamUrl(
+        id: String,
+        maxBitRate: Int = 0,
+        format: String? = null,
+        timeOffset: Int? = null,
+        estimateContentLength: Boolean = false
+    ): String
 
     /**
      * Download a media file.
