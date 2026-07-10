@@ -1593,6 +1593,21 @@ public final class dev/zt64/subsonic/api/model/SonicMatch {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final synthetic class dev/zt64/subsonic/api/model/SonicMatch$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/zt64/subsonic/api/model/SonicMatch$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/zt64/subsonic/api/model/SonicMatch;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/zt64/subsonic/api/model/SonicMatch;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/zt64/subsonic/api/model/SonicMatch$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class dev/zt64/subsonic/api/model/Starred {
 	public static final field Companion Ldev/zt64/subsonic/api/model/Starred$Companion;
 	public fun <init> ()V

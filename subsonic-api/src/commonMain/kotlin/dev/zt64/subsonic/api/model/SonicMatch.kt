@@ -1,6 +1,7 @@
 package dev.zt64.subsonic.api.model
 
 import dev.zt64.subsonic.api.SubsonicApi
+import kotlinx.serialization.Serializable
 
 /**
  * Sonic similarity match
@@ -10,7 +11,8 @@ import dev.zt64.subsonic.api.SubsonicApi
  * For getSonicSimilarTracks, relative to the query song. For [SubsonicApi.findSonicPath], \
  * relative to the starting song. Returns `-1` when similarity is not supported by the server.
  */
-public data class SonicMatch private constructor(
+@Serializable
+public data class SonicMatch internal constructor(
     val entry: SubsonicResource,
     val similarity: Float
 )
