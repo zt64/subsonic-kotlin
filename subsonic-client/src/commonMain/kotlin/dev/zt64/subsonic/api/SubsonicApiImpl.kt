@@ -880,4 +880,31 @@ internal class SubsonicApiImpl(
             parameter("transcodeParams", decision.transcodeParams)
         }.bodyAsChannel()
     }
+
+    override suspend fun findSonicPath(start: Song, stop: Song, count: Int): List<SonicMatch> {
+        return findSonicPath(start.id, stop.id, count)
+    }
+
+    override suspend fun findSonicPath(
+        startId: String,
+        stopId: String,
+        count: Int
+    ): List<SonicMatch> {
+        return getBody("findSonicPath") {
+            parameter("startSongId", startId)
+            parameter("stopSongId", stopId)
+            parameter("count", count)
+        }
+    }
+
+    override suspend fun getSonicSimilarTracks(song: Song, count: Int): List<SonicMatch> {
+        return getSonicSimilarTracks(song.id, count)
+    }
+
+    override suspend fun getSonicSimilarTracks(songId: String, count: Int): List<SonicMatch> {
+        return getBody("getSonicSimilarTracks") {
+            parameter("songId", songId)
+            parameter("count", count)
+        }
+    }
 }

@@ -54,6 +54,8 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun deleteUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun download (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun downloadPodcastEpisode (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun findSonicPath (Ldev/zt64/subsonic/api/model/Song;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun findSonicPath (Ljava/lang/String;Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getAlbum (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getAlbumInfo (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getAlbumInfoID3 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -96,6 +98,8 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getSimilarSongsID3 (Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getSong (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getSongs (Ljava/lang/String;IILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getSonicSimilarTracks (Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getSonicSimilarTracks (Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getStarred (Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getStarredID3 (Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getStreamUrl (Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;Z)Ljava/lang/String;

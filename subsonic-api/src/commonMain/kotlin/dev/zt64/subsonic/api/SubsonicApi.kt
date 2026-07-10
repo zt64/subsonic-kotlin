@@ -878,4 +878,48 @@ public interface SubsonicApi {
         mediaType: MediaType,
         offset: Int = 0
     ): ByteReadChannel
+
+    /**
+     * Finds a path of songs connecting a start song to an end song, navigating through audio similarity space.
+     *
+     * @param start The song to start at
+     * @param stop The song to end at
+     * @param count The maximum number of songs to return
+     * @return The path of matched songs
+     */
+    public suspend fun findSonicPath(start: Song, stop: Song, count: Int = 25): List<SonicMatch>
+
+    /**
+     * Finds a path of songs connecting a start song to an end song, navigating through audio similarity space.
+     *
+     * @param startId The id of the song to start at
+     * @param stopId The id of the song to end at
+     * @param count The maximum number of songs to return
+     * @return The path of matched songs
+     */
+    public suspend fun findSonicPath(startId: String, stopId: String, count: Int = 25): List<SonicMatch>
+
+    /**
+     * Returns tracks that are sonically similar to a given track, based on audio analysis. \
+     * Results are ordered from most similar to least similar. Each result includes a normalized \
+     * similarity score to the query track. Higher values indicate greater similarity, with 1.0 \
+     * meaning it is the exact same song and 0.0 meaning the most different.
+     *
+     * @param song The song to find similar tracks to
+     * @param count The maximum number of songs to return
+     * @return The matched similar tracks
+     */
+    public suspend fun getSonicSimilarTracks(song: Song, count: Int = 10): List<SonicMatch>
+
+    /**
+     * Returns tracks that are sonically similar to a given track, based on audio analysis. \
+     * Results are ordered from most similar to least similar. Each result includes a normalized \
+     * similarity score to the query track. Higher values indicate greater similarity, with 1.0 \
+     * meaning it is the exact same song and 0.0 meaning the most different.
+     *
+     * @param songId The id of the song to find similar tracks to
+     * @param count The maximum number of songs to return
+     * @return The matched similar tracks
+     */
+    public suspend fun getSonicSimilarTracks(songId: String, count: Int = 10): List<SonicMatch>
 }

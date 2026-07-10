@@ -21,6 +21,10 @@ public abstract interface class dev/zt64/subsonic/api/SubsonicApi {
 	public abstract fun deleteUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun download (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun downloadPodcastEpisode (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun findSonicPath (Ldev/zt64/subsonic/api/model/Song;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun findSonicPath (Ljava/lang/String;Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findSonicPath$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Song;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun findSonicPath$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getAlbum (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getAlbumInfo (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getAlbumInfoID3 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -79,6 +83,10 @@ public abstract interface class dev/zt64/subsonic/api/SubsonicApi {
 	public abstract fun getSong (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getSongs (Ljava/lang/String;IILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun getSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;IILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getSonicSimilarTracks (Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getSonicSimilarTracks (Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun getSonicSimilarTracks$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun getSonicSimilarTracks$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getStarred (Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun getStarred$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getStarredID3 (Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -133,6 +141,8 @@ public final class dev/zt64/subsonic/api/SubsonicApi$DefaultImpls {
 	public static synthetic fun createInternetRadioStation$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun createShare$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/util/List;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun createUser$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun findSonicPath$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Song;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun findSonicPath$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getAlbums$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/AlbumListType;IILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getAlbumsID3$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/AlbumListType;IILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getArtistInfo$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Artist;IZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -149,6 +159,8 @@ public final class dev/zt64/subsonic/api/SubsonicApi$DefaultImpls {
 	public static synthetic fun getSimilarSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getSimilarSongsID3$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getSongs$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;IILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun getSonicSimilarTracks$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Song;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun getSonicSimilarTracks$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getStarred$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getStarredID3$default (Ldev/zt64/subsonic/api/SubsonicApi;Ldev/zt64/subsonic/api/model/Directory;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getStreamUrl$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;ZILjava/lang/Object;)Ljava/lang/String;
@@ -1569,6 +1581,16 @@ public abstract interface class dev/zt64/subsonic/api/model/SongCollection {
 
 public final class dev/zt64/subsonic/api/model/SongCollection$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/zt64/subsonic/api/model/SonicMatch {
+	public final fun component1 ()Ldev/zt64/subsonic/api/model/SubsonicResource;
+	public final fun component2 ()F
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEntry ()Ldev/zt64/subsonic/api/model/SubsonicResource;
+	public final fun getSimilarity ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class dev/zt64/subsonic/api/model/Starred {
