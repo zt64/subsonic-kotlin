@@ -51,6 +51,10 @@ public data class Song internal constructor(
     @SerialName("artist")
     val artistName: String,
     val artistId: String? = null,
+    val artists: List<SongArtist> = emptyList(),
+    val albumArtists: List<SongArtist> = emptyList(),
+    val displayArtist: String? = null,
+    val displayAlbumArtist: String? = null,
     @SerialName("album")
     val albumTitle: String? = null,
     val albumId: String? = null,
@@ -144,6 +148,9 @@ public data class Song internal constructor(
         @SerialName("")
         UNKNOWN
     }
+
+    @Serializable
+    public data class SongArtist(val id: String, val name: String)
 }
 
 /**
