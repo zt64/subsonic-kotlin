@@ -31,7 +31,9 @@ class UserTest {
                   "shareRole": "false"
                 }
             """.trimIndent()
-        ) { getUser("123") }
+        ) {
+            getUser("123")
+        }
     }
 
     @Test

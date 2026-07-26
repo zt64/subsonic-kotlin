@@ -897,7 +897,11 @@ public interface SubsonicApi {
      * @param count The maximum number of songs to return
      * @return The path of matched songs
      */
-    public suspend fun findSonicPath(startId: String, stopId: String, count: Int = 25): List<SonicMatch>
+    public suspend fun findSonicPath(
+        startId: String,
+        stopId: String,
+        count: Int = 25
+    ): List<SonicMatch>
 
     /**
      * Returns tracks that are sonically similar to a given track, based on audio analysis. \
