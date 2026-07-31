@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.4.10"
-ktor = "3.5.0"
+ktor = "3.5.2"
 serialization = "1.11.0"
 datetime = "0.8.0"
 kotlincrypto-hash = "0.8.0"
