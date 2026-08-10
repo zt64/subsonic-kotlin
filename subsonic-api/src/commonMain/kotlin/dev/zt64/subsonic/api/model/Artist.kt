@@ -29,10 +29,11 @@ public data class Artist internal constructor(
     @SerialName("starred")
     override val starredAt: Instant? = null,
     val userRating: Int? = null,
-    val sortName: String? = null,
+    override val sortName: String? = null,
     override val musicBrainzId: String? = null,
     val roles: List<String> = emptyList(),
-    val album: List<Album> = emptyList()
+    val album: List<Album> = emptyList(),
+    override val isExternal: Boolean = false
 ) : SubsonicResource
 
 /**

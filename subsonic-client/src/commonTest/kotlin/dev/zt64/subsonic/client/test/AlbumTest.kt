@@ -26,6 +26,11 @@ class AlbumTest {
                   "artist": "Comfort Fit",
                   "year": 2005,
                   "genre": "Hip-Hop",
+                  "releaseDate": {
+                    "year": 2001,
+                    "month": 3,
+                    "day": 10
+                  },
                   "song": [
                     {
                       "id": "300000116",

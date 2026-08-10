@@ -28,6 +28,7 @@ import kotlin.time.Instant
  * @property duration Length of the song
  * @property bpm Beats per minute of the song
  * @property contributors List of people who contributed to the song (e.g., composer, performer)
+ * @property displayComposer Single composer display string
  * @property playCount Number of times the song has been played
  * @property userRating User's rating (1-5)
  * @property averageRating Average rating across all users
@@ -37,10 +38,15 @@ import kotlin.time.Instant
  * @property audioChannelCount Number of audio channels
  * @property replayGain Replay gain info
  * @property explicitStatus Explicit content status of the song
+ * @property bookmarkPosition The bookmark position in seconds
  * @property fileSize Size of the file in bytes
  * @property fileExtension File extension (e.g., mp3, flac)
  * @property mimeType MIME type of the file
  * @property filePath File system path
+ * @property works List of works, typically associated with classical songs
+ * @property movements List of movements, typically associated with classical songs
+ * @property transcodedContentType Transcoded media type if transcoding should be used
+ * @property transcodedSuffix Suffix of the transcoded media
  * @property starredAt Timestamp when the song was starred, if applicable
  * @property coverArtId ID of the cover art image
  */
@@ -74,6 +80,7 @@ public data class Song internal constructor(
     val duration: Duration? = null,
     val bpm: Int? = null,
     val contributors: List<Contributor> = emptyList(),
+    val displayComposer: String? = null,
     val playCount: Int = 0,
     val userRating: Int? = null,
     val averageRating: Float? = null,
@@ -86,6 +93,8 @@ public data class Song internal constructor(
     val audioChannelCount: Int? = null,
     val replayGain: ReplayGain? = null,
     val explicitStatus: ExplicitStatus? = null,
+    @Serializable(SubsonicDurationSerializer::class)
+    val bookmarkPosition: Duration? = null,
     @SerialName("size")
     val fileSize: Long? = null,
     @SerialName("suffix")
@@ -94,12 +103,17 @@ public data class Song internal constructor(
     val mimeType: String,
     @SerialName("path")
     val filePath: String? = null,
+    val works: List<Work> = emptyList(),
+    val movements: List<Movement> = emptyList(),
+    val transcodedContentType: String? = null,
+    val transcodedSuffix: String? = null,
+    override val sortName: String? = null,
     @SerialName("starred")
     override val starredAt: Instant? = null,
     @SerialName("coverArt")
     override val coverArtId: String? = null,
     override val musicBrainzId: String? = null,
-    val isExternal: Boolean = false
+    override val isExternal: Boolean = false
 ) : SubsonicResource {
     /**
      * Type of media content
@@ -151,6 +165,21 @@ public data class Song internal constructor(
 
     @Serializable
     public data class SongArtist(val id: String, val name: String)
+
+    @Serializable
+    public data class Work(val name: String, val musicBrainzId: String? = null)
+
+    /**
+     * @property name Name of the movement
+     * @property number Number of the movement
+     * @property count How many times the movement occurs
+     */
+    @Serializable
+    public data class Movement(
+        val name: String,
+        val number: Int,
+        val count: Int
+    )
 }
 
 /**

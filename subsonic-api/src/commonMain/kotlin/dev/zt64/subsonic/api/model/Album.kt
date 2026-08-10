@@ -2,6 +2,8 @@ package dev.zt64.subsonic.api.model
 
 import dev.zt64.subsonic.api.model.serializer.GenresSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.serializers.LocalDateComponentSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -14,11 +16,13 @@ import kotlin.time.Instant
  * @property name Album name
  * @property artistName Artist name
  * @property artistId Artist identifier
+ * @property artists List of album artists
+ * @property displayArtist Single artist display string
  * @property year Release year
  * @property coverArtId Cover art ID
  * @property genre Album genre
  * @property genres List of genres
- * @property songCount Number of songs in the album
+ * @property moods List of moods
  * @property duration Total album duration
  * @property createdAt Timestamp when added to library
  * @property starredAt Timestamp when starred, or null if not starred
@@ -26,8 +30,16 @@ import kotlin.time.Instant
  * @property playCount Number of times played
  * @property userRating User rating (1-5)
  * @property version Album version or edition
+ * @property originalReleaseDate Date the album was originally released
+ * @property releaseDate Date the specific edition of the album was released
+ * @property recordLabels List of record labels of the album
+ * @property releaseTypes List of release types e.g. "Album", "Remixes"
+ * @property sortName Name to be used for sorting
  * @property musicBrainzId MusicBrainz identifier
  * @property songs List of songs in the album
+ * @property songCount Number of songs in the album
+ * @property isCompilation True if the album is a compilation
+ * @property discs List of discs in the album
  */
 @Serializable
 public data class Album internal constructor(
@@ -36,13 +48,15 @@ public data class Album internal constructor(
     @SerialName("artist")
     val artistName: String,
     val artistId: String? = null,
+    val artists: List<Artist> = emptyList(),
+    val displayArtist: String? = null,
     val year: Int? = null,
     @SerialName("coverArt")
     override val coverArtId: String,
     val genre: String? = null,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
-    override val songCount: Int = 0,
+    val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
     override val duration: Duration? = null,
     @SerialName("created")
@@ -54,11 +68,41 @@ public data class Album internal constructor(
     val playCount: Int = 0,
     val userRating: Int? = null,
     val version: String? = null,
+    @Serializable(LocalDateComponentSerializer::class)
+    val originalReleaseDate: LocalDate? = null,
+    @Serializable(LocalDateComponentSerializer::class)
+    val releaseDate: LocalDate? = null,
+    val recordLabels: List<RecordLabel> = emptyList(),
+    val releaseTypes: List<String> = emptyList(),
+    override val sortName: String? = null,
     override val musicBrainzId: String? = null,
+    override val songCount: Int = 0,
     @SerialName("song")
     override val songs: List<Song> = emptyList(),
-    val isExternal: Boolean = false
-) : SubsonicResource, SongCollection
+    val isCompilation: Boolean = false,
+    @SerialName("discTitles")
+    val discs: List<Disc> = emptyList(),
+    override val isExternal: Boolean = false
+) : SubsonicResource, SongCollection {
+    /**
+     * @property disc Number of the disc
+     * @property title Title of the disc
+     * @property coverArtId ID of the disc cover art
+     */
+    @Serializable
+    public data class Disc(
+        val disc: Int,
+        val title: String,
+        @SerialName("coverArt")
+        val coverArtId: String
+    )
+
+    /**
+     * @property name Name of the record label
+     */
+    @Serializable
+    public data class RecordLabel(val name: String)
+}
 
 /**
  * Detailed album information from Last.fm
