@@ -16,6 +16,12 @@ kotlin {
                 implementation(libs.ktor.client.core)
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
     }
 }
 
