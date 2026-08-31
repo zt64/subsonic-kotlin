@@ -52,7 +52,7 @@ public data class Album internal constructor(
     val displayArtist: String? = null,
     val year: Int? = null,
     @SerialName("coverArt")
-    override val coverArtId: String,
+    override val coverArtId: String? = null,
     val genre: String? = null,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
