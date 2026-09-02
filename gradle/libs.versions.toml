@@ -7,7 +7,7 @@ kotlincrypto-hash = "0.8.0"
 coroutines = "1.11.0"
 
 # Maintenance
-compatibility = "0.18.1"
+compatibility = "0.18.2"
 kover = "0.9.8"
 publish = "0.37.0"
 ktlintPlugin = "14.2.0"
