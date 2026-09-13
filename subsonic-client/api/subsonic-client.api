@@ -114,6 +114,7 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun jukeboxControl (Ldev/zt64/subsonic/api/model/JukeboxAction;FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun ping (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun refreshPodcasts (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun reportPlayback (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;JLdev/zt64/subsonic/api/model/PlaybackState;FLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun savePlayQueue (Ljava/lang/Long;JILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun savePlayQueue (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun scrobble (Ljava/lang/String;Lkotlin/time/Instant;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;

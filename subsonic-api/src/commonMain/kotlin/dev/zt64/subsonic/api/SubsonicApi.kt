@@ -926,4 +926,23 @@ public interface SubsonicApi {
      * @return The matched similar tracks
      */
     public suspend fun getSonicSimilarTracks(songId: String, count: Int = 10): List<SonicMatch>
+
+    /**
+     * Reports playback timeline state for a song.
+     *
+     * @param mediaId The ID of the media being reported
+     * @param mediaType Either song or podcast so the server knows what the mediaId is referring to
+     * @param positionMs The playback position in milliseconds
+     * @param state Playback state: starting, playing, paused, or stopped
+     * @param playbackRate Playback speed multiplier
+     * @param ignoreScrobble If true, server should only update now-playing display/state and should not trigger scrobble/playcount side effects
+     */
+    public suspend fun reportPlayback(
+        mediaId: String,
+        mediaType: MediaType,
+        positionMs: Long,
+        state: PlaybackState,
+        playbackRate: Float = 1f,
+        ignoreScrobble: Boolean? = null
+    )
 }

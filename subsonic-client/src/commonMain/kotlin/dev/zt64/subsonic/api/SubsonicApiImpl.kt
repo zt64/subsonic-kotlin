@@ -907,4 +907,22 @@ internal class SubsonicApiImpl(
             parameter("count", count)
         }
     }
+
+    override suspend fun reportPlayback(
+        mediaId: String,
+        mediaType: MediaType,
+        positionMs: Long,
+        state: PlaybackState,
+        playbackRate: Float,
+        ignoreScrobble: Boolean?
+    ) {
+        get("reportPlayback") {
+            parameter("mediaId", mediaId)
+            parameter("mediaType", mediaType)
+            parameter("positionMs", positionMs)
+            parameter("state", state)
+            parameter("playbackRate", playbackRate)
+            parameter("ignoreScrobble", ignoreScrobble)
+        }
+    }
 }

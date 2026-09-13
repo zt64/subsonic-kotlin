@@ -109,6 +109,8 @@ public abstract interface class dev/zt64/subsonic/api/SubsonicApi {
 	public abstract fun jukeboxControl (Ldev/zt64/subsonic/api/model/JukeboxAction;FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun ping (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun refreshPodcasts (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun reportPlayback (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;JLdev/zt64/subsonic/api/model/PlaybackState;FLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun reportPlayback$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;JLdev/zt64/subsonic/api/model/PlaybackState;FLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun savePlayQueue (Ljava/lang/Long;JILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun savePlayQueue (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun savePlayQueue$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/Long;JILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -169,6 +171,7 @@ public final class dev/zt64/subsonic/api/SubsonicApi$DefaultImpls {
 	public static synthetic fun getTranscodeStream$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun getTranscodeStream$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun hls$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun reportPlayback$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;JLdev/zt64/subsonic/api/model/PlaybackState;FLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun savePlayQueue$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/Long;JILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun savePlayQueue$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun scrobble$default (Ldev/zt64/subsonic/api/SubsonicApi;Ljava/lang/String;Lkotlin/time/Instant;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -1217,6 +1220,21 @@ public final synthetic class dev/zt64/subsonic/api/model/PlayQueue$$serializer :
 }
 
 public final class dev/zt64/subsonic/api/model/PlayQueue$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/zt64/subsonic/api/model/PlaybackState : java/lang/Enum {
+	public static final field Companion Ldev/zt64/subsonic/api/model/PlaybackState$Companion;
+	public static final field PAUSED Ldev/zt64/subsonic/api/model/PlaybackState;
+	public static final field PLAYING Ldev/zt64/subsonic/api/model/PlaybackState;
+	public static final field STARTING Ldev/zt64/subsonic/api/model/PlaybackState;
+	public static final field STOPPED Ldev/zt64/subsonic/api/model/PlaybackState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/zt64/subsonic/api/model/PlaybackState;
+	public static fun values ()[Ldev/zt64/subsonic/api/model/PlaybackState;
+}
+
+public final class dev/zt64/subsonic/api/model/PlaybackState$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
