@@ -847,7 +847,7 @@ public interface SubsonicApi {
      * @param mediaType The media type
      * @return Transcoding decision details
      */
-    public suspend fun getTranscodeDecision(id: String, mediaType: MediaType): TranscodeDecision
+    public suspend fun getTranscodeDecision(id: String, mediaType: MediaType, clientInfo: ClientInfo): TranscodeDecision
 
     /**
      * Get a transcoded media stream with custom parameters.
