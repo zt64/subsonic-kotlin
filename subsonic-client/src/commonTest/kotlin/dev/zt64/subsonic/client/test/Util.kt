@@ -12,97 +12,98 @@ private val apiUrl = env("SUBSONIC_API_URL")
 val username = env("SUBSONIC_USERNAME") ?: "abc"
 val password = env("SUBSONIC_PASSWORD") ?: "xyz"
 
-private val responses = mutableMapOf<String, String?>()
-private val expectedQueryParams = mutableMapOf<String, Map<String, String?>>()
-
-@OptIn(ExperimentalUuidApi::class)
-val client by lazy {
-    if (apiUrl != null) {
-        SubsonicClient(
-            baseUrl = apiUrl,
-            auth = SubsonicAuth.Token(username, password)
-        )
-    } else {
-        val apiKey = Uuid.generateV4().toHexString()
-        SubsonicClient(
-            engine = MockEngine { req ->
-                val params = req.url.parameters
-
-                if ("apiKey" in params) {
-                    assertEquals(apiKey, params["apiKey"])
-                } else {
-                    assertEquals(username, params["u"])
-                }
-
-                assertEquals(params["v"], "1.16.1")
-                assertEquals(params["c"], "subsonic-kotlin")
-                assertEquals(params["f"], "json")
-
-                val endpoint = req.url.segments.last()
-
-                val expected = expectedQueryParams[endpoint]
-                if (expected != null) {
-                    expected.forEach { (k, v) ->
-                        assertEquals(v, params[k])
-                    }
-                }
-
-                if (endpoint in responses) {
-                    val content = responses[endpoint]
-                    val body = if (content == null) {
-                        """
-                        {
-                            "subsonic-response": {
-                                "status": "ok",
-                                "version": "1.16.1",
-                                "type": "AwesomeServerName",
-                                "serverVersion": "0.1.3 (tag)",
-                                "openSubsonic": true
-                            }
-                        }
-                        """.trimIndent()
-                    } else {
-                        """
-                            {
-                                "subsonic-response": {
-                                "status": "ok",
-                                "version": "1.16.1",
-                                "type": "AwesomeServerName",
-                                "serverVersion": "0.1.3 (tag)",
-                                "openSubsonic": true,
-                                $content
-                            }
-                        }
-                        """.trimIndent()
-                    }
-
-                    respond(
-                        content = body,
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(
-                            HttpHeaders.ContentType,
-                            ContentType.Application.Json.toString()
-                        )
-                    )
-                } else {
-                    error("Unhandled $endpoint")
-                }
-            },
-            baseUrl = "subsonic.somewhere.xyz",
-            auth = SubsonicAuth.Token(username, password)
-        )
-    }
-}
-
 expect fun env(name: String): String?
 
+/**
+ * Builds a client for a single [testEndpoint] call.
+ *
+ * When `SUBSONIC_API_URL` is set, requests are sent to a real server. Otherwise, a fresh [MockEngine]
+ * is created per call
+ */
+@OptIn(ExperimentalUuidApi::class)
+private fun testClient(
+    endpoint: String,
+    response: String?,
+    expectedParams: Map<String, String?>
+): SubsonicClient {
+    if (apiUrl != null) {
+        return SubsonicClient(baseUrl = apiUrl, auth = SubsonicAuth.Token(username, password))
+    }
+
+    val apiKey = Uuid.generateV4().toHexString()
+
+    return SubsonicClient(
+        engine = MockEngine { req ->
+            val params = req.url.parameters
+
+            if ("apiKey" in params) {
+                assertEquals(apiKey, params["apiKey"])
+            } else {
+                assertEquals(username, params["u"])
+            }
+
+            assertEquals("1.16.1", params["v"])
+            assertEquals("subsonic-kotlin", params["c"])
+            assertEquals("json", params["f"])
+
+            val requestedEndpoint = req.url.segments.last()
+            assertEquals("$endpoint.view", requestedEndpoint, "Unexpected endpoint requested")
+
+            expectedParams.forEach { (key, value) ->
+                assertEquals(value, params[key], "Unexpected value for query param '$key'")
+            }
+
+            val body = if (response == null) {
+                """
+                {
+                    "subsonic-response": {
+                        "status": "ok",
+                        "version": "1.16.1",
+                        "type": "AwesomeServerName",
+                        "serverVersion": "0.1.3 (tag)",
+                        "openSubsonic": true
+                    }
+                }
+                """.trimIndent()
+            } else {
+                """
+                {
+                    "subsonic-response": {
+                        "status": "ok",
+                        "version": "1.16.1",
+                        "type": "AwesomeServerName",
+                        "serverVersion": "0.1.3 (tag)",
+                        "openSubsonic": true,
+                        $response
+                    }
+                }
+                """.trimIndent()
+            }
+
+            respond(
+                content = body,
+                status = HttpStatusCode.OK,
+                headers = headersOf(
+                    HttpHeaders.ContentType,
+                    ContentType.Application.Json.toString()
+                )
+            )
+        },
+        baseUrl = "subsonic.somewhere.xyz",
+        auth = SubsonicAuth.Token(username, password)
+    )
+}
+
+/**
+ * Stubs [endpoint] to return [response] and invokes [call] on a client. Fails if
+ * endpoint, or if any [expectedParams] don't match the outgoing request's query parameters.
+ */
 suspend fun <T> testEndpoint(
     endpoint: String,
     response: String? = null,
     expectedParams: Map<String, String?> = emptyMap(),
     call: suspend SubsonicClient.() -> T
-): T? {
-    responses["$endpoint.view"] = response
-    expectedQueryParams["$endpoint.view"] = expectedParams
-    return client.call().also { println(it) }
+): T {
+    val client = testClient(endpoint, response, expectedParams)
+    return client.call()
 }

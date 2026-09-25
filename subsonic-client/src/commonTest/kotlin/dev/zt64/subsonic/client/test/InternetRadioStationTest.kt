@@ -2,6 +2,7 @@ package dev.zt64.subsonic.client.test
 
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class InternetRadioStationTest {
     @Test
@@ -24,22 +25,14 @@ class InternetRadioStationTest {
 
     @Test
     fun testGetInternetRadioStations() = runTest {
-        testEndpoint(
+        val stations = testEndpoint(
             endpoint = "getInternetRadioStations",
-            response = """
-                "internetRadioStations": {
-                  "internetRadioStation": [
-                    {
-                      "id": "1",
-                      "name": "HBR1.com - Dream Factory",
-                      "streamUrl": "http://ubuntu.hbr1.com:19800/ambient.aac",
-                      "homepageUrl": "http://www.hbr1.com/"
-                    }
-                  ]
-                }
-            """.trimIndent()
+            response = loadFixture("radio/getInternetRadioStations")
         ) {
             getInternetRadioStations()
         }
+
+        assertEquals(1, stations.size)
+        assertEquals("HBR1.com - Dream Factory", stations.first().name)
     }
 }

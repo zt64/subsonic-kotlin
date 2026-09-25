@@ -3,56 +3,32 @@ package dev.zt64.subsonic.client.test
 import dev.zt64.subsonic.client.SubsonicClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.time.Instant
 
 class LibraryTest {
     @Test
     fun testGetMusicFolders() = runTest {
-        testEndpoint(
+        val folders = testEndpoint(
             endpoint = "getMusicFolders",
-            response = """
-                "musicFolders": {
-                  "musicFolder": [
-                    {
-                      "id": 1,
-                      "name": "Music"
-                    },
-                    {
-                      "id": 2,
-                      "name": "Test"
-                    }
-                  ]
-                }
-            """.trimIndent()
+            response = loadFixture("library/getMusicFolders")
         ) {
             getDirectories()
         }
+
+        assertEquals(2, folders.size)
     }
 
     @Test
     fun testGetIndexes() = runTest {
-        testEndpoint(
+        val indexes = testEndpoint(
             endpoint = "getIndexes",
-            response = """
-                "indexes": {
-                  "lastModified": 1678943707000,
-                  "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
-                  "index": [
-                    {
-                      "name": "A",
-                      "artist": [
-                        {
-                          "id": "ar-1",
-                          "name": "Artist 1"
-                        }
-                      ]
-                    }
-                  ]
-                }
-            """.trimIndent()
+            response = loadFixture("library/getIndexes")
         ) {
             getIndexes()
         }
+
+        assertEquals(1, indexes.index.size)
     }
 
     @Test
@@ -61,23 +37,7 @@ class LibraryTest {
 
         testEndpoint(
             endpoint = "getIndexes",
-            response = """
-                "indexes": {
-                  "lastModified": 1678943707000,
-                  "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
-                  "index": [
-                    {
-                      "name": "A",
-                      "artist": [
-                        {
-                          "id": "ar-1",
-                          "name": "Artist 1"
-                        }
-                      ]
-                    }
-                  ]
-                }
-            """.trimIndent(),
+            response = loadFixture("library/getIndexes"),
             expectedParams = mapOf(
                 "musicFolderId" to "1",
                 "ifModifiedSince" to since.toEpochMilliseconds().toString()
@@ -89,29 +49,23 @@ class LibraryTest {
 
     @Test
     fun testStartScan() = runTest {
-        testEndpoint(
+        val status = testEndpoint(
             endpoint = "startScan",
-            response = """
-                "scanStatus": {
-                  "scanning": true,
-                  "count": 1
-                }
-            """.trimIndent(),
+            response = loadFixture("library/scanStatus"),
             call = SubsonicClient::startScan
         )
+
+        assertEquals(true, status.scanning)
     }
 
     @Test
     fun testGetScanStatus() = runTest {
-        testEndpoint(
+        val status = testEndpoint(
             endpoint = "getScanStatus",
-            response = """
-                "scanStatus": {
-                  "scanning": true,
-                  "count": 1
-                }
-            """.trimIndent(),
+            response = loadFixture("library/scanStatus"),
             call = SubsonicClient::getScanStatus
         )
+
+        assertEquals(1, status.count)
     }
 }

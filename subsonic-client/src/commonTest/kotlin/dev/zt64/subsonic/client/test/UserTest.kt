@@ -3,37 +3,21 @@ package dev.zt64.subsonic.client.test
 import dev.zt64.subsonic.client.SubsonicClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class UserTest {
     @Test
     fun testGetUser() = runTest {
-        testEndpoint(
+        val user = testEndpoint(
             endpoint = "getUser",
-            response = """
-                "user": {
-                  "folder": [
-                      1,
-                      3
-                  ],
-                  "username": "sindre",
-                  "email": "sindre@activeobjects.no",
-                  "scrobblingEnabled": "true",
-                  "adminRole": "false",
-                  "settingsRole": "true",
-                  "downloadRole": "true",
-                  "uploadRole": "false",
-                  "playlistRole": "true",
-                  "coverArtRole": "true",
-                  "commentRole": "true",
-                  "podcastRole": "true",
-                  "streamRole": "true",
-                  "jukeboxRole": "true",
-                  "shareRole": "false"
-                }
-            """.trimIndent()
+            response = loadFixture("user/getUser")
         ) {
             getUser("123")
         }
+
+        assertEquals("sindre", user.name)
+        assertEquals("sindre@activeobjects.no", user.email)
     }
 
     @Test
@@ -52,35 +36,13 @@ class UserTest {
 
     @Test
     fun testGetUsers() = runTest {
-        testEndpoint(
+        val users = testEndpoint(
             endpoint = "getUsers",
-            response = """
-                "users": {
-                  "user": [
-                    {
-                      "folder": [
-                          1,
-                          3
-                      ],
-                      "username": "sindre",
-                      "email": "sindre@activeobjects.no",
-                      "scrobblingEnabled": "true",
-                      "adminRole": "false",
-                      "settingsRole": "true",
-                      "downloadRole": "true",
-                      "uploadRole": "false",
-                      "playlistRole": "true",
-                      "coverArtRole": "true",
-                      "commentRole": "true",
-                      "podcastRole": "true",
-                      "streamRole": "true",
-                      "jukeboxRole": "true",
-                      "shareRole": "false"
-                    }
-                  ]
-                }
-            """.trimIndent()
+            response = loadFixture("user/getUsers")
         ) { getUsers() }
+
+        assertEquals(1, users.size)
+        assertEquals("sindre", users.first().name)
     }
 
     @Test
@@ -99,22 +61,15 @@ class UserTest {
 
     @Test
     fun testGetChatMessages() = runTest {
-        testEndpoint(
+        val messages = testEndpoint(
             endpoint = "getChatMessages",
-            response = """
-                "chatMessages": {
-                  "chatMessage": [
-                    {
-                      "username": "admin",
-                      "time": 1678943707000,
-                      "message": "Hello World"
-                    }
-                  ]
-                }
-            """.trimIndent()
+            response = loadFixture("user/getChatMessages")
         ) {
             getChatMessages()
         }
+
+        assertEquals(1, messages.size)
+        assertEquals("Hello World", messages.first().message)
     }
 
     @Test
@@ -126,15 +81,13 @@ class UserTest {
 
     @Test
     fun testGetShares() = runTest {
-        testEndpoint(
+        val shares = testEndpoint(
             endpoint = "getShares",
-            response = """
-                "shares": {
-                    "share": []
-                }
-            """.trimIndent(),
+            response = loadFixture("user/getShares"),
             call = SubsonicClient::getShares
         )
+
+        assertTrue(shares.isEmpty())
     }
 
     // @Test
@@ -148,10 +101,10 @@ class UserTest {
     // fun testUpdateShare() = runTest {
     //     val share = testEndpoint(
     //         endpoint = "createShare",
-    //         response = """"""
+    //         response = ""
     //     ) {
     //         createShare(listOf("Wa5fzmngg4VgscnxP1c05u"), "test")
-    //     }!!
+    //     }
     //
     //     testEndpoint("updateShare") {
     //         updateShare(share.id, expiresAt = Clock.System.now() + 5.days)
@@ -162,7 +115,7 @@ class UserTest {
     // fun testDeleteShare() = runTest {
     //     val share = testEndpoint("createShare") {
     //         createShare(listOf("Wa5fzmngg4VgscnxP1c05u"), "test")
-    //     }!!
+    //     }
     //
     //     testEndpoint("deleteShare") {
     //         deleteShare(share.id)

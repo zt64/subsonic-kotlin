@@ -3,59 +3,40 @@ package dev.zt64.subsonic.client.test
 import dev.zt64.subsonic.client.SubsonicClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class SystemTest {
     @Test
     fun testGetOpenSubsonicExtensions() = runTest {
-        testEndpoint(
+        val extensions = testEndpoint(
             endpoint = "getOpenSubsonicExtensions",
-            response = """
-                "openSubsonicExtensions": [
-                    {
-                        "name": "template",
-                        "versions": [
-                            1,
-                            2
-                        ]
-                    },
-                    {
-                        "name": "transcodeOffset",
-                        "versions": [
-                            1
-                        ]
-                    }
-                ]
-            """.trimIndent(),
+            response = loadFixture("system/getOpenSubsonicExtensions"),
             call = SubsonicClient::getOpenSubsonicExtensions
         )
+
+        assertEquals(2, extensions.size)
     }
 
     @Test
     fun testTokenInfo() = runTest {
-        testEndpoint(
+        val info = testEndpoint(
             endpoint = "tokenInfo",
-            response = """
-                "tokenInfo": {
-                  "username": "$username"
-                }
-            """.trimIndent(),
+            response = loadFixture("system/tokenInfo", "username" to username),
             call = SubsonicClient::tokenInfo
         )
+
+        assertEquals(username, info.username)
     }
 
     @Test
     fun testGetLicense() = runTest {
-        testEndpoint(
+        val license = testEndpoint(
             endpoint = "getLicense",
-            response = """
-                "license": {
-                    "valid": true,
-                    "email": "abc",
-                    "licenseExpires": "2017-04-11T10:42:50.842Z",
-                    "trialExpires": "2017-04-11T10:42:50.842Z"
-                }
-            """.trimIndent(),
+            response = loadFixture("system/getLicense"),
             call = SubsonicClient::getLicense
         )
+
+        assertTrue(license.valid)
     }
 }
