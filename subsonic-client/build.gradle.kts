@@ -4,6 +4,7 @@ plugins {
     id("kmp-configuration")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.publish)
+    alias(libs.plugins.kotlinx.resources)
 }
 
 description = "Kotlin multiplatform client for the SubSonic API"
@@ -26,6 +27,8 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.coroutines.test)
                 implementation(libs.ktor.test)
+                implementation(libs.kotlinx.resources)
+                implementation(libs.serialization.json)
             }
         }
 
