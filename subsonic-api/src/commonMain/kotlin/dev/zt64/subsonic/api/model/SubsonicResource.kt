@@ -39,13 +39,14 @@ internal object ResourceSerializer : JsonContentPolymorphicSerializer<SubsonicRe
     override fun selectDeserializer(
         element: JsonElement
     ): DeserializationStrategy<SubsonicResource> {
-        return when (element.jsonObject["mediaType"]!!.jsonPrimitive.content) {
+        val mediaType = element.jsonObject["mediaType"]?.jsonPrimitive?.content
+            ?: throw SerializationException("Missing 'mediaType' field in json")
+
+        return when (mediaType) {
             "song" -> Song.serializer()
             "artist" -> Artist.serializer()
             "album" -> Album.serializer()
-            else -> throw SerializationException(
-                "Unknown media type: ${element.jsonObject["mediaType"]}"
-            )
+            else -> throw SerializationException("Unknown media type: $mediaType")
         }
     }
 }
