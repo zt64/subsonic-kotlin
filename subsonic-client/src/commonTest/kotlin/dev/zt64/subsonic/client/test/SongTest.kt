@@ -34,7 +34,7 @@ class SongTest {
     fun testGetTopSongs() = runTest {
         val songs = testEndpoint(
             endpoint = "getTopSongs",
-            response = loadFixture("song/getTopSongs"),
+            response = loadFixture("song/getTopSongs")
         ) {
             getTopSongs("abriction")
         }
