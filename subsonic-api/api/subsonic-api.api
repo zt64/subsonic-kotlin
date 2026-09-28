@@ -325,17 +325,12 @@ public final class dev/zt64/subsonic/api/model/Album$RecordLabel$Companion {
 
 public final class dev/zt64/subsonic/api/model/AlbumInfo {
 	public static final field Companion Ldev/zt64/subsonic/api/model/AlbumInfo$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
 	public final fun component5 ()Ljava/lang/String;
 	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/zt64/subsonic/api/model/AlbumInfo;
-	public static synthetic fun copy$default (Ldev/zt64/subsonic/api/model/AlbumInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/zt64/subsonic/api/model/AlbumInfo;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getLargeImageUrl ()Ljava/lang/String;
 	public final fun getLastFmUrl ()Ljava/lang/String;
@@ -1904,13 +1899,9 @@ public final class dev/zt64/subsonic/api/model/Song$ExplicitStatus$Companion {
 
 public final class dev/zt64/subsonic/api/model/Song$Movement {
 	public static final field Companion Ldev/zt64/subsonic/api/model/Song$Movement$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/Integer;
 	public final fun component3 ()Ljava/lang/Integer;
-	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Ldev/zt64/subsonic/api/model/Song$Movement;
-	public static synthetic fun copy$default (Ldev/zt64/subsonic/api/model/Song$Movement;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Ldev/zt64/subsonic/api/model/Song$Movement;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCount ()Ljava/lang/Integer;
 	public final fun getName ()Ljava/lang/String;
@@ -1936,17 +1927,12 @@ public final class dev/zt64/subsonic/api/model/Song$Movement$Companion {
 
 public final class dev/zt64/subsonic/api/model/Song$ReplayGain {
 	public static final field Companion Ldev/zt64/subsonic/api/model/Song$ReplayGain$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;)V
-	public synthetic fun <init> (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/Float;
 	public final fun component2 ()Ljava/lang/Float;
 	public final fun component3 ()Ljava/lang/Float;
 	public final fun component4 ()Ljava/lang/Float;
 	public final fun component5 ()Ljava/lang/Float;
 	public final fun component6 ()Ljava/lang/Float;
-	public final fun copy (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;)Ldev/zt64/subsonic/api/model/Song$ReplayGain;
-	public static synthetic fun copy$default (Ldev/zt64/subsonic/api/model/Song$ReplayGain;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Float;ILjava/lang/Object;)Ldev/zt64/subsonic/api/model/Song$ReplayGain;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAlbumGain ()Ljava/lang/Float;
 	public final fun getAlbumPeak ()Ljava/lang/Float;
@@ -2018,7 +2004,6 @@ public final class dev/zt64/subsonic/api/model/Song$Type$Companion {
 public final class dev/zt64/subsonic/api/model/Song$Work {
 	public static final field Companion Ldev/zt64/subsonic/api/model/Song$Work$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ldev/zt64/subsonic/api/model/Song$Work;

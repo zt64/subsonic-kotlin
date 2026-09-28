@@ -111,7 +111,7 @@ public data class Album internal constructor(
  * @property notes Album notes or description
  */
 @Serializable
-public data class AlbumInfo(
+public data class AlbumInfo internal constructor(
     val musicBrainzId: String?,
     val largeImageUrl: String?,
     val mediumImageUrl: String?,

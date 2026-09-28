@@ -139,7 +139,7 @@ public data class Song internal constructor(
      * gain value is missing.
      */
     @Serializable
-    public data class ReplayGain(
+    public data class ReplayGain internal constructor(
         val albumGain: Float?,
         val albumPeak: Float?,
         val trackGain: Float?,
@@ -175,7 +175,7 @@ public data class Song internal constructor(
      * @property count How many times the movement occurs
      */
     @Serializable
-    public data class Movement(
+    public data class Movement internal constructor(
         val name: String,
         val number: Int?,
         val count: Int?
