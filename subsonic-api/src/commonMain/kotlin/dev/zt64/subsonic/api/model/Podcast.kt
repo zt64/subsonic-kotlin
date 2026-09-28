@@ -41,14 +41,14 @@ public enum class PodcastStatus {
 @Serializable
 public data class PodcastChannel internal constructor(
     val id: String,
-    val title: String? = null,
+    val title: String?,
     val url: String,
-    val description: String? = null,
+    val description: String?,
     @SerialName("coverArt")
-    val coverArtId: String? = null,
-    val originalImageUrl: String? = null,
+    val coverArtId: String?,
+    val originalImageUrl: String?,
     val status: PodcastStatus,
-    val errorMessage: String? = null,
+    val errorMessage: String?,
     @SerialName("episode")
     val episodes: List<PodcastEpisode> = emptyList()
 )
@@ -68,16 +68,16 @@ public data class PodcastChannel internal constructor(
 @Serializable
 public data class PodcastEpisode internal constructor(
     override val id: String,
-    val streamId: String? = null,
+    val streamId: String?,
     val channelId: String,
-    val description: String? = null,
+    val description: String?,
     @SerialName("coverArt")
-    override val coverArtId: String? = null,
+    override val coverArtId: String?,
     val status: PodcastStatus,
-    val publishDate: Instant? = null,
+    val publishDate: Instant?,
     @SerialName("starred")
-    override val starredAt: Instant? = null,
-    override val musicBrainzId: String? = null,
+    override val starredAt: Instant?,
+    override val musicBrainzId: String?,
     override val isExternal: Boolean = false,
-    override val sortName: String? = null
+    override val sortName: String?
 ) : SubsonicResource

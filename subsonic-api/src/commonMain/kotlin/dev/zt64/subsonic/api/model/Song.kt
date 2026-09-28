@@ -56,63 +56,63 @@ public data class Song internal constructor(
     val title: String,
     @SerialName("artist")
     val artistName: String,
-    val artistId: String? = null,
+    val artistId: String?,
     val artists: List<SongArtist> = emptyList(),
     val albumArtists: List<SongArtist> = emptyList(),
-    val displayArtist: String? = null,
-    val displayAlbumArtist: String? = null,
+    val displayArtist: String?,
+    val displayAlbumArtist: String?,
     @SerialName("album")
-    val albumTitle: String? = null,
-    val albumId: String? = null,
+    val albumTitle: String?,
+    val albumId: String?,
     @SerialName("parent")
-    val parentId: String? = null,
-    val comment: String? = null,
+    val parentId: String?,
+    val comment: String?,
     @SerialName("track")
-    val trackNumber: Int? = null,
-    val discNumber: Int? = null,
+    val trackNumber: Int?,
+    val discNumber: Int?,
     val isrc: List<String> = emptyList(),
-    val year: Int? = null,
-    val genre: String? = null,
+    val year: Int?,
+    val genre: String?,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
     val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
-    val duration: Duration? = null,
-    val bpm: Int? = null,
+    val duration: Duration?,
+    val bpm: Int?,
     val contributors: List<Contributor> = emptyList(),
-    val displayComposer: String? = null,
+    val displayComposer: String?,
     val playCount: Int = 0,
-    val userRating: Int? = null,
-    val averageRating: Float? = null,
+    val userRating: Int?,
+    val averageRating: Float?,
     @SerialName("bitRate")
-    val bitRate: Int? = null,
-    val bitDepth: Int? = null,
+    val bitRate: Int?,
+    val bitDepth: Int?,
     @SerialName("samplingRate")
-    val sampleRate: Int? = null,
+    val sampleRate: Int?,
     @SerialName("channelCount")
-    val audioChannelCount: Int? = null,
-    val replayGain: ReplayGain? = null,
-    val explicitStatus: ExplicitStatus? = null,
+    val audioChannelCount: Int?,
+    val replayGain: ReplayGain?,
+    val explicitStatus: ExplicitStatus?,
     @Serializable(SubsonicDurationSerializer::class)
-    val bookmarkPosition: Duration? = null,
+    val bookmarkPosition: Duration?,
     @SerialName("size")
-    val fileSize: Long? = null,
+    val fileSize: Long?,
     @SerialName("suffix")
-    val fileExtension: String? = null,
+    val fileExtension: String?,
     @SerialName("contentType")
-    val mimeType: String? = null,
+    val mimeType: String?,
     @SerialName("path")
-    val filePath: String? = null,
+    val filePath: String?,
     val works: List<Work> = emptyList(),
     val movements: List<Movement> = emptyList(),
-    val transcodedContentType: String? = null,
-    val transcodedSuffix: String? = null,
-    override val sortName: String? = null,
+    val transcodedContentType: String?,
+    val transcodedSuffix: String?,
+    override val sortName: String?,
     @SerialName("starred")
-    override val starredAt: Instant? = null,
+    override val starredAt: Instant?,
     @SerialName("coverArt")
-    override val coverArtId: String? = null,
-    override val musicBrainzId: String? = null,
+    override val coverArtId: String?,
+    override val musicBrainzId: String?,
     override val isExternal: Boolean = false
 ) : SubsonicResource {
     /**
@@ -140,12 +140,12 @@ public data class Song internal constructor(
      */
     @Serializable
     public data class ReplayGain(
-        val albumGain: Float? = null,
-        val albumPeak: Float? = null,
-        val trackGain: Float? = null,
-        val trackPeak: Float? = null,
-        val baseGain: Float? = null,
-        val fallbackGain: Float? = null
+        val albumGain: Float?,
+        val albumPeak: Float?,
+        val trackGain: Float?,
+        val trackPeak: Float?,
+        val baseGain: Float?,
+        val fallbackGain: Float?
     )
 
     /**
@@ -167,7 +167,7 @@ public data class Song internal constructor(
     public data class SongArtist(val id: String, val name: String)
 
     @Serializable
-    public data class Work(val name: String, val musicBrainzId: String? = null)
+    public data class Work(val name: String, val musicBrainzId: String?)
 
     /**
      * @property name Name of the movement
@@ -177,8 +177,8 @@ public data class Song internal constructor(
     @Serializable
     public data class Movement(
         val name: String,
-        val number: Int? = null,
-        val count: Int? = null
+        val number: Int?,
+        val count: Int?
     )
 }
 
@@ -191,7 +191,7 @@ public data class Song internal constructor(
 @Serializable
 public data class Contributor internal constructor(
     val role: String,
-    val subRole: String? = null,
+    val subRole: String?,
     val artist: Artist
 )
 
@@ -238,7 +238,7 @@ public data class StructuredLyrics internal constructor(
      */
     @Serializable
     public data class Line internal constructor(
-        val start: Int? = null,
+        val start: Int?,
         val value: String
     )
 }

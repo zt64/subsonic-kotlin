@@ -52,10 +52,10 @@ public sealed interface SongCollection {
 public data class Playlist internal constructor(
     override val id: String,
     override val name: String,
-    val owner: String? = null,
-    val comment: String? = null,
+    val owner: String?,
+    val comment: String?,
     @SerialName("coverArt")
-    override val coverArtId: String? = null,
+    override val coverArtId: String?,
     override val songCount: Int = 0,
     @Serializable(SubsonicDurationSerializer::class)
     override val duration: Duration,
@@ -63,11 +63,11 @@ public data class Playlist internal constructor(
     val createdAt: Instant,
     @SerialName("changed")
     val modifiedAt: Instant,
-    val public: Boolean? = null,
+    val public: Boolean?,
     @SerialName("readonly")
-    val readOnly: Boolean? = null,
+    val readOnly: Boolean?,
     val allowedUsers: List<String> = emptyList(),
-    val validUntil: Instant? = null,
+    val validUntil: Instant?,
     @SerialName("entry")
     override val songs: List<Song> = emptyList()
 ) : SongCollection

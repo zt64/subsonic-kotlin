@@ -40,5 +40,5 @@ public data class NowPlayingEntry internal constructor(
     val username: String,
     val minutesAgo: Int,
     val playerId: Int,
-    val playerName: String? = null
+    val playerName: String?
 )

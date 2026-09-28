@@ -16,7 +16,7 @@ public data class InternetRadioStation internal constructor(
     val id: String,
     val name: String,
     val streamUrl: String,
-    val homepageUrl: String? = null,
+    val homepageUrl: String?,
     @SerialName("coverArt")
-    val coverArtId: String? = null
+    val coverArtId: String?
 )

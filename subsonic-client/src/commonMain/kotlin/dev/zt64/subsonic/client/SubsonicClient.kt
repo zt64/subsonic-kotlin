@@ -57,6 +57,7 @@ public class SubsonicClient(
 
             val json = Json {
                 ignoreUnknownKeys = true
+                explicitNulls = false
             }
 
             val httpClientConfig: HttpClientConfig<*>.() -> Unit = {

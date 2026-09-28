@@ -24,13 +24,13 @@ public data class Artist internal constructor(
     val name: String,
     val albumCount: Int = 0,
     @SerialName("coverArt")
-    override val coverArtId: String? = null,
-    val artistImageUrl: String? = null,
+    override val coverArtId: String?,
+    val artistImageUrl: String?,
     @SerialName("starred")
-    override val starredAt: Instant? = null,
-    val userRating: Int? = null,
-    override val sortName: String? = null,
-    override val musicBrainzId: String? = null,
+    override val starredAt: Instant?,
+    val userRating: Int?,
+    override val sortName: String?,
+    override val musicBrainzId: String?,
     val roles: List<String> = emptyList(),
     val album: List<Album> = emptyList(),
     override val isExternal: Boolean = false
@@ -49,12 +49,12 @@ public data class Artist internal constructor(
  */
 @Serializable
 public data class ArtistInfo internal constructor(
-    val musicBrainzId: String? = null,
-    val biography: String? = null,
+    val musicBrainzId: String?,
+    val biography: String?,
     val smallImageUrl: String,
     val mediumImageUrl: String,
     val largeImageUrl: String,
-    val lastFmUrl: String? = null,
+    val lastFmUrl: String?,
     @SerialName("similarArtist")
     val similarArtists: List<Artist> = emptyList()
 )

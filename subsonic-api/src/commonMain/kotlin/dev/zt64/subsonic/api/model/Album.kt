@@ -42,36 +42,36 @@ import kotlin.time.Instant
 @Serializable
 public data class Album internal constructor(
     override val id: String,
-    override val name: String? = null,
+    override val name: String?,
     @SerialName("artist")
-    val artistName: String? = null,
-    val artistId: String? = null,
+    val artistName: String?,
+    val artistId: String?,
     val artists: List<Artist> = emptyList(),
-    val displayArtist: String? = null,
-    val year: Int? = null,
+    val displayArtist: String?,
+    val year: Int?,
     @SerialName("coverArt")
-    override val coverArtId: String? = null,
-    val genre: String? = null,
+    override val coverArtId: String?,
+    val genre: String?,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
     val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
-    override val duration: Duration? = null,
+    override val duration: Duration?,
     @SerialName("created")
     val createdAt: Instant,
     @SerialName("starred")
-    override val starredAt: Instant? = null,
+    override val starredAt: Instant?,
     @SerialName("played")
-    val lastPlayedAt: Instant? = null,
+    val lastPlayedAt: Instant?,
     val playCount: Int = 0,
-    val userRating: Int? = null,
-    val version: String? = null,
-    val originalReleaseDate: ItemDate? = null,
-    val releaseDate: ItemDate? = null,
+    val userRating: Int?,
+    val version: String?,
+    val originalReleaseDate: ItemDate?,
+    val releaseDate: ItemDate?,
     val recordLabels: List<RecordLabel> = emptyList(),
     val releaseTypes: List<String> = emptyList(),
-    override val sortName: String? = null,
-    override val musicBrainzId: String? = null,
+    override val sortName: String?,
+    override val musicBrainzId: String?,
     override val songCount: Int = 0,
     @SerialName("song")
     override val songs: List<Song> = emptyList(),
@@ -112,12 +112,12 @@ public data class Album internal constructor(
  */
 @Serializable
 public data class AlbumInfo(
-    val musicBrainzId: String? = null,
-    val largeImageUrl: String? = null,
-    val mediumImageUrl: String? = null,
-    val smallImageUrl: String? = null,
-    val lastFmUrl: String? = null,
-    val notes: String? = null
+    val musicBrainzId: String?,
+    val largeImageUrl: String?,
+    val mediumImageUrl: String?,
+    val smallImageUrl: String?,
+    val lastFmUrl: String?,
+    val notes: String?
 )
 
 /**

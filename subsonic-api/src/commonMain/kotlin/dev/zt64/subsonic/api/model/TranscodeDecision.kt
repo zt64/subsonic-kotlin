@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 public data class TranscodeDecision internal constructor(
     val canDirectPlay: Boolean,
     val canTranscode: Boolean,
-    val errorReason: String? = null,
-    val transcodeParams: String? = null,
-    val sourceStream: StreamDetails? = null,
-    val transcodeStream: StreamDetails? = null
+    val errorReason: String?,
+    val transcodeParams: String?,
+    val sourceStream: StreamDetails?,
+    val transcodeStream: StreamDetails?
 )
 
 @Serializable

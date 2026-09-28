@@ -16,11 +16,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class StreamDetails internal constructor(
-    val audioBitdepth: Int? = null,
-    val audioBitrate: Int? = null,
-    val audioChannels: Int? = null,
+    val audioBitdepth: Int?,
+    val audioBitrate: Int?,
+    val audioChannels: Int?,
     val audioProfile: String = "",
-    val audioSamplerate: Int? = null,
+    val audioSamplerate: Int?,
     val codec: String,
     val container: String,
     val protocol: String

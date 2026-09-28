@@ -14,7 +14,7 @@ import kotlin.time.Instant
 @Serializable
 public data class License internal constructor(
     val valid: Boolean,
-    val email: String? = null,
-    val licenseExpires: Instant? = null,
-    val trialExpires: Instant? = null
+    val email: String?,
+    val licenseExpires: Instant?,
+    val trialExpires: Instant?
 )

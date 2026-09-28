@@ -1,6 +1,9 @@
 package dev.zt64.subsonic.api.model
 
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KeepGeneratedSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 internal object UserSerializer : JsonTransformingSerializer<User>(User.generatedSerializer()) {
@@ -52,7 +55,7 @@ internal object UserSerializer : JsonTransformingSerializer<User>(User.generated
 public data class User internal constructor(
     @SerialName("username")
     val name: String,
-    val email: String? = null,
+    val email: String?,
     val scrobblingEnabled: Boolean,
     val folder: List<Int> = emptyList(),
     val roles: List<Role> = emptyList()

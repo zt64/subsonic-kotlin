@@ -32,11 +32,11 @@ public data class MusicFolder internal constructor(
 public data class Directory internal constructor(
     val id: String,
     val name: String,
-    val parent: String? = null,
+    val parent: String?,
     @SerialName("starred")
-    val starredAt: Instant? = null,
-    val userRating: Int? = null,
-    val averageRating: Float? = null,
+    val starredAt: Instant?,
+    val userRating: Int?,
+    val averageRating: Float?,
     val playCount: Int = 0,
     @SerialName("entry")
     val items: List<SubsonicResource> = emptyList()
