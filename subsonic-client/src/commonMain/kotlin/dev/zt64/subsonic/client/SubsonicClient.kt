@@ -2,10 +2,13 @@ package dev.zt64.subsonic.client
 
 import dev.zt64.subsonic.api.SubsonicApi
 import dev.zt64.subsonic.api.SubsonicApiImpl
+import dev.zt64.subsonic.api.model.SubsonicException
+import dev.zt64.subsonic.api.model.SubsonicResponse
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -72,6 +75,28 @@ public class SubsonicClient(
                 }
 
                 clientConfig()
+
+                HttpResponseValidator {
+                    validateResponse { response ->
+                        if (response.contentType() == ContentType.Application.Json) {
+                            try {
+                                val subsonicResponse =
+                                    Json.decodeFromString<SubsonicResponse<Any>>(
+                                        response.bodyAsText()
+                                    )
+
+                                if (subsonicResponse is SubsonicResponse.Error) {
+                                    throw SubsonicException(
+                                        subsonicResponse.error.message,
+                                        subsonicResponse.error.code
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                if (e is SubsonicException) throw e
+                            }
+                        }
+                    }
+                }
             }
 
             val httpClient = if (engine != null) {
