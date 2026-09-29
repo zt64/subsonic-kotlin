@@ -37,6 +37,8 @@ public class SubsonicClient(
             engine: HttpClientEngine? = null,
             clientConfig: HttpClientConfig<*>.() -> Unit = {}
         ): SubsonicClient {
+            val normalizedBaseUrl = baseUrl.trimEnd('/')
+
             val params = buildMap {
                 put("f", "json")
                 put("v", API_VERSION)
@@ -67,7 +69,7 @@ public class SubsonicClient(
 
                 defaultRequest {
                     url {
-                        takeFrom("$baseUrl/rest/")
+                        takeFrom("$normalizedBaseUrl/rest/")
                         params.forEach { (k, v) -> parameters[k] = v }
                     }
                 }
@@ -81,7 +83,7 @@ public class SubsonicClient(
                 HttpClient(httpClientConfig)
             }
 
-            return SubsonicClient(httpClient, json, baseUrl, params)
+            return SubsonicClient(httpClient, json, normalizedBaseUrl, params)
         }
     }
 
