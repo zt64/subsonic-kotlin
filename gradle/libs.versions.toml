@@ -9,7 +9,7 @@ kotlinx-resources = "0.16.2"
 
 # Maintenance
 compatibility = "0.18.2"
-kover = "0.9.10"
+kover = "0.9.11"
 publish = "0.37.0"
 ktlintPlugin = "14.2.0"
 ktlint = "1.8.0"
