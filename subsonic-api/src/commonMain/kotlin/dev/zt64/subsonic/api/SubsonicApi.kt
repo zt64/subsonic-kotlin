@@ -472,6 +472,22 @@ public interface SubsonicApi {
     ): String
 
     /**
+     * Get the URL for streaming a transcoded media file.
+     *
+     * @param id The media file ID
+     * @param mediaType The media type
+     * @param offset Audio offset
+     * @param transcodeParams Transcoding parameters (returned by getTranscodeDecision)
+     * @return The stream URL
+     */
+    public fun getTranscodeStreamUrl(
+        id: String,
+        mediaType: MediaType,
+        offset: Int,
+        transcodeParams: String
+    ): String
+
+    /**
      * Download a media file.
      *
      * @param id The media file ID
