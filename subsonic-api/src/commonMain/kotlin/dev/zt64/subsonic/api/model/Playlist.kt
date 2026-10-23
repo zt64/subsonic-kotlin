@@ -1,5 +1,6 @@
 package dev.zt64.subsonic.api.model
 
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -67,6 +68,7 @@ public data class Playlist internal constructor(
     @SerialName("readonly")
     val readOnly: Boolean?,
     val allowedUsers: List<String> = emptyList(),
+    @Serializable(with = LenientInstantSerializer::class)
     val validUntil: Instant?,
     @SerialName("entry")
     override val songs: List<Song> = emptyList()

@@ -2,6 +2,7 @@ package dev.zt64.subsonic.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import kotlin.time.Instant
 
 /**
@@ -25,8 +26,10 @@ public data class Share internal constructor(
     val username: String,
     @SerialName("created")
     val createdAt: Instant,
+    @Serializable(with = LenientInstantSerializer::class)
     @SerialName("expires")
     val expiresAt: Instant?,
+    @Serializable(with = LenientInstantSerializer::class)
     val lastVisited: Instant?,
     val visitCount: Int = 0,
     @SerialName("entry")

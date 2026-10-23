@@ -885,8 +885,8 @@ internal class SubsonicApiImpl(
         params: String
     ): ByteArray {
         return getBytes("getTranscodeStream") {
-            parameter("id", id)
-            parameter("mediaType", mediaType)
+            parameter("mediaId", id)
+            parameter("mediaType", mediaType.name.lowercase())
             parameter("offset", offset)
             parameter("transcodeParams", params)
         }

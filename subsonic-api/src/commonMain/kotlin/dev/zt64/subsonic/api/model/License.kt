@@ -1,6 +1,7 @@
 package dev.zt64.subsonic.api.model
 
 import kotlinx.serialization.Serializable
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import kotlin.time.Instant
 
 /**
@@ -15,6 +16,8 @@ import kotlin.time.Instant
 public data class License internal constructor(
     val valid: Boolean,
     val email: String?,
+    @Serializable(with = LenientInstantSerializer::class)
     val licenseExpires: Instant?,
+    @Serializable(with = LenientInstantSerializer::class)
     val trialExpires: Instant?
 )

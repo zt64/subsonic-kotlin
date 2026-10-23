@@ -2,6 +2,7 @@ package dev.zt64.subsonic.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import kotlin.time.Instant
 
 /**
@@ -26,6 +27,7 @@ public data class Artist internal constructor(
     @SerialName("coverArt")
     override val coverArtId: String?,
     val artistImageUrl: String?,
+    @Serializable(with = LenientInstantSerializer::class)
     @SerialName("starred")
     override val starredAt: Instant?,
     val userRating: Int?,

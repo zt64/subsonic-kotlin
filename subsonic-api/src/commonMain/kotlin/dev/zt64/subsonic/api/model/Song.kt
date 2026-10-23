@@ -1,6 +1,7 @@
 package dev.zt64.subsonic.api.model
 
 import dev.zt64.subsonic.api.model.serializer.GenresSerializer
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -108,6 +109,7 @@ public data class Song internal constructor(
     val transcodedContentType: String?,
     val transcodedSuffix: String?,
     override val sortName: String?,
+    @Serializable(with = LenientInstantSerializer::class)
     @SerialName("starred")
     override val starredAt: Instant?,
     @SerialName("coverArt")

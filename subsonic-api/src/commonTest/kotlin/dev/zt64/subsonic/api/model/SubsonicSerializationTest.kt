@@ -6,9 +6,14 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
+import kotlin.time.Instant
 
 class SubsonicSerializationTest {
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
 
     @Test
     fun testResponseSuccessList() {
@@ -55,5 +60,45 @@ class SubsonicSerializationTest {
 
         val error = assertIs<SubsonicResponse.Error>(response)
         assertEquals(SubsonicErrorCode.WRONG_USERNAME_OR_PASSWORD, error.error.code)
+    }
+
+    @Test
+    fun testBlankInstantInAlbumIsNull() {
+        val payload = """
+            {
+              "subsonic-response": {
+                "status": "ok",
+                "version": "1.16.1",
+                "albumList": {
+                  "album": [
+                    {
+                      "id": "1",
+                      "created": "2026-01-25T17:24:40.000Z",
+                      "played": "",
+                      "starred": ""
+                    },
+                    {
+                      "id": "2",
+                      "created": "2026-01-25T17:24:40.000Z",
+                      "played": "2026-08-01T17:35:28.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+        """.trimIndent()
+
+        val response = json.decodeFromString(
+            SubsonicResponse.serializer(ListSerializer(Album.serializer())),
+            payload
+        )
+
+        val success = assertIs<SubsonicResponse.Success<List<Album>>>(response)
+        assertNull(success.data[0].lastPlayedAt)
+        assertNull(success.data[0].starredAt)
+        assertEquals(
+            Instant.parse("2026-08-01T17:35:28.000Z"),
+            success.data[1].lastPlayedAt
+        )
     }
 }
