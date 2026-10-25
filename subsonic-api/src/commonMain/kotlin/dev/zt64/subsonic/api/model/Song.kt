@@ -56,7 +56,7 @@ public data class Song internal constructor(
     override val id: String,
     val title: String,
     @SerialName("artist")
-    val artistName: String,
+    val artistName: String?,
     val artistId: String?,
     val artists: List<SongArtist> = emptyList(),
     val albumArtists: List<SongArtist> = emptyList(),
