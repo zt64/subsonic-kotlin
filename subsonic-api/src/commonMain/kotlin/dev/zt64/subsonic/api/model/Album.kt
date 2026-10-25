@@ -43,38 +43,38 @@ import kotlin.time.Instant
 @Serializable
 public data class Album internal constructor(
     override val id: String,
-    override val name: String?,
+    override val name: String? = null,
     @SerialName("artist")
-    val artistName: String?,
-    val artistId: String?,
+    val artistName: String? = null,
+    val artistId: String? = null,
     val artists: List<Artist> = emptyList(),
-    val displayArtist: String?,
-    val year: Int?,
+    val displayArtist: String? = null,
+    val year: Int? = null,
     @SerialName("coverArt")
-    override val coverArtId: String?,
-    val genre: String?,
+    override val coverArtId: String? = null,
+    val genre: String? = null,
     @Serializable(GenresSerializer::class)
     val genres: List<String> = emptyList(),
     val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
-    override val duration: Duration?,
+    override val duration: Duration? = null,
     @SerialName("created")
     val createdAt: Instant,
     @Serializable(with = LenientInstantSerializer::class)
     @SerialName("starred")
-    override val starredAt: Instant?,
+    override val starredAt: Instant? = null,
     @Serializable(with = LenientInstantSerializer::class)
     @SerialName("played")
-    val lastPlayedAt: Instant?,
+    val lastPlayedAt: Instant? = null,
     val playCount: Int = 0,
-    val userRating: Int?,
-    val version: String?,
-    val originalReleaseDate: ItemDate?,
-    val releaseDate: ItemDate?,
+    val userRating: Int? = null,
+    val version: String? = null,
+    val originalReleaseDate: ItemDate? = null,
+    val releaseDate: ItemDate? = null,
     val recordLabels: List<RecordLabel> = emptyList(),
     val releaseTypes: List<String> = emptyList(),
-    override val sortName: String?,
-    override val musicBrainzId: String?,
+    override val sortName: String? = null,
+    override val musicBrainzId: String? = null,
     override val songCount: Int = 0,
     @SerialName("song")
     override val songs: List<Song> = emptyList(),
@@ -93,7 +93,7 @@ public data class Album internal constructor(
         val disc: Int,
         val title: String,
         @SerialName("coverArt")
-        val coverArtId: String?
+        val coverArtId: String? = null
     )
 
     /**

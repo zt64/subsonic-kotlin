@@ -1,12 +1,63 @@
 package dev.zt64.subsonic.api
 
-import dev.zt64.subsonic.api.model.*
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.utils.io.*
+import dev.zt64.subsonic.api.model.Album
+import dev.zt64.subsonic.api.model.AlbumInfo
+import dev.zt64.subsonic.api.model.AlbumListType
+import dev.zt64.subsonic.api.model.Artist
+import dev.zt64.subsonic.api.model.ArtistIndexes
+import dev.zt64.subsonic.api.model.ArtistInfo
+import dev.zt64.subsonic.api.model.Artists
+import dev.zt64.subsonic.api.model.Bookmark
+import dev.zt64.subsonic.api.model.ChatMessage
+import dev.zt64.subsonic.api.model.ClientInfo
+import dev.zt64.subsonic.api.model.Directory
+import dev.zt64.subsonic.api.model.Genre
+import dev.zt64.subsonic.api.model.InternetRadioStation
+import dev.zt64.subsonic.api.model.JukeboxAction
+import dev.zt64.subsonic.api.model.License
+import dev.zt64.subsonic.api.model.Lyrics
+import dev.zt64.subsonic.api.model.MediaType
+import dev.zt64.subsonic.api.model.MusicFolder
+import dev.zt64.subsonic.api.model.NowPlayingEntry
+import dev.zt64.subsonic.api.model.PlayQueue
+import dev.zt64.subsonic.api.model.PlaybackState
+import dev.zt64.subsonic.api.model.Playlist
+import dev.zt64.subsonic.api.model.PodcastChannel
+import dev.zt64.subsonic.api.model.PodcastEpisode
+import dev.zt64.subsonic.api.model.Role
+import dev.zt64.subsonic.api.model.ScanStatus
+import dev.zt64.subsonic.api.model.SearchResult
+import dev.zt64.subsonic.api.model.Share
+import dev.zt64.subsonic.api.model.Song
+import dev.zt64.subsonic.api.model.SonicMatch
+import dev.zt64.subsonic.api.model.Starred
+import dev.zt64.subsonic.api.model.StructuredLyrics
+import dev.zt64.subsonic.api.model.SubsonicException
+import dev.zt64.subsonic.api.model.SubsonicExtension
+import dev.zt64.subsonic.api.model.SubsonicResource
+import dev.zt64.subsonic.api.model.SubsonicResponse
+import dev.zt64.subsonic.api.model.TokenInfo
+import dev.zt64.subsonic.api.model.TranscodeDecision
+import dev.zt64.subsonic.api.model.User
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.request
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsBytes
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.appendPathSegments
+import io.ktor.http.buildUrl
+import io.ktor.http.contentType
+import io.ktor.http.takeFrom
+import io.ktor.utils.io.ByteReadChannel
 import kotlinx.serialization.json.Json
 import kotlin.time.Instant
 
@@ -51,6 +102,7 @@ internal class SubsonicApiImpl(
             HttpStatusCode.Gone -> throw SubsonicException(
                 "Endpoint '$endpoint' will not be implemented"
             )
+
             HttpStatusCode.NotImplemented -> throw SubsonicException(
                 "Endpoint '$endpoint' is not implemented"
             )
@@ -68,15 +120,17 @@ internal class SubsonicApiImpl(
             is SubsonicResponse.Empty -> throw SubsonicException(
                 "Expected data but received empty response"
             )
+
             is SubsonicResponse.Error -> throw SubsonicException(res.error.message, res.error.code)
         }
     }
 
-    private suspend fun get(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}) {
+    private suspend fun get(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}): SubsonicResponse<Nothing> {
         val res = execute(endpoint, builder).body<SubsonicResponse<Nothing>>()
         if (res is SubsonicResponse.Error) {
             throw SubsonicException(res.error.message, res.error.code)
         }
+        return res
     }
 
     private suspend fun getBytes(
@@ -95,8 +149,8 @@ internal class SubsonicApiImpl(
         return res.bodyAsBytes()
     }
 
-    override suspend fun ping() {
-        get("ping")
+    override suspend fun ping(): SubsonicResponse<Nothing> {
+        return get("ping")
     }
 
     override suspend fun tokenInfo(): TokenInfo {
@@ -777,7 +831,7 @@ internal class SubsonicApiImpl(
         name: String,
         homepageUrl: String?
     ) {
-        return get("createInternetRadioStation") {
+        get("createInternetRadioStation") {
             parameter("streamUrl", streamUrl)
             parameter("name", name)
             parameter("homepageUrl", homepageUrl)
@@ -819,7 +873,7 @@ internal class SubsonicApiImpl(
     }
 
     override suspend fun createBookmark(id: String, position: Long, comment: String?) {
-        return get("createBookmark") {
+        get("createBookmark") {
             parameter("id", id)
             parameter("position", position)
             parameter("comment", comment)

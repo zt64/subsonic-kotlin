@@ -1,7 +1,44 @@
 package dev.zt64.subsonic.api
 
-import dev.zt64.subsonic.api.model.*
-import io.ktor.utils.io.*
+import dev.zt64.subsonic.api.model.Album
+import dev.zt64.subsonic.api.model.AlbumInfo
+import dev.zt64.subsonic.api.model.AlbumListType
+import dev.zt64.subsonic.api.model.Artist
+import dev.zt64.subsonic.api.model.ArtistIndexes
+import dev.zt64.subsonic.api.model.ArtistInfo
+import dev.zt64.subsonic.api.model.Artists
+import dev.zt64.subsonic.api.model.Bookmark
+import dev.zt64.subsonic.api.model.ChatMessage
+import dev.zt64.subsonic.api.model.ClientInfo
+import dev.zt64.subsonic.api.model.Directory
+import dev.zt64.subsonic.api.model.Genre
+import dev.zt64.subsonic.api.model.InternetRadioStation
+import dev.zt64.subsonic.api.model.JukeboxAction
+import dev.zt64.subsonic.api.model.License
+import dev.zt64.subsonic.api.model.Lyrics
+import dev.zt64.subsonic.api.model.MediaType
+import dev.zt64.subsonic.api.model.MusicFolder
+import dev.zt64.subsonic.api.model.NowPlayingEntry
+import dev.zt64.subsonic.api.model.PlayQueue
+import dev.zt64.subsonic.api.model.PlaybackState
+import dev.zt64.subsonic.api.model.Playlist
+import dev.zt64.subsonic.api.model.PodcastChannel
+import dev.zt64.subsonic.api.model.PodcastEpisode
+import dev.zt64.subsonic.api.model.Role
+import dev.zt64.subsonic.api.model.ScanStatus
+import dev.zt64.subsonic.api.model.SearchResult
+import dev.zt64.subsonic.api.model.Share
+import dev.zt64.subsonic.api.model.Song
+import dev.zt64.subsonic.api.model.SonicMatch
+import dev.zt64.subsonic.api.model.Starred
+import dev.zt64.subsonic.api.model.StructuredLyrics
+import dev.zt64.subsonic.api.model.SubsonicExtension
+import dev.zt64.subsonic.api.model.SubsonicResource
+import dev.zt64.subsonic.api.model.SubsonicResponse
+import dev.zt64.subsonic.api.model.TokenInfo
+import dev.zt64.subsonic.api.model.TranscodeDecision
+import dev.zt64.subsonic.api.model.User
+import io.ktor.utils.io.ByteReadChannel
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -12,7 +49,7 @@ public interface SubsonicApi {
     /**
      * Used to test connectivity with the server.
      */
-    public suspend fun ping()
+    public suspend fun ping(): SubsonicResponse<Nothing>
 
     /**
      * Returns information about the API key.

@@ -101,4 +101,24 @@ class SubsonicSerializationTest {
             success.data[1].lastPlayedAt
         )
     }
+
+    @Test
+    fun testOptionalFieldsMayBeOmitted() {
+        val artist = json.decodeFromString(Artist.serializer(), """{"id":"1","name":"Childish Gambino"}""")
+        val playlist = json.decodeFromString(
+            Playlist.serializer(),
+            """
+                {
+                  "id": "1",
+                  "name": "Favorites",
+                  "created": "2026-01-25T17:24:40.000Z",
+                  "changed": "2026-01-25T17:24:40.000Z",
+                  "duration": 0
+                }
+            """.trimIndent()
+        )
+
+        assertNull(artist.starredAt)
+        assertNull(playlist.validUntil)
+    }
 }

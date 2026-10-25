@@ -25,14 +25,14 @@ public data class Artist internal constructor(
     val name: String,
     val albumCount: Int = 0,
     @SerialName("coverArt")
-    override val coverArtId: String?,
-    val artistImageUrl: String?,
+    override val coverArtId: String? = null,
+    val artistImageUrl: String? = null,
     @Serializable(with = LenientInstantSerializer::class)
     @SerialName("starred")
-    override val starredAt: Instant?,
-    val userRating: Int?,
-    override val sortName: String?,
-    override val musicBrainzId: String?,
+    override val starredAt: Instant? = null,
+    val userRating: Int? = null,
+    override val sortName: String? = null,
+    override val musicBrainzId: String? = null,
     val roles: List<String> = emptyList(),
     val album: List<Album> = emptyList(),
     override val isExternal: Boolean = false
