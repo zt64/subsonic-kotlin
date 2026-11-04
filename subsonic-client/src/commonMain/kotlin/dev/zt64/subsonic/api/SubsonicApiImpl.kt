@@ -715,7 +715,7 @@ internal class SubsonicApiImpl(
     override suspend fun scrobble(id: String, time: Instant, submission: Boolean) {
         get("scrobble") {
             parameter("id", id)
-            parameter("time", time)
+            parameter("time", time.toEpochMilliseconds())
             parameter("submission", submission)
         }
     }
@@ -734,7 +734,7 @@ internal class SubsonicApiImpl(
                 parameter("id", id)
             }
             parameter("description", description)
-            parameter("expires", expiresAt)
+            parameter("expires", expiresAt?.toEpochMilliseconds())
         }.single()
     }
 
@@ -742,7 +742,7 @@ internal class SubsonicApiImpl(
         get("updateShare") {
             parameter("id", id)
             parameter("description", description)
-            parameter("expires", expiresAt)
+            parameter("expires", expiresAt?.toEpochMilliseconds())
         }
     }
 
