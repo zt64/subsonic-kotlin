@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.4.20"
 ktor = "3.6.0"
-serialization = "1.11.0"
+serialization = "1.12.0"
 datetime = "0.8.0"
 kotlincrypto-hash = "0.8.0"
 coroutines = "1.11.0"
