@@ -1,5 +1,6 @@
 package dev.zt64.subsonic.client.test
 
+import dev.zt64.subsonic.api.model.SubsonicException
 import dev.zt64.subsonic.client.SubsonicAuth
 import dev.zt64.subsonic.client.SubsonicClient
 import io.ktor.client.engine.mock.*
@@ -7,6 +8,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ClientTest {
     private val successResponse = """
@@ -71,5 +73,27 @@ class ClientTest {
         }
 
         assertEquals("/navidrome/rest/ping.view", requestedPath)
+    }
+
+    @Test
+    fun testNonJsonResponseThrowsSubsonicException() = runTest {
+        val client = SubsonicClient(
+            baseUrl = "https://example.com",
+            auth = SubsonicAuth.Key("secret"),
+            engine = MockEngine {
+                respond(
+                    content = "<html><body>Unauthorized</body></html>",
+                    status = HttpStatusCode.Unauthorized,
+                    headers = headersOf(
+                        name = HttpHeaders.ContentType,
+                        value = ContentType.Text.Html.toString()
+                    )
+                )
+            }
+        )
+
+        client.use {
+            assertFailsWith<SubsonicException> { it.ping() }
+        }
     }
 }

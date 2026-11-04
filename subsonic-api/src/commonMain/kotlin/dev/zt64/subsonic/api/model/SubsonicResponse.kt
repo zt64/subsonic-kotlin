@@ -1,11 +1,22 @@
 package dev.zt64.subsonic.api.model
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 internal class SubsonicResponseSerializer<T : Any>(
     private val tSerializer: KSerializer<T>
@@ -43,7 +54,11 @@ internal class SubsonicResponseSerializer<T : Any>(
                 else -> JsonArray(emptyList())
             }
         } else {
-            dataEntry.value
+            // This normalizes fields that are blank/empty by making them null
+            dataEntry.value.takeIf { v ->
+                val content = v.takeIf { it is JsonPrimitive }?.jsonPrimitive?.contentOrNull
+                content == null || (content.isNotBlank() && content.isNotEmpty())
+            } ?: JsonNull
         }
 
         val obj = element.jsonObject.toMutableMap().apply {

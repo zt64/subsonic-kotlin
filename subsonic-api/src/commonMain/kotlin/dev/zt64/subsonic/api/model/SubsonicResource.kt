@@ -23,6 +23,7 @@ import kotlin.time.Instant
 public sealed interface SubsonicResource {
     public val id: String
     public val coverArtId: String?
+
     public val starredAt: Instant?
     public val musicBrainzId: String?
     public val isExternal: Boolean

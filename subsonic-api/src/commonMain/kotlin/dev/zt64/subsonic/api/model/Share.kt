@@ -1,5 +1,6 @@
 package dev.zt64.subsonic.api.model
 
+import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant
@@ -21,13 +22,15 @@ import kotlin.time.Instant
 public data class Share internal constructor(
     val id: String,
     val url: String,
-    val description: String?,
+    val description: String? = null,
     val username: String,
     @SerialName("created")
     val createdAt: Instant,
+    @Serializable(with = LenientInstantSerializer::class)
     @SerialName("expires")
-    val expiresAt: Instant?,
-    val lastVisited: Instant?,
+    val expiresAt: Instant? = null,
+    @Serializable(with = LenientInstantSerializer::class)
+    val lastVisited: Instant? = null,
     val visitCount: Int = 0,
     @SerialName("entry")
     val items: List<SubsonicResource> = emptyList()
