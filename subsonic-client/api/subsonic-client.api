@@ -108,6 +108,7 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getTranscodeDecision (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;Ldev/zt64/subsonic/api/model/ClientInfo;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getTranscodeStreamUrl (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;)Ljava/lang/String;
 	public fun getUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getUsers (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun hls (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

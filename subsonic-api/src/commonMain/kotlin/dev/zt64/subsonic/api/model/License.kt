@@ -1,7 +1,7 @@
 package dev.zt64.subsonic.api.model
 
-import kotlinx.serialization.Serializable
 import dev.zt64.subsonic.api.model.serializer.LenientInstantSerializer
+import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 /**

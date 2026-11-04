@@ -125,7 +125,11 @@ internal class SubsonicApiImpl(
         }
     }
 
-    private suspend fun get(endpoint: String, builder: HttpRequestBuilder.() -> Unit = {}): SubsonicResponse<Nothing> {
+    private suspend fun get(
+        endpoint: String,
+        builder: HttpRequestBuilder.() -> Unit = {
+        }
+    ): SubsonicResponse<Nothing> {
         val res = execute(endpoint, builder).body<SubsonicResponse<Nothing>>()
         if (res is SubsonicResponse.Error) {
             throw SubsonicException(res.error.message, res.error.code)

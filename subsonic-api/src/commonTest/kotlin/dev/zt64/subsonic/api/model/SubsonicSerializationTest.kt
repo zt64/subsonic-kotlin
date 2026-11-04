@@ -104,7 +104,10 @@ class SubsonicSerializationTest {
 
     @Test
     fun testOptionalFieldsMayBeOmitted() {
-        val artist = json.decodeFromString(Artist.serializer(), """{"id":"1","name":"Childish Gambino"}""")
+        val artist = json.decodeFromString(
+            Artist.serializer(),
+            """{"id":"1","name":"Childish Gambino"}"""
+        )
         val song = json.decodeFromString(
             Song.serializer(),
             """{"id":"1","title":"Redbone","explicitStatus":"","groupings":[],"works":[],"movements":[]}"""
