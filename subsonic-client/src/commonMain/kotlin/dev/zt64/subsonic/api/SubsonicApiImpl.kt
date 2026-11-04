@@ -40,7 +40,6 @@ import dev.zt64.subsonic.api.model.TokenInfo
 import dev.zt64.subsonic.api.model.TranscodeDecision
 import dev.zt64.subsonic.api.model.User
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -58,6 +57,7 @@ import io.ktor.http.buildUrl
 import io.ktor.http.contentType
 import io.ktor.http.takeFrom
 import io.ktor.utils.io.ByteReadChannel
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlin.time.Instant
 
@@ -111,11 +111,34 @@ internal class SubsonicApiImpl(
         return res
     }
 
+    /**
+     * Decodes the JSON body without going through ContentNegotiation, so a non-JSON response
+     * (XML, an HTML error page, etc.) surfaces as a [SubsonicException] instead of Ktor's
+     * NoTransformationFoundException.
+     */
+    private suspend inline fun <reified T : Any> HttpResponse.bodyAsJson(endpoint: String): T {
+        val text = bodyAsText()
+        val contentType = contentType() ?: "no content type"
+        val message = "Expected a JSON response from '$endpoint' but got $contentType " +
+            "(HTTP ${status.value}): ${text.take(200)}"
+        val failure = SubsonicException(message)
+
+        return try {
+            json.decodeFromString<T>(text)
+        } catch (_: SerializationException) {
+            throw failure
+        } catch (_: IllegalArgumentException) {
+            throw failure
+        }
+    }
+
     private suspend inline fun <reified T : Any> getBody(
         endpoint: String,
         noinline builder: HttpRequestBuilder.() -> Unit = {}
     ): T {
-        return when (val res = execute(endpoint, builder).body<SubsonicResponse<T>>()) {
+        val res = execute(endpoint, builder).bodyAsJson<SubsonicResponse<T>>(endpoint)
+
+        return when (res) {
             is SubsonicResponse.Success -> res.data
             is SubsonicResponse.Empty -> throw SubsonicException(
                 "Expected data but received empty response"
@@ -130,7 +153,7 @@ internal class SubsonicApiImpl(
         builder: HttpRequestBuilder.() -> Unit = {
         }
     ): SubsonicResponse<Nothing> {
-        val res = execute(endpoint, builder).body<SubsonicResponse<Nothing>>()
+        val res = execute(endpoint, builder).bodyAsJson<SubsonicResponse<Nothing>>(endpoint)
         if (res is SubsonicResponse.Error) {
             throw SubsonicException(res.error.message, res.error.code)
         }
@@ -143,7 +166,7 @@ internal class SubsonicApiImpl(
         }
     ): ByteArray {
         val res = execute(endpoint, builder)
-        if (res.contentType() == ContentType.Application.Json) {
+        if (res.contentType()?.match(ContentType.Application.Json) == true) {
             val parsed = json.decodeFromString<SubsonicResponse<Nothing>>(res.bodyAsText())
             if (parsed is SubsonicResponse.Error) {
                 throw SubsonicException(parsed.error.message, parsed.error.code)
