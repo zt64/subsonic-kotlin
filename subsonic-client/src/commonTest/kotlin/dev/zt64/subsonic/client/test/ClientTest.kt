@@ -76,6 +76,37 @@ class ClientTest {
     }
 
     @Test
+    fun testNoneAuthSendsNoAuthParameters() = runTest {
+        var requestedUrl: Url? = null
+
+        val client = SubsonicClient(
+            baseUrl = "https://example.com",
+            auth = SubsonicAuth.None,
+            engine = MockEngine { req ->
+                requestedUrl = req.url
+                respond(
+                    content = successResponse,
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(
+                        name = HttpHeaders.ContentType,
+                        value = ContentType.Application.Json.toString()
+                    )
+                )
+            }
+        )
+
+        client.use {
+            it.ping()
+        }
+
+        val parameters = requestedUrl!!.parameters
+        assertEquals(null, parameters["u"])
+        assertEquals(null, parameters["t"])
+        assertEquals(null, parameters["s"])
+        assertEquals(null, parameters["apiKey"])
+    }
+
+    @Test
     fun testNonJsonResponseThrowsSubsonicException() = runTest {
         val client = SubsonicClient(
             baseUrl = "https://example.com",

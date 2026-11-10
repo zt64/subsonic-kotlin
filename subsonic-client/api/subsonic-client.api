@@ -12,6 +12,13 @@ public final class dev/zt64/subsonic/client/SubsonicAuth$Key : dev/zt64/subsonic
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class dev/zt64/subsonic/client/SubsonicAuth$None : dev/zt64/subsonic/client/SubsonicAuth {
+	public static final field INSTANCE Ldev/zt64/subsonic/client/SubsonicAuth$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class dev/zt64/subsonic/client/SubsonicAuth$Token : dev/zt64/subsonic/client/SubsonicAuth {
 	public static final field Companion Ldev/zt64/subsonic/client/SubsonicAuth$Token$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V

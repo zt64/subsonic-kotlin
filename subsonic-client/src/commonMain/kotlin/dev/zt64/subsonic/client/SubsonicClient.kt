@@ -48,6 +48,8 @@ public class SubsonicClient(
                 put("c", client)
 
                 when (auth) {
+                    SubsonicAuth.None -> Unit
+
                     is SubsonicAuth.Key -> {
                         put("apiKey", auth.apiKey)
                     }
