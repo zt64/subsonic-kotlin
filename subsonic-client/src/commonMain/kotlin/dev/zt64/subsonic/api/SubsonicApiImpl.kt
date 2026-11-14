@@ -1030,7 +1030,7 @@ internal class SubsonicApiImpl(
             parameter("mediaId", mediaId)
             parameter("mediaType", mediaType)
             parameter("positionMs", positionMs)
-            parameter("state", state)
+            parameter("state", state.name.lowercase())
             parameter("playbackRate", playbackRate)
             parameter("ignoreScrobble", ignoreScrobble)
         }
