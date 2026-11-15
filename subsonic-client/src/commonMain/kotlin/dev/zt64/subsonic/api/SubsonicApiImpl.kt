@@ -980,12 +980,12 @@ internal class SubsonicApiImpl(
     ): ByteReadChannel {
         val decision = getBody<TranscodeDecision>("getTranscodeDecision") {
             parameter("id", id)
-            parameter("mediaType", mediaType)
+            parameter("mediaType", mediaType.name.lowercase())
         }
 
         return execute("getTranscodeStream") {
             parameter("id", id)
-            parameter("mediaType", mediaType)
+            parameter("mediaType", mediaType.name.lowercase())
             parameter("offset", offset)
             parameter("transcodeParams", decision.transcodeParams)
         }.bodyAsChannel()
@@ -1028,7 +1028,7 @@ internal class SubsonicApiImpl(
     ) {
         get("reportPlayback") {
             parameter("mediaId", mediaId)
-            parameter("mediaType", mediaType)
+            parameter("mediaType", mediaType.name.lowercase())
             parameter("positionMs", positionMs)
             parameter("state", state.name.lowercase())
             parameter("playbackRate", playbackRate)
