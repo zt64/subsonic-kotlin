@@ -7,6 +7,14 @@ import org.kotlincrypto.hash.md.MD5
  */
 public sealed interface SubsonicAuth {
     /**
+     * Do not send any authentication parameters.
+     *
+     * Intended for endpoints that must be accessible without authentication, such as
+     * [getOpenSubsonicExtensions][dev.zt64.subsonic.api.SubsonicApi.getOpenSubsonicExtensions].
+     */
+    public data object None : SubsonicAuth
+
+    /**
      * Authenticate using an API key
      *
      * @property apiKey The API key to authenticate with

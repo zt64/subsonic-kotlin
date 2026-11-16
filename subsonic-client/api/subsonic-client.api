@@ -12,6 +12,13 @@ public final class dev/zt64/subsonic/client/SubsonicAuth$Key : dev/zt64/subsonic
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class dev/zt64/subsonic/client/SubsonicAuth$None : dev/zt64/subsonic/client/SubsonicAuth {
+	public static final field INSTANCE Ldev/zt64/subsonic/client/SubsonicAuth$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class dev/zt64/subsonic/client/SubsonicAuth$Token : dev/zt64/subsonic/client/SubsonicAuth {
 	public static final field Companion Ldev/zt64/subsonic/client/SubsonicAuth$Token$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
@@ -108,6 +115,7 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getTranscodeDecision (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;Ldev/zt64/subsonic/api/model/ClientInfo;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getTranscodeStreamUrl (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;)Ljava/lang/String;
 	public fun getUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getUsers (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun hls (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
